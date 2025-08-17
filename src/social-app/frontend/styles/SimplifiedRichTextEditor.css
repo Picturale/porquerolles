@@ -1,0 +1,173 @@
+/* Styles supplémentaires pour SimplifiedRichTextEditor */
+
+/* Barre d'outils améliorée */
+.formatting-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 8px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e1e4e8;
+  border-radius: 4px 4px 0 0;
+}
+
+.format-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.format-btn:hover {
+  background-color: #e2e8f0;
+  border-color: #cbd5e0;
+}
+
+.format-btn:active {
+  background-color: #cbd5e0;
+}
+
+.format-divider {
+  width: 1px;
+  height: 24px;
+  margin: 0 5px;
+  background-color: #e1e4e8;
+  align-self: center;
+}
+
+/* Modal pour insérer un lien */
+.link-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.link-modal-content {
+  background-color: white;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.link-modal h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 18px;
+  color: #2d3748;
+}
+
+.link-form .form-group {
+  margin-bottom: 15px;
+}
+
+.link-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #4a5568;
+}
+
+.link-form input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #e1e4e8;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.link-form input:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+}
+
+.link-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.link-actions button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background-color: transparent;
+  border: 1px solid #e1e4e8;
+  color: #4a5568;
+}
+
+.cancel-btn:hover {
+  background-color: #f7fafc;
+}
+
+.confirm-btn {
+  background-color: #4299e1;
+  border: 1px solid #4299e1;
+  color: white;
+}
+
+.confirm-btn:hover {
+  background-color: #3182ce;
+  border-color: #3182ce;
+}
+
+/* Styles pour l'éditeur amélioré */
+.editor-content {
+  min-height: 150px;
+  padding: 12px;
+  border: 1px solid #e1e4e8;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #2d3748;
+  overflow-y: auto;
+  outline: none;
+}
+
+.editor-content:focus {
+  border-color: #4299e1;
+  box-shadow: 0 1px 3px rgba(66, 153, 225, 0.2);
+}
+
+/* Styles pour les listes */
+.editor-content ul, 
+.editor-content ol {
+  padding-left: 2em;
+  margin: 0.5em 0;
+}
+
+.editor-content li {
+  margin-bottom: 0.25em;
+}
+
+/* Styles pour les liens */
+.editor-content a {
+  color: #4299e1;
+  text-decoration: none;
+}
+
+.editor-content a:hover {
+  text-decoration: underline;
+}

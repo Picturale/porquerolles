@@ -1,0 +1,700 @@
+/* Import du design system centralisé */
+@import './design-system.css';
+
+/* HashtagDetail.css - Styles pour la page de détail d'un hashtag */
+
+.hashtag-detail {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: calc(100vh - 150px);
+  background-color: var(--color-white);
+}
+
+.hashtag-header {
+  text-align: center;
+  padding: 30px 0;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.hashtag-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #002739;
+  margin-bottom: 8px;
+}
+
+.hashtag-header p {
+  font-size: 1rem;
+  color: #6b7280;
+}
+
+.hashtag-posts {
+  margin-top: 20px;
+}
+
+.loading-spinner {
+  text-align: center;
+  padding: 40px 0;
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.no-posts {
+  text-align: center;
+  padding: 50px 0;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Intégration avec PostViewSwitcher */
+.hashtag-posts .post-view-switcher {
+  margin-top: 0;
+}
+
+.hashtag-detail-container {
+  min-height: 100vh;
+  background: var(--background-color);
+  color: var(--text-color);
+}
+
+.hashtag-detail-container .hashtag-header {
+  background: var(--surface-color);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: relative;
+  overflow-x: hidden;
+  display: block !important;
+  padding: 0 !important;
+  align-items: unset !important;
+  justify-content: unset !important;
+  gap: unset !important;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0.6rem;
+  border-radius: var(--radius-full);
+  transition: all 0.2s ease;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 20;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.25);
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.back-button:hover {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+}
+
+/* Wikipedia banner styles */
+.wikipedia-banner {
+  width: 100vw;
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 0;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  z-index: 0;
+}
+
+.wikipedia-banner-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.wikipedia-banner-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.wikipedia-banner-link:hover .wikipedia-banner-image {
+  transform: scale(1.05);
+}
+
+.wikipedia-banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.wikipedia-banner-overlay .hashtag-title {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 0 0 1rem 0;
+  text-shadow: 3px 3px 12px rgba(0,0,0,0.9);
+  z-index: 2;
+  background: linear-gradient(45deg, #ffffff, #f0f0f0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(2px 2px 8px rgba(0,0,0,0.8));
+}
+
+.wikipedia-banner-text {
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  background: rgba(255,255,255,0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  transition: var(--transition-base);
+  margin-top: auto;
+}
+
+.wikipedia-banner-link:hover .wikipedia-banner-text {
+  background: rgba(255,255,255,0.3);
+  transform: translateY(-2px);
+}
+
+.hashtag-info {
+  text-align: center;
+  padding: 1.5rem;
+  position: relative;
+  z-index: 1;
+  background: var(--surface-color);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Informations Wikipedia centrées */
+.wikipedia-info {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.wikipedia-info .wikipedia-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  color: var(--text-color);
+  line-height: 1.3;
+}
+
+.wikipedia-info .wikipedia-description {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0 0 1.5rem 0;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.wikipedia-info .wikipedia-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--primary-color);
+  color: white;
+  text-decoration: none;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: var(--transition-base);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.hashtag-title {
+  font-size: 2rem;
+  margin: 0 auto 0.5rem auto;
+  color: #000000;
+  text-align: center;
+  font-weight: 700;
+  width: 100%;
+  display: block;
+  /* Suppression du gradient et conservation du noir */
+}
+
+.post-count {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: rgba(var(--primary-color-rgb), 0.1);
+  color: var(--primary-color);
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 107, 53, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 107, 53, 0);
+  }
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.stat-number {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.hashtag-detail-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.posts-section {
+  margin-top: 2rem;
+}
+
+.posts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.posts-header h2 {
+  font-size: 1.5rem;
+  margin: 0;
+  color: var(--text-color);
+}
+
+.sort-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.sort-button {
+  padding: 0.5rem 1rem;
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: var(--transition-base);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.sort-button.active {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.sort-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 10px;
+}
+
+.hashtag-post-card {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+
+.hashtag-post-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  border-color: var(--primary-color);
+}
+
+.post-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  background: var(--border-color);
+}
+
+.post-content {
+  padding: 1rem;
+}
+
+.post-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  color: var(--text-color);
+  line-height: 1.4;
+}
+
+.post-author {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.post-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.post-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.loading-posts {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.loading-spinner-large {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-color);
+  border-top: 3px solid var(--primary-color);
+  border-radius: var(--radius-full);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.no-posts {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-secondary);
+}
+
+.no-posts-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.no-posts h3 {
+  font-size: 1.25rem;
+  margin: 0 0 0.5rem 0;
+  color: var(--text-color);
+}
+
+.no-posts p {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.error-state {
+  text-align: center;
+  padding: 2rem;
+  color: var(--error-color, #ef4444);
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  margin: 1rem 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hashtag-detail-header {
+    padding: 1rem;
+  }
+  
+  .hashtag-title {
+    font-size: 1.5rem;
+  }
+  
+  .hashtag-stats {
+    gap: 1rem;
+  }
+  
+  .stat-number {
+    font-size: 1.25rem;
+  }
+  
+  .posts-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .hashtag-detail-content {
+    padding: 1rem;
+  }
+  
+  .posts-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  
+  .sort-controls {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hashtag-stats {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .sort-controls {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .sort-button {
+    flex: 1;
+    min-width: 100px;
+  }
+}
+
+/* Intégration avec PostViewSwitcher */
+.hashtag-detail-container .post-view-switcher {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.hashtag-detail-container .view-toggle-bar {
+  background: var(--surface-color);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card);
+}
+
+.hashtag-detail-container .posts-count {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* Posts section styles */
+.posts-section {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.empty-posts {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-secondary);
+}
+
+.empty-posts p {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.wikipedia-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.loading-spinner-small {
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid var(--primary-color);
+  border-radius: var(--radius-full);
+  animation: spin 1s linear infinite;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .hashtag-detail-container .hashtag-header {
+    padding: 0 !important;
+    display: block !important;
+  }
+  
+  .back-button {
+    padding: 0.75rem;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border-radius: var(--radius-full);
+    width: 44px;
+    height: 44px;
+    justify-content: center;
+    z-index: 20;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  
+  .back-button:hover {
+    color: white;
+    background: rgba(0,0,0,0.8);
+    transform: scale(1.05);
+  }
+  
+  .wikipedia-banner {
+    height: 250px;
+    margin-bottom: 0;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    z-index: 0;
+  }
+  
+  .wikipedia-banner-overlay {
+    padding: 1rem;
+  }
+  
+  .wikipedia-banner-text {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
+  
+  .hashtag-info {
+    padding: 1.5rem 1rem;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .hashtag-title {
+    font-size: 1.6rem;
+  }
+  
+  .wikipedia-info .wikipedia-title {
+    font-size: 1.1rem;
+  }
+  
+  .wikipedia-info .wikipedia-description {
+    font-size: 0.85rem;
+    padding: 0 0.5rem;
+  }
+  
+  .posts-section {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .wikipedia-banner {
+    height: 200px;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    z-index: 0;
+  }
+  
+  .back-button {
+    top: 0.75rem;
+    left: 0.75rem;
+    padding: 0.5rem;
+    font-size: 1.1rem;
+    width: 40px;
+    height: 40px;
+    backdrop-filter: blur(15px);
+  }
+  
+  .wikipedia-banner-overlay .hashtag-title {
+    font-size: 1.8rem;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.9);
+    filter: drop-shadow(1px 1px 6px rgba(0,0,0,0.8));
+  }
+  
+  .hashtag-title {
+    font-size: 1.4rem;
+  }
+  
+  .wikipedia-info .wikipedia-title {
+    font-size: 1rem;
+  }
+  
+  .wikipedia-info .wikipedia-description {
+    font-size: 0.8rem;
+  }
+  
+  .wikipedia-info .wikipedia-link {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.8rem;
+  }
+  
+  .hashtag-info {
+    padding: 1rem;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

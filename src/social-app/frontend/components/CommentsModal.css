@@ -1,0 +1,1168 @@
+/* Import du design system centralisé */
+@import './design-system.css';
+
+/* Minimalist Comments Modal styles - Clean White Design */
+/* Version 2.1 - Formulaire sticky avec spécificité élevée et debug avatars */
+
+/* Overlay - Plein écran sans centrage avec DVH */
+.comments-drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh; /* Dynamic Viewport Height pour mobile */
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: flex-start; /* Alignement à gauche */
+  align-items: flex-start; /* Alignement en haut */
+  z-index: var(--z-modal-backdrop);
+  animation: overlayFadeIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateZ(0);
+  inset: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* SafeAreaView pour le modal - 100% de l'écran */
+.comments-drawer-safe-area {
+  width: 100%; /* 100% de la largeur */
+  height: 100%; /* 100% de la hauteur */
+  display: flex;
+  justify-content: flex-start; /* Alignement à gauche */
+  align-items: flex-start; /* Alignement en haut */
+}
+
+@keyframes overlayFadeIn {
+  from { 
+    opacity: 0; 
+  }
+  to { 
+    opacity: 1; 
+  }
+}
+
+.comments-drawer-overlay.closing {
+  animation: overlayFadeOut 0.3s ease-out;
+}
+
+@keyframes overlayFadeOut {
+  from { 
+    opacity: 1; 
+  }
+  to { 
+    opacity: 0; 
+  }
+}
+
+/* Drawer - 90% de hauteur pour laisser place au formulaire fixé avec DVH */
+.comments-drawer {
+  background: var(--color-white);
+  width: 100%; /* Prend toute la largeur du SafeAreaView (100%) */
+  height: 90vh; /* 90% de hauteur pour laisser place au formulaire */
+  height: 90dvh; /* Dynamic Viewport Height pour mobile */
+  max-height: calc(100vh - 80px); /* Hauteur max moins l'espace pour le formulaire */
+  max-height: calc(100dvh - 80px); /* DVH fallback */
+  border-radius: 0; /* Suppression des bordures arrondies pour plein écran */
+  display: flex;
+  flex-direction: column;
+  animation: drawerScaleIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  border: none;
+  z-index: var(--z-modal);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes drawerScaleIn {
+  from { 
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to { 
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.comments-drawer.closing {
+  animation: drawerScaleOut 0.3s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+@keyframes drawerScaleOut {
+  from { 
+    transform: scale(1);
+    opacity: 1;
+  }
+  to { 
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
+
+/* Header simplifié - Seulement titre et bouton fermer */
+.comments-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  background: var(--color-white);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-modal-header);
+  margin-top: 0;
+}
+
+.modal-header-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.modal-header-content h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+/* Suppression des styles obsolètes pour post-info et post-caption */
+
+.close-button {
+  background: #f5f5f5;
+  border: none;
+  border-radius: var(--radius-full);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-gray-600);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+/* Content - Layout optimisé pour plein écran */
+.comments-drawer-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch; /* Smooth scroll sur iOS */
+  height: 100%; /* Prend toute la hauteur disponible */
+  z-index: var(--z-modal-content); /* S'assurer qu'il est sous le formulaire */
+  position: relative;
+}
+
+/* Comments Section Styling - Zone scrollable */
+.comments-drawer-content .comments-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* Important pour permettre le shrinking */
+  overflow: hidden; /* Éviter le double scroll */
+  padding: 0; /* Laisser le padding au container interne */
+}
+
+.comments-drawer-content .comments-header {
+  margin-bottom: 20px;
+}
+
+.comments-drawer-content .comments-header h4 {
+  font-size: 1.25rem; /* ~20px - Titre principal */
+  font-weight: 600; /* semi-bold pour "Commentaires" */
+  color: #000; /* Noir pour le titre */
+  margin: 0;
+  text-align: center;
+  letter-spacing: -0.01em; /* Légère optimisation typographique */
+}
+
+/* Comment Form in Modal - Formulaire fixé en bas avec z-index unifié */
+.comments-drawer .comments-drawer-content .comment-form-container {
+  background: var(--color-white) !important;
+  padding: 20px !important;
+  border-radius: 0 !important;
+  border: none !important;
+  margin: 0 !important;
+  position: sticky !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  z-index: var(--z-modal) !important; /* Utilise la variable z-index du modal */
+  border-top: 1px solid #e0e0e0 !important;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1) !important;
+  flex-shrink: 0 !important;
+  margin-top: auto !important;
+  min-height: 80px !important; /* Hauteur minimum pour être visible */
+}
+
+/* NOUVEAU - Formulaire de commentaire dans le modal (hors Comments) avec DVH */
+.modal-comment-form {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  height: 10vh !important; /* 10% de la hauteur de l'écran pour correspondre aux 10% libres */
+  height: 10dvh !important; /* Dynamic Viewport Height pour mobile */
+  min-height: 70px !important; /* Hauteur minimum pour être fonctionnel */
+  max-height: 120px !important; /* Hauteur maximum pour ne pas déborder */
+  background: var(--color-white) !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 15px !important;
+  z-index: var(--z-modal-form) !important; /* Nouveau z-index spécifique pour formulaires modals */
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15) !important;
+  gap: 12px !important;
+  border-top: 1px solid #e0e0e0 !important;
+  padding-bottom: calc(15px + env(safe-area-inset-bottom, 0px)) !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  max-width: 100% !important;
+  flex-shrink: 0 !important;
+}
+
+.modal-comment-form .comment-user-avatar {
+  flex-shrink: 0;
+  width: 35px;
+  height: 35px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  border: none;
+  align-self: flex-start; /* Assurer l'alignement en haut */
+  margin-top: 0;
+}
+
+.modal-comment-form .comment-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modal-comment-form .comment-avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #667eea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.modal-comment-form .comment-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  font-family: inherit;
+  font-size: 16px;
+  background: #f8f9fa;
+  resize: none;
+  outline: none;
+  transition: all 0.2s ease;
+  min-height: 40px;
+  max-height: 100px;
+}
+
+.modal-comment-form .comment-input:focus {
+  border-color: #667eea;
+  background: var(--color-white);
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+.modal-comment-form .comment-submit {
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  align-self: flex-start; /* Aligner au même niveau que l'avatar */
+  margin-top: 0;
+}
+
+.modal-comment-form .comment-submit:hover:not(:disabled) {
+  background: #5a67d8;
+  transform: scale(1.05);
+}
+
+.modal-comment-form .comment-submit:disabled {
+  background: #e2e8f0;
+  color: #a0aec0;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.comments-drawer-content .comment-input-group {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+}
+
+.comments-drawer-content .comment-input {
+  flex: 1;
+  background: #f8f9fa;
+  border: 2px solid #e0e0e0;
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  font-size: 16px; /* 16px pour éviter le zoom sur iOS */
+  line-height: 1.4;
+  resize: none;
+  transition: all 0.2s ease;
+  min-height: 48px;
+  max-height: 120px;
+  font-family: inherit;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.comments-drawer-content .comment-input:focus {
+  outline: none;
+  background: var(--color-white);
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.comments-drawer-content .comment-input::placeholder {
+  color: #999;
+  font-style: italic;
+}
+
+.comments-drawer-content .comment-submit {
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: var(--radius-lg);
+  width: 56px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.comments-drawer-content .comment-submit:hover {
+  background: #5a6fd8;
+  transform: translateY(-1px);
+}
+
+.comments-drawer-content .comment-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Comments List in Modal */
+.comments-drawer-content .comments-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px;
+  padding-bottom: 140px; /* Augmenté pour plus d'espace avec le formulaire fixe - était 100px */
+  gap: 16px;
+  display: flex;
+  flex-direction: column;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  /* Éviter la compression du contenu */
+  flex-shrink: 0;
+}
+
+.comments-drawer-content .comment-item {
+  background: var(--color-white);
+  border-radius: 18px;
+  padding: 16px 20px;
+  border: none;
+  transition: border-color 0.2s ease;
+  position: relative;
+  overflow: visible; /* Permettre l'expansion complète */
+  min-height: auto; /* Pas de contrainte de hauteur */
+  max-height: none; /* Pas de limite de hauteur */
+  height: auto; /* Hauteur automatique selon le contenu */
+  flex-shrink: 0; /* Éviter la compression */
+  /* Assurer l'affichage complet du contenu */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.comments-drawer-content .comment-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.comments-drawer-content .comment-author {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.comments-drawer-content .comment-author-link {
+  text-decoration: none;
+  color: #000; /* Noir pour le nom d'utilisateur */
+  font-weight: 700; /* bold pour hiérarchiser l'émetteur */
+  font-size: 0.95rem; /* ~15px pour le nom d'utilisateur */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s ease;
+}
+
+.comments-drawer-content .comment-date {
+  font-size: 0.75rem; /* ~12px pour le temps */
+  color: var(--color-gray-600); /* Gris pour dé-emphase */
+  font-style: normal; /* Suppression de l'italique */
+  font-weight: 500; /* semi-bold pour meilleure lisibilité */
+}
+
+.comments-drawer-content .comment-content {
+  position: relative;
+  overflow: visible;
+  max-height: none;
+  height: auto;
+}
+
+.comments-drawer-content .comment-text-with-actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.comments-drawer-content .comment-text-with-actions p {
+  flex: 1;
+  margin: 0;
+  color: #000; /* Noir pour le texte du commentaire */
+  line-height: 1.5;
+  font-size: 0.875rem; /* 14px pour le texte du commentaire */
+  font-weight: 400; /* regular pour lecture fluide */
+}
+
+.comments-drawer-content .comment-delete {
+  background: #f5f5f5;
+  border: none;
+  border-radius: var(--radius-md);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #dc3545;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+/* Animation d'ajout de commentaire */
+.comments-drawer-content .comment-item {
+  animation: slideInComment 0.3s ease-out;
+}
+
+@keyframes slideInComment {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* État vide avec style amélioré */
+.comments-drawer-content .no-comments {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+  font-style: italic;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.comments-drawer-content .no-comments::before {
+  content: "💬";
+  font-size: 2.5rem;
+  opacity: 0.5;
+}
+
+/* Drag Handle amélioré */
+.drag-handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  background: transparent;
+  z-index: var(--z-elevated);
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.drag-indicator {
+  width: 48px;
+  height: 5px;
+  background: #e0e0e0;
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
+  position: relative;
+  top: 8px;
+}
+
+/* Smooth dragging animation */
+.comments-drawer.dragging {
+  transition: none;
+}
+
+.comments-drawer:not(.dragging) {
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Mobile optimizations - 100% de l'écran */
+
+/* Responsive fluide - Plein écran */
+.comments-drawer {
+  height: 100vh; /* Hauteur plein écran */
+  width: 100vw; /* Largeur plein écran */
+  border-radius: 0; /* Pas de bordures arrondies */
+}
+
+.comments-drawer-header {
+  padding: clamp(16px, 4vh, 24px) clamp(12px, 3vw, 16px) clamp(10px, 2.5vh, 14px);
+}
+
+.modal-header-content h3 {
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+}
+
+.post-info {
+  font-size: clamp(0.85rem, 2vw, 1rem);
+}
+
+.post-caption-preview {
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+  max-width: clamp(180px, 35vw, 220px);
+}
+
+.close-button {
+  width: clamp(32px, 6vw, 40px);
+  height: clamp(32px, 6vw, 40px);
+}
+
+.comments-drawer-content .comments-list {
+  padding: 0 clamp(8px, 2vw, 12px);
+}
+
+.comments-drawer-content .comment-item {
+  padding: clamp(10px, 2.5vh, 14px);
+  border-radius: clamp(12px, 3vw, 16px);
+}
+
+.comments-drawer-content .comment-author-link {
+  font-size: clamp(0.875rem, 2vw, 0.95rem); /* Maintenir ~14-15px sur mobile */
+  font-weight: 700; /* Conserver le bold */
+  color: #000; /* Maintenir le noir */
+}
+
+.comments-drawer-content .comment-text-with-actions p {
+  font-size: clamp(0.875rem, 2vw, 0.875rem); /* Maintenir 14px sur mobile */
+  color: #000; /* Maintenir le noir */
+  font-weight: 400; /* Maintenir regular */
+}
+
+/* Disable body scroll when modal is open */
+.modal-open {
+  overflow: hidden !important;
+  height: 100vh;
+  position: fixed;
+  width: 100%;
+}
+
+/* Amélioration du focus et de l'accessibilité */
+.comments-drawer:focus-within {
+  outline: none;
+}
+
+.close-button:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+.comments-drawer-content .comment-input:focus {
+  outline: none;
+}
+
+.comments-drawer-content .comment-submit:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Support pour les appareils avec notch */
+@supports (env(safe-area-inset-bottom)) {
+  .comments-drawer-content .comment-form-container {
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  }
+}
+
+/* Amélioration des transitions */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.comments-drawer-content {
+  scroll-behavior: smooth;
+}
+
+/* Loading state amélioré */
+.comments-drawer-content .comments-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: #999;
+  gap: 16px;
+}
+
+.comments-drawer-content .comments-loading::before {
+  content: "⏳";
+  font-size: 2rem;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* =================================================================== */
+/* CORRECTIONS SPÉCIFIQUES IPHONE/IOS - FORMULAIRE COMMENTAIRES     */
+/* =================================================================== */
+
+/* Corrections pour Safari mobile et iOS */
+@supports (-webkit-appearance: none) {
+  /* Forcer l'affichage correct du formulaire sur iOS */
+  .modal-comment-form {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100vw !important;
+    min-height: 80px !important;
+    max-height: 120px !important;
+    background: var(--color-white) !important;
+    z-index: 999999 !important; /* Z-index très élevé pour iOS */
+    display: flex !important;
+    align-items: center !important;
+    padding: 16px !important;
+    gap: 12px !important;
+    border-top: 1px solid #e0e0e0 !important;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15) !important;
+    /* Gestion du safe area pour iPhone */
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+    /* Éviter le zoom automatique sur iOS */
+    -webkit-text-size-adjust: 100% !important;
+    /* Éviter les problèmes de viewport sur iOS */
+    transform: translateZ(0) !important;
+    backface-visibility: hidden !important;
+  }
+
+  /* Input spécifique iOS - éviter le zoom automatique */
+  .modal-comment-form .comment-input {
+    font-size: 16px !important; /* 16px minimum pour éviter le zoom sur iOS */
+    border: 2px solid #e0e0e0 !important;
+    border-radius: 20px !important;
+    padding: 12px 16px !important;
+    background: #f8f9fa !important;
+    min-height: 44px !important; /* Taille minimum recommandée Apple */
+    resize: none !important;
+    outline: none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    -webkit-border-radius: 20px !important; /* Force border-radius sur webkit */
+    box-sizing: border-box !important;
+    /* Éviter les problèmes de performance sur iOS */
+    -webkit-transform: translateZ(0) !important;
+    transform: translateZ(0) !important;
+    /* Personnaliser l'apparence du placeholder sur iOS */
+    -webkit-text-size-adjust: 100% !important;
+  }
+
+  /* Focus state amélioré pour iOS */
+  .modal-comment-form .comment-input:focus {
+    border-color: #667eea !important;
+    background: var(--color-white) !important;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1) !important;
+    outline: none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+  }
+
+  /* Bouton submit optimisé pour iOS */
+  .modal-comment-form .comment-submit {
+    min-width: 44px !important; /* Taille minimum Apple */
+    min-height: 44px !important; /* Taille minimum Apple */
+    border-radius: 50% !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    -webkit-transform: translateZ(0) !important;
+    transform: translateZ(0) !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  /* Avatar optimisé pour iOS */
+  .modal-comment-form .comment-user-avatar {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
+    -webkit-transform: translateZ(0) !important;
+    transform: translateZ(0) !important;
+  }
+}
+
+/* Corrections spécifiques iPhone (détection user-agent) */
+@media screen and (-webkit-min-device-pixel-ratio: 2) {
+  /* iPhone avec écran Retina */
+  .modal-comment-form {
+    /* Forcer l'affichage en utilisant des unités absolues */
+    height: auto !important;
+    min-height: 80px !important;
+    max-height: 140px !important;
+    /* Améliorer les performances sur iPhone */
+    will-change: transform !important;
+    -webkit-backface-visibility: hidden !important;
+    backface-visibility: hidden !important;
+  }
+
+  .modal-comment-form .comment-input {
+    /* Optimiser pour les écrans Retina */
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    /* Améliorer le rendu du texte */
+    text-rendering: optimizeLegibility !important;
+  }
+}
+
+/* Corrections pour les iPhones avec notch */
+@supports (env(safe-area-inset-bottom)) {
+  .modal-comment-form {
+    /* Adapter le padding pour les iPhones avec notch */
+    padding-bottom: calc(20px + env(safe-area-inset-bottom)) !important;
+    /* S'assurer que le formulaire est visible */
+    margin-bottom: 0 !important;
+  }
+}
+
+/* Corrections pour le clavier virtuel iOS */
+@media screen and (max-height: 500px) {
+  /* Quand le clavier est ouvert (hauteur réduite) */
+  .modal-comment-form {
+    position: fixed !important;
+    bottom: 0 !important;
+    height: auto !important;
+    min-height: 70px !important;
+    max-height: 100px !important;
+    /* Réduire le padding quand l'espace est limité */
+    padding: 12px !important;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .modal-comment-form .comment-input {
+    min-height: 40px !important;
+    max-height: 60px !important;
+    padding: 10px 14px !important;
+  }
+}
+
+/* Éviter les problèmes de scroll avec le clavier iOS */
+.comments-drawer-overlay:has(.modal-comment-form .comment-input:focus) {
+  /* Empêcher le scroll de l'overlay quand l'input est focus */
+  overflow: hidden !important;
+  position: fixed !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+}
+
+/* Nouveaux styles pour les commentaires imbriqués dans le modal */
+
+/* Container principal des threads de commentaires */
+.comments-thread-container {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 75vh; /* Augmenté pour plus d'espace - était 60vh */
+  min-height: 300px; /* Augmenté pour éviter le tassement - était 200px */
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  flex: 1; /* Prendre tout l'espace disponible */
+  /* Assurer un défilement fluide */
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  /* Éviter la compression des commentaires */
+  flex-shrink: 0;
+}
+
+/* Style de la barre de défilement pour les navigateurs Webkit dans le modal */
+.comments-thread-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.comments-thread-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.comments-thread-container::-webkit-scrollbar-thumb {
+  background: #c2c8d5;
+  border-radius: 10px;
+}
+
+.comments-thread-container::-webkit-scrollbar-thumb:hover {
+  background: #667eea;
+}
+
+/* État de chargement des commentaires */
+.comments-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  color: var(--text-secondary, #666);
+}
+
+.comments-loading .spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(255, 107, 53, 0.3);
+  border-radius: var(--radius-full);
+  border-top: 3px solid #ff6b35;
+  animation: spin 1s linear infinite;
+  margin-bottom: 0.5rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* État "Aucun commentaire" */
+.no-comments {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-secondary, #666);
+}
+
+.no-comments p {
+  margin: 0.25rem 0;
+  line-height: 1.4;
+}
+
+.no-comments p:first-child {
+  font-weight: 500;
+  color: var(--text-primary, #333);
+}
+
+/* Bouton "Charger plus" */
+.load-more-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1rem auto;
+  padding: 0.75rem 1.5rem;
+  background: var(--background-secondary, #f8f9fa);
+  border: 1px solid var(--border-color, #e1e5e9);
+  border-radius: var(--radius-md);
+  color: var(--text-primary, #333);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 160px;
+}
+
+.load-more-button:hover:not(:disabled) {
+  background: var(--background-hover, #e9ecef);
+  border-color: var(--border-hover, #d0d7de);
+}
+
+.load-more-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.load-more-button .spinner {
+  animation: spin 1s linear infinite;
+  font-size: 0.9rem;
+}
+
+/* Responsive pour mobile */
+@media (max-width: 768px) {
+  .comments-thread-container {
+    padding: 0.75rem;
+    gap: 0.5rem;
+    max-height: 65vh; /* Augmenté pour mobile - était 400px */
+    min-height: 250px; /* Hauteur minimum augmentée pour mobile */
+    padding-right: 0.5rem;
+    /* Plus d'espace pour les commentaires sur mobile */
+    padding-bottom: 1.5rem;
+  }
+  
+  .comments-thread-container::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  .comments-loading,
+  .no-comments {
+    padding: 2rem 1rem;
+  }
+  
+  .load-more-button {
+    margin: 0.75rem auto;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.85rem;
+  }
+  
+  /* Amélioration pour mobile - plus d'espace pour les commentaires */
+  .comments-drawer-content .comments-list {
+    padding-bottom: 160px; /* Plus d'espace sur mobile pour le formulaire */
+  }
+}
+
+/* Amélioration de l'intégration avec les styles existants */
+.comments-drawer-content .comments-thread-container {
+  height: 100%;
+  max-height: calc(100vh - 200px); /* S'assurer qu'il reste de la place pour le formulaire */
+  overflow-y: auto;
+  padding-bottom: 2rem; /* Plus d'espace pour éviter la collision avec le formulaire */
+  /* Éviter tout conflit avec le formulaire fixe */
+  margin-bottom: 0;
+}
+
+/* Assurer que le CommentThread s'intègre bien dans le modal */
+.comments-thread-container .comment-thread {
+  border-bottom: 1px solid var(--border-light, #f0f0f0);
+  margin-bottom: 0.75rem; /* Augmenté pour plus d'espacement */
+  padding-bottom: 1rem; /* Augmenté pour plus d'espace */
+  /* Assurer l'expansion complète */
+  overflow: visible;
+  max-height: none;
+  height: auto;
+}
+
+.comments-thread-container .comment-thread:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  /* Plus d'espace pour le dernier élément */
+  padding-bottom: 1.5rem;
+}
+
+/* Ajustements pour les réponses dans le modal */
+.comments-thread-container .comment-thread .comment-reply {
+  margin-top: 0.75rem; /* Augmenté pour plus d'espacement */
+  /* Assurer l'expansion complète des réponses */
+  overflow: visible;
+  max-height: none;
+  height: auto;
+}
+
+.comments-thread-container .comment-thread .comment-replies {
+  margin-top: 1rem; /* Augmenté pour plus d'espacement */
+  /* Assurer l'expansion complète des conteneurs de réponses */
+  overflow: visible;
+  max-height: none;
+  height: auto;
+  /* Éviter la compression du contenu imbriqué */
+  flex-shrink: 0;
+}
+
+/* Variables CSS pour la cohérence */
+:root {
+  --comment-indent-base: 1rem;
+  --comment-indent-mobile: 0.75rem;
+  --comment-border-light: #f0f0f0;
+  --comment-background-reply: #fafbfc;
+}
+
+/* Styles pour les actions de commentaires (Répondre, Voir la traduction, etc.) */
+.comments-drawer-content .comment-actions,
+.comments-drawer-content .comment-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.comments-drawer-content .comment-reply-btn,
+.comments-drawer-content .comment-translate-btn,
+.comments-drawer-content .comment-action-btn {
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  font-size: 0.75rem; /* 12px pour les actions */
+  font-weight: 400; /* regular */
+  color: var(--color-gray-600); /* gris pour action discrète */
+  cursor: pointer;
+  transition: color 0.2s ease;
+  text-decoration: none;
+}
+
+.comments-drawer-content .comment-reply-btn:hover,
+.comments-drawer-content .comment-translate-btn:hover,
+.comments-drawer-content .comment-action-btn:hover {
+  color: #333; /* Légèrement plus foncé au hover */
+}
+
+.comments-drawer-content .comment-reply-btn:focus,
+.comments-drawer-content .comment-translate-btn:focus,
+.comments-drawer-content .comment-action-btn:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+/* Ajustements pour le conteneur d'actions de commentaire */
+.comments-drawer-content .comment-footer {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Styles typographiques pour les commentaires imbriqués dans le modal */
+.comments-thread-container .comment-author-name,
+.comments-thread-container .comment-author-link {
+  font-size: 0.95rem; /* ~15px pour le nom d'utilisateur */
+  font-weight: 700; /* bold pour hiérarchiser l'émetteur */
+  color: #000; /* Noir pour le nom d'utilisateur */
+  text-decoration: none;
+}
+
+.comments-thread-container .comment-text,
+.comments-thread-container .comment-content p,
+.comments-thread-container .comment-body {
+  font-size: 0.875rem; /* 14px pour le texte du commentaire */
+  font-weight: 400; /* regular pour lecture fluide */
+  color: #000; /* Noir pour le texte */
+  line-height: 1.5;
+  margin: 0;
+}
+
+.comments-thread-container .comment-date,
+.comments-thread-container .comment-time {
+  font-size: 0.75rem; /* 12px pour le temps */
+  color: var(--color-gray-600); /* Gris pour dé-emphase */
+  font-weight: 500; /* semi-bold pour meilleure lisibilité */
+  font-style: normal;
+}
+
+.comments-thread-container .comment-reply-btn,
+.comments-thread-container .comment-action-btn,
+.comments-thread-container .comment-toggle-replies {
+  font-size: 0.75rem; /* 12px pour les actions */
+  font-weight: 400; /* regular */
+  color: var(--color-gray-600); /* gris pour action discrète */
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.comments-thread-container .comment-reply-btn:hover,
+.comments-thread-container .comment-action-btn:hover,
+.comments-thread-container .comment-toggle-replies:hover {
+  color: #333; /* Légèrement plus foncé au hover */
+}
+
+/* Titre des commentaires dans le thread container */
+.comments-thread-container .comments-title,
+.comments-thread-container h4 {
+  font-size: 1.25rem; /* ~20px - Titre principal */
+  font-weight: 600; /* semi-bold pour "Commentaires" */
+  color: #000; /* Noir pour le titre */
+  text-align: center;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.01em;
+}
+
+/* Styles pour les différents niveaux de commentaires - Fonds progressifs */
+.comments-drawer-content .comment-level-0 {
+  border-left: none;
+}
+
+.comments-drawer-content .comment-level-1 {
+  border-left: 2px solid #e8f0fe;
+}
+
+.comments-drawer-content .comment-level-2 {
+  border-left: 2px solid #d2e3fc;
+}
+
+.comments-drawer-content .comment-level-3 {
+  border-left: 2px solid #aecbfa;
+}
+
+/* Distinction visuelle entre commentaires principaux et réponses */
+.comments-drawer-content .comment-main {
+  background: var(--color-white);
+}
+
+.comments-drawer-content .comment-reply {
+  background: #f8f9fb !important;
+  border: 1px solid #e8eaed;
+}
+
+/* Fonds progressivement plus foncés pour les niveaux de réponses */
+.comments-drawer-content .comment-level-1.comment-reply {
+  background: #f8f9fb !important;
+}
+
+.comments-drawer-content .comment-level-2.comment-reply {
+  background: var(--color-white) !important;
+}
+
+.comments-drawer-content .comment-level-3.comment-reply {
+  background: var(--color-white) !important;
+}
+
+/* Limitation à 3 niveaux - masquer les niveaux supérieurs */
+.comments-drawer-content .comment-level-3,
+.comments-drawer-content .comment-level-4,
+.comments-drawer-content .comment-level-5,
+.comments-drawer-content .comment-level-6 {
+  display: none;
+}

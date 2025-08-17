@@ -1,0 +1,14 @@
+{
+  "appId": "com.visionpicturale.community",
+  "appName": "Vision Picturale",
+  "webDir": "src",
+  "server": {
+    "androidScheme": "https"
+  },
+  "ios": {
+    "scheme": "Vision Picturale"
+  },
+  "android": {
+    "allowMixedContent": true
+  }
+}

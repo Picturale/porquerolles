@@ -1,0 +1,16 @@
+/* Import du design system centralisé */
+@import './design-system.css';
+
+/* Solution universelle simple et propre */
+
+/* Support pour les écrans avec encoche (iPhone X+) */
+@supports (padding: max(0px)) {
+  .bottom-navbar {
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+    height: calc(70px + env(safe-area-inset-bottom));
+  }
+  
+  .main-content {
+    padding-bottom: calc(90px + env(safe-area-inset-bottom));
+  }
+}

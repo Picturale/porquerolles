@@ -1,0 +1,369 @@
+/* Import du design system centralisé */
+@import './design-system.css';
+
+/* Styles pour le composant SmartInput unifié */
+.smart-input-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Icônes de raccourci en bas à gauche sous le formulaire */
+.input-shortcuts {
+  position: relative;
+  margin-top: 8px;
+  margin-left: 0;
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.shortcut-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #e0e0e0;
+  border-radius: var(--radius-sm);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  color: #333;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.shortcut-btn:hover {
+  opacity: 1;
+  transform: scale(1.05);
+  border-color: #333;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Style pour les boutons actifs (formatage actuellement appliqué) */
+.shortcut-btn.active {
+  background-color: #333;
+  color: white;
+  border-color: #333;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.shortcut-btn.active:hover {
+  background-color: #444;
+  transform: scale(1.05);
+}
+
+.hashtag-shortcut {
+  background: white;
+  color: #333;
+  border: 1px solid #e0e0e0;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.hashtag-shortcut:hover {
+  background: #f8f9fa;
+  color: #000;
+  border-color: #333;
+}
+
+.mention-shortcut {
+  background: white;
+  color: #333;
+  border: 1px solid #e0e0e0;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.mention-shortcut:hover {
+  background: #f8f9fa;
+  color: #000;
+  border-color: #333;
+}
+
+/* Séparateur visuel entre les groupes de boutons */
+.shortcuts-separator {
+  width: 1px;
+  height: 20px;
+  background: #e0e0e0;
+  margin: 0 4px;
+}
+
+/* Styles pour tous les boutons de mise en forme */
+.format-bold,
+.format-separator,
+.format-link,
+.format-quote,
+.align-left,
+.align-center,
+.align-right {
+  background: white;
+  color: #333;
+  border: 1px solid #e0e0e0;
+}
+
+.format-bold:hover,
+.format-separator:hover,
+.format-link:hover,
+.format-quote:hover,
+.align-left:hover,
+.align-center:hover,
+.align-right:hover {
+  background: #f8f9fa;
+  color: #000;
+  border-color: #333;
+}
+
+.smart-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.4;
+  outline: none;
+  transition: all 0.2s ease;
+  background-color: #fafafa;
+  min-height: 115px;
+  max-height: none; /* Permettre l'expansion illimitée */
+  resize: none; /* Désactiver le resize par défaut */
+  overflow-y: auto; /* Ajouter scroll si nécessaire */
+}
+
+.smart-input.focused {
+  border-color: #007acc;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.1);
+  resize: vertical; /* Permettre le resize vertical en mode focus */
+}
+
+.smart-input:focus {
+  border-color: #007acc;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.1);
+}
+
+.smart-input:disabled {
+  background-color: #f5f5f5;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* Animation de transition pour le redimensionnement */
+.smart-input {
+  transition: height 0.3s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Suggestions communes */
+.smart-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--color-white);
+  border: 1px solid #ddd;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  margin-top: 4px;
+}
+
+.suggestions-header {
+  padding: 8px 12px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #eee;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-gray-600);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Suggestions de mentions */
+.mention-suggestion {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s ease;
+}
+
+.mention-suggestion:hover,
+.mention-suggestion.active {
+  background-color: #f8f9fa;
+}
+
+.mention-suggestion:last-child {
+  border-bottom: none;
+}
+
+.suggestion-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  margin-right: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.suggestion-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #007acc;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.suggestion-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.suggestion-username {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.suggestion-displayname {
+  font-size: 12px;
+  color: var(--color-gray-600);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Suggestions de hashtags */
+.hashtag-suggestion {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s ease;
+}
+
+.hashtag-suggestion:hover,
+.hashtag-suggestion.active {
+  background-color: #f8f9fa;
+}
+
+.hashtag-suggestion:last-child {
+  border-bottom: none;
+}
+
+.hashtag-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.hashtag-tag {
+  font-weight: 600;
+  color: #007acc;
+  font-size: 14px;
+}
+
+.hashtag-count {
+  font-size: 12px;
+  color: var(--color-gray-600);
+  background-color: #e9ecef;
+  padding: 2px 8px;
+  border-radius: var(--radius-lg);
+}
+
+/* Affichage du compteur de hashtags */
+.hashtag-count-display {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background-color: #e3f2fd;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  color: #1976d2;
+}
+
+.hashtag-icon {
+  margin-right: 8px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Compteur de caractères */
+.character-count {
+  align-self: flex-end;
+  font-size: 12px;
+  color: var(--color-gray-600);
+  margin-top: 4px;
+  padding: 0 4px;
+}
+
+.character-count.near-limit {
+  color: #f57c00;
+}
+
+.character-count.at-limit {
+  color: #d32f2f;
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .smart-suggestions {
+    max-height: 200px;
+  }
+  
+  .mention-suggestion,
+  .hashtag-suggestion {
+    padding: 10px;
+  }
+  
+  .suggestion-avatar {
+    width: 28px;
+    height: 28px;
+    margin-right: 10px;
+  }
+  
+  /* Ajustements des icônes de raccourci sur mobile */
+  .input-shortcuts {
+    margin-top: 6px;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  
+  .shortcut-btn {
+    width: 26px;
+    height: 26px;
+    font-size: 12px;
+  }
+
+  .shortcuts-separator {
+    height: 16px;
+    margin: 0 2px;
+  }
+}

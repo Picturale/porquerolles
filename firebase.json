@@ -1,0 +1,185 @@
+{
+  "hosting": {
+    "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "headers": [
+      {
+        "source": "**/*.js",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/javascript"
+          },
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "**/*.mjs",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/javascript"
+          },
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "**/*.css",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "text/css"
+          },
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(css|js|html)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
+          },
+          {
+            "key": "Pragma",
+            "value": "no-cache"
+          },
+          {
+            "key": "Expires",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(jpg|jpeg|png|gif|ico|svg|webp)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=86400"
+          }
+        ]
+      }
+    ],
+    "rewrites": [
+      {
+        "source": "/api/admin/bootstrap",
+        "function": { "functionId": "adminBootstrap", "region": "europe-west1" }
+      },
+      {
+        "source": "/api/invites/redeem",
+        "function": { "functionId": "adminApi", "region": "europe-west1" }
+      },
+      {
+        "source": "/api/affiliates/**",
+        "function": { "functionId": "adminApi", "region": "europe-west1" }
+      },
+      {
+        "source": "/api/admin/**",
+        "function": { "functionId": "adminApi", "region": "europe-west1" }
+      },
+      {
+        "source": "/",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/core-app/**",
+        "destination": "/core-app/index.html"
+      },
+      {
+        "source": "/social-app/**",
+        "destination": "/social-app/index.html"
+      },
+      {
+        "source": "/home",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/login",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/register",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/invite",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/profile/**",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/create",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/chat",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/edit-profile",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/admin/**",
+        "destination": "/index.html"
+      },
+      {
+        "source": "!/**/*.@(js|css|png|jpg|jpeg|gif|ico|svg|webp|woff|woff2|ttf|eot|map)",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "firestore": {
+  "rules": "config/firestore.rules",
+  "indexes": "config/firestore.indexes.json"
+  },
+  "database": {
+    "rules": "database.rules.json"
+  },
+  "storage": {
+    "rules": "config/storage.rules"
+  },
+  "functions": {
+  "source": "functions",
+  "runtime": "nodejs22",
+  "region": "europe-west1"
+  },
+  "emulators": {
+    "functions": {
+      "host": "127.0.0.1",
+      "port": 5001
+    },
+    "firestore": {
+      "host": "127.0.0.1",
+      "port": 8080
+    },
+    "auth": {
+      "host": "127.0.0.1",
+      "port": 9099
+    },
+    "storage": {
+      "host": "127.0.0.1",
+      "port": 9199
+    },
+    "ui": {
+      "enabled": true,
+      "host": "127.0.0.1",
+      "port": 4002
+    }
+  }
+}

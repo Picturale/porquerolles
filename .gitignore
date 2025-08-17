@@ -1,0 +1,93 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Build files
+dist/
+build/
+.cache/
+.emulator-data/
+firestore_export/
+storage_export/
+firebase-debug.log*
+
+# Temporary files and reports
+BUILD-REPORT.md
+docs/BUILD-REPORT.md
+CLEANUP-*.md
+MIGRATION-*.md
+*-SUMMARY.md
+*-SUCCESS.md
+*.tmp
+temp-*/
+backup-*/
+DEPLOYMENT-LOG-*.md
+CreatePost_backup.jsx
+RichTextEditor_backup.jsx
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# iOS
+ios/build/
+ios/App/App.xcworkspace/
+ios/App/App.xcodeproj/
+ios/App/Pods/
+ios/App/Podfile.lock
+ios/App/App/public/
+ios/capacitor-cordova-ios-plugins/
+
+# Android
+android/build/
+android/app/build/
+android/.gradle/
+android/.idea/
+android/local.properties
+android/app/release/
+android/app/debug/
+android/capacitor-cordova-android-plugins/
+
+# Mobile releases
+*.ipa
+*.apk
+*.aab
+MOBILE-RELEASE-REPORT.json
+android/app/build/
+android/.gradle/
+android/gradle/
+android/gradlew
+android/gradlew.bat
+
+# VS Code settings (garder le dossier mais ignorer les configs utilisateur)
+.vscode/settings.json
+.vscode/launch.json
+
+# OS files
+.DS_Store
+**/.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Firebase
+.firebase/
+
+# Logs
+*.log
+logs/
+
+# Coverage et tests
+coverage/
+.nyc_output/
+test-results/
+playwright-report/

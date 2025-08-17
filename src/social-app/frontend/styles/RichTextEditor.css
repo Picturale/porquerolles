@@ -1,0 +1,282 @@
+@import './design-system.css';
+
+/**
+ * Styles pour l'éditeur de texte riche WYSIWYG direct
+ */
+
+.rich-text-editor {
+  display: flex;
+  flex-direction: column;
+  border: none;
+  border-radius: 0;
+  overflow: hidden;
+  background-color: white;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+/* Barre d'outils de formatage */
+.formatting-toolbar {
+  display: flex;
+  padding: 6px 0;
+  border-bottom: none;
+  background-color: white;
+  flex-wrap: wrap;
+  gap: 3px;
+  align-items: center;
+}
+
+.format-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border-radius: 4px;
+  border: none;
+  background-color: white;
+  color: #000;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  margin-right: 4px;
+}
+
+.format-btn:hover {
+  background-color: #f0f0f0;
+}
+
+.format-btn.active {
+  background-color: #e0e0e0;
+  color: #000;
+  box-shadow: inset 0 0 2px rgba(0,0,0,0.1);
+  border: none;
+}
+
+.format-btn.active:hover {
+  background-color: #f0f0f0;
+}
+
+/* Style spécifique pour les boutons d'alignement */
+.format-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: #000;
+}
+
+.format-btn.active svg {
+  fill: #000;
+}
+
+/* Séparateur entre groupes de boutons */
+.btn-separator {
+  width: 1px;
+  height: 20px;
+  background-color: #e0e0e0;
+  margin: 0 6px;
+}
+
+/* Style pour les icônes SVG */
+.format-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: #333;
+  stroke: none;
+}
+
+/* Styles pour les suggestions (hashtags et mentions) */
+.suggestions-container {
+  /* Position contrôlée en ligne (top/left & fixed). Ne pas surcharger ici. */
+  z-index: 2000;
+  background: var(--color-white, #ffffff);
+  border: 1px solid #e5e7eb;
+  border-radius: var(--radius-md, 8px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12), 0 4px 10px rgba(0, 0, 0, 0.06);
+  min-width: 260px;
+  max-width: 360px;
+  max-height: 280px;
+  overflow-y: auto;
+  backdrop-filter: saturate(1.2);
+}
+
+.suggestions-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.15s ease, border-left-color 0.15s ease;
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover {
+  background-color: #f8fafc;
+}
+
+.suggestion-item.active {
+  background-color: #eff6ff;
+  border-left: 3px solid #3b82f6;
+}
+
+.suggestion-symbol {
+  color: #3b82f6;
+  font-weight: 600;
+  margin-right: 2px;
+}
+
+.suggestion-text {
+  flex: 1;
+  color: #374151;
+  font-weight: 500;
+}
+
+.suggestion-count {
+  color: #6b7280;
+  font-size: 0.85rem;
+  margin-left: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .suggestions-container {
+    min-width: 220px;
+    max-width: 85vw;
+    max-height: 220px;
+  }
+  .suggestion-item {
+    padding: 10px 12px;
+  }
+}
+
+/* Contenu éditable WYSIWYG */
+.editor-content {
+  min-height: 150px;
+  max-height: 500px;
+  overflow-y: auto;
+  padding: 12px 16px;
+  line-height: 1.6;
+  color: #333;
+  outline: none;
+  font-size: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+.editor-content:empty::before {
+  content: attr(placeholder);
+  color: #aaa;
+}
+
+.editor-content:focus {
+  border-color: #bdbdbd;
+  box-shadow: none;
+}
+
+.editor-content.focused {
+  border-color: #999;
+}
+
+/* Styles pour les paragraphes dans l'éditeur */
+.editor-content p {
+  margin: 0.5em 0;
+}
+
+/* Assurer que les paragraphes s'alignent correctement */
+.editor-content [style*="text-align: left"] {
+  text-align: left !important;
+}
+
+.editor-content [style*="text-align: center"] {
+  text-align: center !important;
+}
+
+.editor-content [style*="text-align: right"] {
+  text-align: right !important;
+}
+
+/* S'assurer que les divisions s'alignent correctement */
+.editor-content div[style*="text-align"] {
+  display: block;
+  width: 100%;
+  margin: 0.5em 0;
+}
+
+/* Compteur de caractères */
+.character-count {
+  padding: 4px 12px;
+  text-align: right;
+  font-size: 12px;
+  color: #666;
+  border-top: none;
+  background-color: transparent;
+  margin-top: 4px;
+}
+
+.character-count.near-limit {
+  color: #ff9800;
+}
+
+.character-count.at-limit {
+  color: #f44336;
+  font-weight: bold;
+}
+
+/* Styles pour le contenu formaté */
+.editor-content strong {
+  font-weight: bold;
+}
+
+.editor-content blockquote {
+  border-left: 3px solid #ddd;
+  margin-left: 0;
+  padding-left: 16px;
+  color: #666;
+}
+
+.editor-content a {
+  color: #0066cc;
+  text-decoration: underline;
+}
+
+.editor-content hr {
+  border: none;
+  height: 1px;
+  background-color: #ddd;
+  margin: 16px 0;
+}
+
+/* Alignements */
+.editor-content .text-left {
+  text-align: left;
+}
+
+.editor-content .text-center {
+  text-align: center;
+}
+
+.editor-content .text-right {
+  text-align: right;
+}
+
+/* Styles pour les mentions et hashtags */
+.editor-content .preview-mention {
+  color: #0066cc;
+  font-weight: 500;
+}
+
+.editor-content .preview-hashtag {
+  color: #1da1f2;
+  font-weight: 500;
+}

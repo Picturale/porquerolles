@@ -1,0 +1,74 @@
+/* Z-Index Scale - Vision Picturale Community */
+/* Cette échelle unifie tous les z-index de l'application */
+
+:root {
+  /* Base layers */
+  --z-base: 1;
+  --z-content: 5; /* Contenu principal bien en dessous du top menu */
+  --z-elevated: 100;
+  
+  /* Navigation & Fixed Elements */
+  --z-header: 1000;
+  --z-navigation: 1010;
+  --z-sticky: 1020;
+  --z-floating-action: 1030;
+  
+  /* Overlays & Dropdowns */
+  --z-dropdown: 2000;
+  --z-popover: 2010;
+  --z-tooltip: 2020;
+  --z-notification: 2030;
+  --z-chat-conversation: 2100; /* Conversations chat au premier plan */
+  --z-chat-fullscreen: 2500; /* Chat en mode plein écran mobile */
+  
+  /* Modals & Dialogs */
+  --z-modal-backdrop: 9000;
+  --z-modal: 9010;
+  --z-modal-header: 9020;
+  --z-modal-content: 9030;
+  --z-modal-form: 9040; /* Formulaires dans les modals (toujours au-dessus) */
+  
+  /* Critical Elements */
+  --z-loading: 9500;
+  --z-error: 9600;
+  --z-debug: 9700;
+  --z-dev-tools: 10000;
+  --z-system: 9999;
+  --z-mobile-chat: 99999; /* Valeur extrême pour le chat mobile */
+}
+
+/* SafeAreaView pour iOS */
+.safe-area-container {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* SafeAreaView spécifique pour les modales */
+.modal-safe-area {
+  padding-top: max(env(safe-area-inset-top), 20px);
+  padding-bottom: max(env(safe-area-inset-bottom), 20px);
+  padding-left: max(env(safe-area-inset-left), 20px);
+  padding-right: max(env(safe-area-inset-right), 20px);
+}
+
+/* Helper classes pour les z-index */
+.z-header { z-index: var(--z-header); }
+.z-navigation { z-index: var(--z-navigation); }
+.z-sticky { z-index: var(--z-sticky); }
+.z-floating-action { z-index: var(--z-floating-action); }
+.z-dropdown { z-index: var(--z-dropdown); }
+.z-popover { z-index: var(--z-popover); }
+.z-tooltip { z-index: var(--z-tooltip); }
+.z-notification { z-index: var(--z-notification); }
+.z-chat-conversation { z-index: var(--z-chat-conversation); }
+.z-modal-backdrop { z-index: var(--z-modal-backdrop); }
+.z-modal { z-index: var(--z-modal); }
+.z-modal-header { z-index: var(--z-modal-header); }
+.z-modal-content { z-index: var(--z-modal-content); }
+.z-loading { z-index: var(--z-loading); }
+.z-error { z-index: var(--z-error); }
+.z-debug { z-index: var(--z-debug); }
+.z-dev-tools { z-index: var(--z-dev-tools); }
+.z-system { z-index: var(--z-system); }

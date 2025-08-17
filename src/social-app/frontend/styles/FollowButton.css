@@ -1,0 +1,133 @@
+/* Import du design system centralisé */
+@import './design-system.css';
+
+/* Follow Button Component Styles */
+
+.follow-button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px; /* Réduit de 8px à 4px */
+  padding: 2px 2px; /* Nouveau padding minimal */
+  /* Retirer margin-top pour améliorer l'alignement avec les autres boutons */
+}
+
+.follow-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px; /* Réduit de 8px à 6px */
+  padding: 2px 2px; /* Réduit de 12px 24px à 8px 16px */
+  border-radius: 20px; /* Réduit de 25px à 20px */
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.85rem; /* Réduit de 0.95rem à 0.85rem */
+  transition: var(--transition-base);
+  cursor: pointer;
+  border: 2px solid;
+  min-width: 100px; /* Réduit de 120px à 100px */
+  justify-content: center;
+}
+
+/* Not Following State - Orange theme */
+.follow-button.not-following {
+  background: var(--color-white);
+  color: #ff6b35; /* Orange direct */
+  border-color: #ff6b35; /* Orange direct */
+}
+
+.follow-button.not-following:hover:not(:disabled) {
+  background: #ff6b35; /* Orange direct */
+  color: white;
+  border-color: #ff6b35; /* Orange direct */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+/* Following State - Orange theme */
+.follow-button.following {
+  background: #ff6b35; /* Orange direct */
+  color: white;
+  border-color: #ff6b35; /* Orange direct */
+}
+
+.follow-button.following:hover:not(:disabled) {
+  background: #dc3545;
+  border-color: #dc3545;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.follow-button.following:hover:not(:disabled) span {
+  content: 'Se désabonner';
+}
+
+/* Disabled State */
+.follow-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Loading State */
+.follow-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.follow-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 107, 53, 0.3);
+  border-radius: var(--radius-full);
+  border-top: 2px solid #ff6b35;
+  animation: followSpin 1s linear infinite;
+}
+
+@keyframes followSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Followers Count */
+.followers-count {
+  font-size: 0.75rem; /* Réduit de 0.85rem à 0.75rem */
+  color: var(--text-light);
+  text-align: center;
+}
+
+.followers-count span {
+  font-weight: 500;
+}
+
+/* Responsive Design */
+
+
+/* Compact Follow Button for Feed */
+.follow-button-compact {
+  padding: 4px 8px !important;
+  font-size: 0.75rem !important;
+  min-width: 60px !important;
+  height: 28px;
+  border-radius: 14px !important;
+  gap: 4px !important;
+}
+
+.follow-button-compact .follow-loading {
+  gap: 4px;
+}
+
+.follow-button-compact .follow-spinner {
+  width: 12px;
+  height: 12px;
+}
+
+.follow-button-compact span {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Hide followers count in compact mode */
+.post-header-actions .followers-count {
+  display: none;
+}

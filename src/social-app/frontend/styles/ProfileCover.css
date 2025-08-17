@@ -1,0 +1,70 @@
+/* Wrapper maintains aspect ratio using CSS variable */
+.profile-cover-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--cover-ratio, 3 / 1);
+  background: var(--background, #111);
+  overflow: hidden;
+}
+
+/* Horizontal slider with scroll snap */
+.cover-slider {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+.cover-slide {
+  flex: 0 0 100%;
+  height: 100%;
+  scroll-snap-align: start;
+  position: relative;
+}
+
+.cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Nav buttons */
+.cover-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.4);
+  border: none;
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.cover-nav.prev { left: 8px; }
+.cover-nav.next { right: 8px; }
+.cover-nav:hover { background: rgba(0,0,0,0.6); }
+
+/* Dots */
+.cover-dots {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+}
+.cover-dots .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  border: 0;
+  background: rgba(255,255,255,0.5);
+}
+.cover-dots .dot.active { background: #fff; }

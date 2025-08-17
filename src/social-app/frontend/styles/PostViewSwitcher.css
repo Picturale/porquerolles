@@ -1,0 +1,179 @@
+/* Import du design system centralisé */
+@import './design-system.css';
+
+/* Sélecteur de vue pour les posts */
+
+.post-view-switcher {
+  width: 100%;
+}
+
+.view-toggle-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.view-toggle-buttons {
+  display: flex;
+  background: #f3f4f6;
+  border-radius: var(--radius-md);
+  padding: 4px;
+  gap: 2px;
+}
+
+.view-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.view-toggle-btn:hover {
+  color: #374151;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.view-toggle-btn.active {
+  background: var(--color-white);
+  color: #111827;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.view-toggle-btn svg {
+  font-size: 0.875rem;
+}
+
+.posts-count {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.view-content {
+  min-height: 200px;
+}
+
+/* Styles spécifiques pour la vue détaillée */
+.post-detailed-view {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 0 16px;
+}
+
+/* Affichage en grille pour les grands écrans dans la vue détaillée */
+@media (min-width: 1024px) {
+  .post-detailed-view {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 20px;
+  }
+  
+  /* Assurer que la grille ne dépasse pas 3 colonnes */
+  .post-detailed-view {
+    grid-template-columns: repeat(auto-fill, minmax(max(380px, calc((100% - 40px) / 3)), 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .post-detailed-view {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+/* Styles pour les PostCard en vue détaillée */
+.post-detailed-view .post-card {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 0;
+  border: 1px solid #e0e0e0;
+}
+
+/* Forcer la visibilité des boutons dans la vue détaillée */
+.post-detailed-view .post-actions {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.post-detailed-view .action-btn {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .view-toggle-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+  }
+  
+  .view-toggle-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .view-toggle-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 0.625rem 0.75rem;
+  }
+  
+  .posts-count {
+    align-self: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .view-toggle-bar {
+    margin-bottom: 1rem;
+    padding: 0.5rem 0;
+  }
+  
+  .view-toggle-btn {
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.625rem;
+  }
+  
+  .view-toggle-btn span {
+    display: none;
+  }
+  
+  .view-toggle-btn svg {
+    font-size: 1rem;
+  }
+}
+
+/* Animation de transition entre les vues */
+.view-content {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

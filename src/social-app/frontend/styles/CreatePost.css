@@ -1,0 +1,3139 @@
+/* Import du design system centralisé */
+@import './design-system.css';
+
+/* Variables CSS pour une cohérence design - MIGRATION VERS DESIGN SYSTEM */
+:root {
+  /* Migration en cours : utiliser les variables du design-system.css */
+  --create-post-primary: var(--color-primary-text);
+  --create-post-secondary: var(--color-secondary-text);
+  --create-post-success: #27ae60;
+  --create-post-error: #e74c3c;
+  --create-post-warning: #f39c12;
+  --create-post-gray-light: var(--color-gray-50);
+  --create-post-gray: var(--color-muted-text);
+  --create-post-gray-dark: var(--color-gray-900);
+  --create-post-shadow: var(--shadow-md);
+  --create-post-shadow-hover: var(--shadow-lg);
+  --create-post-transition: var(--transition-fast);
+  --create-post-border-radius: var(--radius-md);
+  --create-post-border-radius-lg: var(--radius-lg);
+  --create-post-border-color: var(--color-border-medium);
+  --create-post-border-color-light: var(--color-border-light);
+}
+
+/* Empêcher le zoom automatique sur tous les éléments de saisie */
+input, 
+textarea, 
+select, 
+button,
+.create-post-fullscreen input,
+.create-post-fullscreen textarea,
+.create-post-fullscreen select {
+  font-size: 16px !important; /* Taille minimale pour empêcher le zoom sur iOS */
+  transform-origin: left top;
+  zoom: 1;
+      border: 1px solid #e0e0e0 !important;
+}
+
+/* Version plein écran - Cache les menus et occupe tout l'écran */
+.create-post-fullscreen {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  padding-top: 60px !important; /* Espace pour le header fixe */
+  padding-bottom: max(140px, env(safe-area-inset-bottom, 140px)) !important; /* Espace garanti pour le bouton publier */
+  background: var(--color-white) !important;
+  z-index: 9999 !important; /* Au-dessus de tous les autres éléments */
+  overflow-y: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+
+/* Header fixe en haut - style bottom menu */
+.create-post-header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 60px !important;
+  background: var(--color-white) !important;
+  z-index: var(--z-navigation) !important;
+  box-shadow: var(--shadow-card) !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 0 20px !important;
+}
+
+.create-post-header h2 {
+  margin: 0 !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  color: #1f2937 !important;
+  text-align: center !important;
+  flex: 1 !important;
+}
+
+/* Bouton de fermeture */
+.close-create-post-btn {
+  background: none !important;
+  border: none !important;
+  font-size: 1.5rem !important;
+  color: #6b7280 !important;
+  cursor: pointer !important;
+  padding: 8px !important;
+  border-radius: 50% !important;
+  width: 40px !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+}
+
+.close-create-post-btn:hover {
+  background: #f3f4f6 !important;
+  color: #374151 !important;
+  transform: scale(1.1) !important;
+}
+
+/* Bouton publier dans le header */
+.header-publish-button {
+  background: var(--color-white) !important;
+  color: #ff6b35 !important;
+  border: 2px solid #ff6b35 !important;
+  padding: 8px 16px !important;
+  border-radius: var(--radius-md) !important;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  min-width: 80px !important;
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.2) !important;
+}
+
+.header-publish-button:hover:not(:disabled) {
+  background: #ff6b35 !important;
+  color: white !important;
+  transform: translateY(-1px) scale(1.02) !important;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3) !important;
+}
+
+.header-publish-button:disabled {
+  background: #f5f5f5 !important;
+  color: #ccc !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  border-color: #ddd !important;
+  box-shadow: none !important;
+}
+
+/* Section de progression fullscreen */
+.upload-progress-fullscreen {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(255, 255, 255, 0.97) !important;
+  backdrop-filter: blur(4px) !important;
+  z-index: 10000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.upload-progress-content {
+  background: var(--surface-primary) !important;
+  padding: 32px !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-md) !important;
+  text-align: center !important;
+  min-width: 280px !important;
+  max-width: 360px !important;
+  gap: 12px;
+}
+
+/* Spacer pour équilibrer le layout - Supprimé, remplacé par le bouton publier */
+
+/* Cacher le top menu et bottom menu quand CreatePost est en plein écran */
+body:has(.create-post-fullscreen) .top-navbar,
+body:has(.create-post-fullscreen) .bottom-navbar {
+  display: none !important;
+}
+
+/* Fallback sans :has(): masquer TopMenu/BottomNavbar quand CreatePost est actif */
+body.create-post-active .top-menu,
+body.create-post-active .bottom-navbar {
+  display: none !important;
+}
+
+/* Container principal */
+.create-post-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  padding-bottom: 100px; /* Espace supplémentaire en bas */
+  min-height: calc(100vh - 150px);
+  background: var(--color-white);
+}
+
+/* Card principale */
+.create-post-card {
+  background: var(--color-white);
+  border-radius: var(--create-post-border-radius-lg);
+  padding: 32px;
+  margin-bottom: 20px;
+  transition: var(--create-post-transition);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Styles pour la card en mode plein écran */
+.create-post-fullscreen .create-post-card {
+  border-radius: 0 !important;
+  padding: 24px !important;
+  margin: 0 !important;
+  max-width: 1200px !important;
+  width: 100% !important;
+  height: auto !important;
+  overflow-y: visible !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background: var(--color-white) !important;
+  box-shadow: none !important;
+}
+
+/* Cacher le titre inline en mode plein écran */
+.create-post-fullscreen .create-post-title-inline {
+  display: none !important;
+}
+
+.create-post-card:hover {
+  transform: translateY(-1px);
+}
+
+/* Pas d'effet hover en plein écran */
+.create-post-fullscreen .create-post-card:hover {
+  transform: none !important;
+}
+
+.create-post-card h2 {
+  text-align: center;
+  color: var(--create-post-gray-dark);
+  margin-bottom: 32px;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.create-post-card h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: var(--create-post-primary);
+  border-radius: 1px;
+}
+
+.create-post-card h3 {
+  color: var(--create-post-gray-dark);
+  margin-bottom: 16px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  border-left: 3px solid var(--create-post-primary);
+  padding-left: 12px;
+}
+
+.create-post-card h4 {
+  color: var(--create-post-gray-dark);
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* Section titre */
+.title-section {
+  margin-bottom: 24px;
+}
+
+.title-section label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--create-post-gray-dark);
+  font-size: 1.1rem;
+}
+
+.title-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #3b82f6; /* Bordure bleue par défaut */
+  border-radius: var(--create-post-border-radius);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+  transition: all 0.2s ease;
+  background: #f8fafc;
+}
+
+.title-input:focus {
+  outline: none;
+  border-color: #ff6b35; /* Bordure orange au focus */
+  background: #f8fafc;
+  box-shadow: 0 0 0 1px rgba(255, 107, 53, 0.2);
+}
+
+/* Styles pour les sections avec pattern step-description */
+.title-section-display,
+.description-section-display,
+.resources-section-display {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(-10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+/* Section d'upload */
+.upload-section {
+  margin-bottom: 24px;
+}
+
+.file-drop-zone {
+  position: relative;
+  border: 2px dashed #dee2e6;
+  border-radius: var(--create-post-border-radius);
+  padding: 60px 20px;
+  text-align: center;
+  background: var(--create-post-gray-light);
+  transition: var(--create-post-transition);
+  cursor: pointer;
+  margin-top: 16px;
+}
+
+.file-drop-zone:hover {
+  border-color: var(--create-post-primary);
+  background: #fff5f3;
+}
+
+.method-drop-zone {
+  padding: 40px 20px;
+  margin-top: 12px;
+}
+
+.drop-zone-content {
+  pointer-events: none;
+}
+
+.upload-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  color: var(--create-post-gray);
+}
+
+.upload-hint {
+  font-size: 0.9rem;
+  color: var(--create-post-gray);
+  margin: 8px 0 0 0;
+}
+
+.file-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Section de crop - IMPORTANT: Hauteur limitée pour éviter le plein écran */
+.crop-section {
+  margin-bottom: 24px;
+}
+
+.crop-container {
+  position: relative;
+  width: 100%;
+  height: 400px; /* Hauteur fixe cruciale pour éviter le plein écran */
+  background: #000;
+  border-radius: var(--create-post-border-radius);
+  overflow: hidden;
+  margin-bottom: 24px;
+  /* Force la hauteur même si react-easy-crop essaie de la modifier */
+  max-height: 400px !important;
+}
+
+/* Styles spécifiques pour react-easy-crop */
+.crop-container .reactEasyCrop_Container {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  height: 400px !important;
+  max-height: 400px !important;
+}
+
+.crop-container .reactEasyCrop_CropArea {
+  border: 2px solid var(--create-post-primary) !important;
+}
+
+.crop-controls {
+  background: var(--color-white);
+  padding: 20px;
+  border-radius: var(--create-post-border-radius);
+  box-shadow: var(--create-post-shadow);
+  position: relative;
+  z-index: 10; /* S'assurer que les contrôles restent au-dessus */
+}
+
+.zoom-control {
+  margin-bottom: 24px;
+}
+
+.zoom-control label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--create-post-gray-dark);
+}
+
+.zoom-slider {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #ddd;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.zoom-slider::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: var(--create-post-primary);
+  cursor: pointer;
+}
+
+.zoom-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: var(--create-post-primary);
+  cursor: pointer;
+  border: none;
+}
+
+.crop-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+/* Section de preview */
+.preview-section {
+  margin-bottom: 24px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.image-preview {
+  text-align: center;
+  margin-bottom: 24px;
+  position: relative;
+  border: 1px solid var(--create-post-border-color-light);
+  border-radius: var(--create-post-border-radius);
+  overflow: hidden;
+  background: var(--color-white);
+}
+
+.preview-image,
+.preview-video {
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+  border-radius: var(--create-post-border-radius);
+  box-shadow: var(--create-post-shadow);
+  display: block;
+  transition: var(--create-post-transition);
+  margin: 0 auto;
+}
+
+.preview-video {
+  background: #000;
+  max-height: 400px;
+}
+
+.image-preview:hover .preview-image,
+.image-preview:hover .preview-video {
+  transform: scale(1.02);
+}
+
+/* Styles pour les sections d'aperçu vidéo */
+.video-preview-section {
+  padding: 20px;
+  background: var(--color-white);
+  border-radius: var(--create-post-border-radius);
+  box-shadow: var(--create-post-shadow);
+  margin-bottom: 20px;
+}
+
+.video-preview-section h3 {
+  color: var(--create-post-text-primary);
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+/* IMPORTANT: Forcer les styles des formulaires même après upload d'image */
+.create-post-card .description-section,
+.create-post-card .ingredients-section,
+.create-post-card .method-section,
+.create-post-card .method-text-section,
+.create-post-card .resources-section,
+.create-post-card .location-section {
+  background: var(--color-white) !important;
+  border: 1px solid var(--create-post-border-color) !important;
+  border-radius: var(--create-post-border-radius) !important;
+  padding: 16px !important;
+  margin-bottom: 24px !important;
+}
+
+/* Forcer les styles des inputs et textareas */
+.create-post-card .description-input,
+.create-post-card .ingredients-input,
+.create-post-card .method-input,
+.create-post-card .description-textarea,
+.create-post-card .ingredients-textarea {
+  background: var(--color-white) !important;
+  border: 1px solid #e0e0e0 !important;
+  width: 100% !important;
+  padding: 12px !important;
+}
+
+/* CRITICAL: Forcer la visibilité même en mode crop/preview */
+.create-post-form .title-section {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  background: var(--color-white) !important;
+  border: none !important;
+  border-radius: var(--create-post-border-radius) !important;
+  padding: 16px !important;
+  margin-bottom: 24px !important;
+}
+
+.create-post-form .description-section,
+.create-post-form .resources-section,
+.create-post-form .location-section {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  background: var(--color-white) !important;
+  border: none !important;
+  border-radius: var(--create-post-border-radius) !important;
+  padding: 16px !important;
+  margin-bottom: 24px !important;
+}
+
+.create-post-form .ingredients-section,
+.create-post-form .method-section,
+.create-post-form .method-text-section {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  background: var(--color-white) !important;
+  border: 1px solid var(--create-post-border-color) !important;
+  border-radius: var(--create-post-border-radius) !important;
+  padding: 16px !important;
+  margin-bottom: 24px !important;
+}
+
+/* Règles hyper-spécifiques pour différents états */
+.create-post-fullscreen .create-post-form .title-section {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  background: var(--color-white) !important;
+  border: none !important;
+  border-radius: var(--create-post-border-radius) !important;
+  padding: 16px !important;
+  margin-bottom: 24px !important;
+}
+
+.create-post-fullscreen .create-post-form .description-section,
+.create-post-fullscreen .create-post-form .resources-section,
+.create-post-fullscreen .create-post-form .location-section {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  background: var(--color-white) !important;
+  border: none !important;
+  border-radius: var(--create-post-border-radius) !important;
+  padding: 16px !important;
+  margin-bottom: 24px !important;
+}
+
+.create-post-fullscreen .create-post-form .ingredients-section,
+.create-post-fullscreen .create-post-form .method-section,
+.create-post-fullscreen .create-post-form .method-text-section {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  background: var(--color-white) !important;
+  border: 1px solid var(--create-post-border-color) !important;
+  border-radius: var(--create-post-border-radius) !important;
+  padding: 16px !important;
+  margin-bottom: 24px !important;
+}
+
+/* Annuler tout display: none qui pourrait être appliqué conditionnellement */
+.create-post-card[data-edit-mode] .title-section,
+.create-post-card[data-edit-mode] .description-section,
+.create-post-card[data-edit-mode] .ingredients-section,
+.create-post-card[data-edit-mode] .method-section,
+.create-post-card[data-edit-mode] .method-text-section,
+.create-post-card[data-edit-mode] .resources-section,
+.create-post-card[data-edit-mode] .location-section,
+.create-post-card .title-section,
+.create-post-card .description-section,
+.create-post-card .ingredients-section,
+.create-post-card .method-section,
+.create-post-card .method-text-section,
+.create-post-card .resources-section,
+.create-post-card .location-section {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.video-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.video-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* Styles pour les vidéos dans les étapes */
+.step-video-section {
+  margin: 16px 0;
+}
+
+.step-video-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.step-video-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.step-preview-video {
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  background: #000;
+}
+
+/* Amélioration pour les vidéos avec contrôles personnalisés */
+.video-container,
+.image-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.video-player-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive pour petits écrans */
+@media (max-width: 768px) {
+  .video-container,
+  .image-preview {
+    padding: 0 16px;
+  }
+  
+  .video-player-container {
+    max-width: 100%;
+    border-radius: var(--radius-md);
+  }
+  
+  .preview-video,
+  .video-player-video {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .create-post-container {
+    padding-bottom: 150px; /* Encore plus d'espace en bas sur mobile */
+  }
+  
+  .create-post-fullscreen {
+    padding-bottom: 180px !important; /* Espace supplémentaire pour mobile en fullscreen */
+  }
+  
+  .video-container,
+  .image-preview {
+    padding: 0 8px;
+  }
+  
+  .video-player-container {
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-card);
+  }
+  
+  .video-preview-section {
+    padding: 16px 12px;
+  }
+  
+  .video-preview-section h3 {
+    font-size: 1.1rem;
+    text-align: center;
+  }
+}
+
+/* Styles spécifiques pour les vidéos d'étapes */
+.step-video-player,
+.step-video-preview-player {
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.step-video-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.step-video-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.step-image-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Adaptation mobile pour les vidéos d'étapes */
+@media (max-width: 480px) {
+  .step-video-player,
+  .step-video-preview-player {
+    max-width: 100%;
+    margin: 0;
+  }
+  
+  .step-video-section {
+    padding: 0 8px;
+  }
+  
+  .step-video-container {
+    padding: 0;
+  }
+  
+  .step-image-preview .video-player-container {
+    max-width: 280px;
+  }
+}
+
+.edit-image-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--create-post-border-color);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--create-post-gray);
+  cursor: pointer;
+  transition: var(--create-post-transition);
+  backdrop-filter: blur(4px);
+}
+
+.edit-image-btn:hover {
+  background: var(--color-white);
+  color: var(--create-post-primary);
+  border-color: var(--create-post-primary);
+  transform: translateY(-1px);
+}
+
+/* Sections de formulaire - STYLE UNIFORME */
+.description-section {
+  margin-bottom: 24px;
+  background: #f8fafc;
+  border: none;
+  border-radius: var(--create-post-border-radius);
+  padding: 16px;
+}
+
+.ingredients-section,
+.method-text-section {
+  margin-bottom: 24px;
+  background: #f8fafc;
+  border: 1px solid var(--create-post-border-color);
+  border-radius: var(--create-post-border-radius);
+  padding: 16px;
+}
+
+.description-section label,
+.ingredients-section label,
+.method-text-section label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--create-post-gray-dark);
+  font-size: 0.9rem;
+}
+
+.description-input,
+.ingredients-input,
+.method-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #3b82f6; /* Bordure bleue par défaut */
+  border-radius: var(--create-post-border-radius);
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  transition: all 0.2s ease;
+  background: #f8fafc;
+}
+
+.description-textarea,
+.ingredients-textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #3b82f6; /* Bordure bleue par défaut */
+  border-radius: var(--create-post-border-radius);
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  resize: vertical;
+  transition: all 0.2s ease;
+  background: #f8fafc;
+}
+
+.ingredients-input,
+.ingredients-textarea {
+  min-height: 100px;
+}
+
+.method-input {
+  min-height: 120px;
+}
+
+.description-input:focus,
+.ingredients-input:focus,
+.method-input:focus,
+.description-textarea:focus,
+.ingredients-textarea:focus {
+  outline: none;
+  border-color: #ff6b35; /* Bordure orange au focus */
+  box-shadow: 0 0 0 1px rgba(255, 107, 53, 0.2);
+}
+
+/* Section méthode */
+.method-section {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: var(--color-white);
+  border-radius: var(--create-post-border-radius);
+  border: 1px solid var(--create-post-border-color);
+}
+
+/* Titre de section centré */
+.section-title-centered {
+  text-align: center !important;
+  margin: 0 0 1.5rem 0 !important;
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  color: var(--color-primary-text) !important;
+  letter-spacing: 0.025em !important;
+  border-left: none !important;
+  padding-left: 0 !important;
+}
+
+/* Supprimer complètement tous les emojis des titres de la section méthode */
+.method-section h3::before,
+.method-section .section-title-centered::before {
+  content: none !important;
+  display: none !important;
+}
+
+.method-image-section {
+  margin-top: 20px;
+}
+
+.method-image-section > label {
+  display: block;
+  margin-bottom: 12px;
+  font-weight: 500;
+  color: var(--create-post-gray-dark);
+}
+
+.method-crop-section {
+  margin-top: 16px;
+}
+
+.method-image-preview {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.method-preview-image {
+  max-width: 200px;
+  width: 100%;
+  height: auto;
+  border-radius: var(--create-post-border-radius);
+  box-shadow: var(--create-post-shadow);
+  margin-bottom: 12px;
+}
+
+.method-image-controls {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.preview-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e9ecef;
+}
+
+/* Styles pour les étapes de méthode */
+.method-steps-section {
+  margin-top: 16px;
+}
+
+.method-steps-section > label {
+  display: block;
+  margin-bottom: 16px;
+  font-weight: 600;
+  color: var(--create-post-gray-dark);
+  font-size: 1.1rem;
+}
+
+.method-step-item {
+  margin-bottom: 20px;
+  padding: 20px;
+  background: var(--color-white);
+  border-radius: var(--create-post-border-radius);
+  border: 1px solid #e9ecef;
+  transition: var(--create-post-transition);
+}
+
+.method-step-item:hover {
+  border-color: var(--create-post-primary);
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.1);
+}
+
+.method-step-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.step-number {
+  font-weight: 600;
+  color: var(--create-post-primary);
+  font-size: 0.9rem;
+  background: rgba(255, 107, 53, 0.1);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.btn-remove-step {
+  background: var(--create-post-error);
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  width: 28px;
+  height: 28px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--create-post-transition);
+}
+
+.btn-remove-step:hover {
+  background: #c0392b;
+  transform: scale(1.1);
+}
+
+.method-step-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #dee2e6;
+  border-radius: var(--create-post-border-radius);
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+  resize: vertical;
+  transition: var(--create-post-transition);
+  background: var(--color-white);
+}
+
+.method-step-input:focus {
+  outline: none;
+  border-color: var(--create-post-primary);
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.btn-add-step {
+  width: 100%;
+  padding: 12px 20px;
+  background: var(--create-post-secondary);
+  color: white;
+  border: none;
+  border-radius: var(--create-post-border-radius);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--create-post-transition);
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-add-step:hover {
+  background: #357abd;
+  transform: translateY(-1px);
+  box-shadow: var(--create-post-shadow-hover);
+}
+
+.btn-add-step:active {
+  transform: translateY(0);
+}
+
+/* ===== STYLES POUR LES IMAGES DES ÉTAPES ===== */
+
+.step-image-section {
+  margin-top: 8px;
+  border-top: 1px solid var(--create-post-border-color-light);
+  padding-top: 8px;
+}
+
+/* Bouton d'ajout d'image pour les étapes */
+.add-step-image-btn {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--create-post-gray-light);
+  border: 1px solid var(--create-post-border-color-light);
+  border-radius: var(--radius-sm);
+  color: var(--create-post-gray);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--create-post-transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.add-step-image-btn:hover {
+  border-color: var(--create-post-primary);
+  color: var(--create-post-primary);
+  background: rgba(26, 26, 26, 0.02);
+  transform: translateY(-1px);
+}
+
+.step-image-upload {
+  border: 1px solid #bbdefb;
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  text-align: center;
+  background: #e3f2fd;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  box-shadow: none;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.step-image-upload:hover {
+  background: #d1ebfa;
+  border-color: #90caf9;
+  transform: translateY(-1px);
+}
+
+.step-upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: center;
+}
+
+.step-upload-label .upload-icon {
+  width: 32px;
+  height: 32px;
+  background: #0d47a1;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  color: white;
+  font-size: 16px;
+}
+
+.step-upload-label:hover {
+  color: #0d47a1;
+}
+
+.step-upload-label:hover .upload-icon {
+  background: #1976d2;
+  transform: scale(1.05);
+}
+
+/* Section description pour les étapes */
+.step-description-section {
+  margin-top: 12px;
+}
+
+.add-description-btn {
+  width: 100%;
+  padding: 12px 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.add-description-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+.step-description-display {
+  margin-top: 8px;
+}
+
+.step-textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #3b82f6; /* Bordure bleue par défaut */
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  resize: vertical;
+  min-height: 80px;
+  transition: all 0.2s ease;
+  background: #f8fafc;
+}
+
+.step-textarea:focus {
+  outline: none;
+  background: #f8fafc;
+  border-color: #ff6b35; /* Bordure orange au focus */
+  box-shadow: 0 0 0 1px rgba(255, 107, 53, 0.2);
+}
+
+/* Cropping pour les étapes */
+.step-crop-section {
+  border: 1px solid var(--create-post-border-color);
+  border-radius: var(--create-post-border-radius);
+  padding: 12px;
+  background: var(--color-white);
+}
+
+.step-cropper-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  background: var(--create-post-gray-light);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.step-crop-controls {
+  margin-bottom: 12px;
+}
+
+.step-crop-controls label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--create-post-gray);
+}
+
+.step-crop-controls input[type="range"] {
+  flex: 1;
+}
+
+.step-crop-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.step-crop-buttons .btn-primary,
+.step-crop-buttons .btn-secondary {
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  min-width: auto;
+}
+
+/* Preview des images d'étapes */
+.step-image-preview {
+  position: relative;
+  border: 1px solid var(--create-post-border-color);
+  border-radius: var(--create-post-border-radius);
+  overflow: hidden;
+  background: var(--color-white);
+}
+
+.step-preview-image {
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: var(--create-post-transition);
+  margin: 0 auto;
+}
+
+.step-image-preview:hover .step-preview-image {
+  transform: scale(1.02);
+}
+
+.step-image-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
+  opacity: 1;
+  transition: var(--create-post-transition);
+}
+
+.step-image-preview:hover .step-image-actions {
+  opacity: 1;
+}
+
+.step-image-actions .btn-secondary {
+  padding: 4px 6px;
+  font-size: 0.7rem;
+  min-width: auto;
+  background: var(--color-white);
+  border: 1px solid #e5e7eb;
+  border-radius: var(--radius-sm);
+  color: #374151;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.step-image-actions .btn-secondary:hover {
+  background: #f9fafb;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Styles pour les fichiers input cachés */
+.file-input {
+  display: none;
+}
+
+/* Amélioration du style pour les sections principales */
+.upload-section,
+.crop-section,
+.preview-section {
+  animation: fadeIn 0.3s ease;
+}
+
+/* Section d'upload améliorée */
+.upload-area {
+  border: 1px solid #bbdefb;
+  border-radius: var(--create-post-border-radius);
+  padding: 40px 20px;
+  text-align: center;
+  background: #e3f2fd;
+  transition: var(--create-post-transition);
+  margin-bottom: 24px;
+}
+
+.upload-area:hover {
+  border-color: #90caf9;
+  background: #d1ebfa;
+}
+
+.upload-label {
+  display: block;
+  cursor: pointer;
+  color: var(--create-post-gray);
+}
+
+.upload-content {
+  pointer-events: none;
+}
+
+.upload-icon {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  opacity: 0.8;
+  color: #0d47a1;
+}
+
+.upload-area:hover .upload-icon {
+  opacity: 1;
+}
+
+.upload-area p {
+  margin: 6px 0;
+  font-size: 0.9rem;
+  color: #0d47a1;
+}
+
+.upload-hint {
+  font-size: 0.8rem !important;
+  color: #1976d2 !important;
+}
+
+/* Section de crop améliorée */
+.crop-section {
+  text-align: center;
+}
+
+.cropper-container {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  background: var(--create-post-gray-light);
+  border-radius: var(--create-post-border-radius);
+  overflow: hidden;
+  margin-bottom: 20px;
+  border: 1px solid var(--create-post-border-color);
+}
+
+.crop-controls {
+  margin-bottom: 20px;
+}
+
+.crop-controls label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: var(--create-post-gray);
+}
+
+.crop-controls input[type="range"] {
+  width: 200px;
+}
+
+.crop-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* Indicateurs visuels pour le mode édition */
+.create-post-card[data-edit-mode="true"] h2::before {
+  content: "✏️ ";
+  margin-right: 8px;
+}
+
+/* Exclure l'emoji des titres de section centrés */
+.create-post-card[data-edit-mode="true"] .section-title-centered::before {
+  content: none;
+}
+
+/* Amélioration des transitions */
+* {
+  transition: var(--create-post-transition);
+}
+
+input, textarea, button {
+  transition: var(--create-post-transition);
+}
+
+/* Loading container - Minimaliste */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  gap: 12px;
+}
+
+.loading-container p {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin: 0;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+/* Style pour le titre de la page de modification */
+.create-post-card h2 {
+  position: relative;
+  padding-bottom: 16px;
+}
+
+/* Amélioration de la section preview pour la modification */
+.preview-section {
+  animation: fadeIn 0.3s ease;
+}
+
+/* Image preview avec indicateur de modification */
+.image-preview {
+  position: relative;
+  margin-bottom: 24px;
+  border: 1px solid var(--create-post-border-color-light);
+  border-radius: var(--create-post-border-radius);
+  overflow: hidden;
+  background: var(--color-white);
+}
+
+.preview-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: var(--create-post-transition);
+}
+
+.image-preview:hover .preview-image {
+  transform: scale(1.02);
+}
+
+.edit-image-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--create-post-border-color);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--create-post-gray);
+  cursor: pointer;
+  transition: var(--create-post-transition);
+  backdrop-filter: blur(4px);
+}
+
+.edit-image-btn:hover {
+  background: var(--color-white);
+  color: var(--create-post-primary);
+  border-color: var(--create-post-primary);
+  transform: translateY(-1px);
+}
+
+/* Les styles de sections sont déjà définis plus haut - éviter la duplication */
+
+.description-textarea,
+.ingredients-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: var(--create-post-border-radius);
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  resize: vertical;
+  transition: var(--create-post-transition);
+  background: var(--color-white);
+}
+
+.description-textarea:focus,
+.ingredients-textarea:focus {
+  outline: none;
+  background: #f8fafc;
+  box-shadow: 0 0 0 2px rgba(26, 26, 26, 0.1);
+}
+
+/* Styles pour les étapes de méthode - Interface moderne */
+.method-steps-container {
+  border: none;
+  border-radius: 16px;
+  background: #f8fafc;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.method-step-editor {
+  background: var(--color-white);
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-bottom: 16px;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.method-step-editor::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.method-step-editor:hover {
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+}
+
+.method-step-editor:hover::before {
+  opacity: 0;
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.step-number {
+  font-weight: 700;
+  color: #3b82f6;
+  font-size: 0.875rem;
+  background: #eff6ff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid #dbeafe;
+  letter-spacing: 0.025em;
+}
+
+/* Container pour les actions d'étape */
+.step-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Bouton modifier étape */
+.edit-step-btn {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 0.875rem;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+}
+
+.edit-step-btn:hover {
+  color: #10b981;
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  transform: scale(1.05);
+}
+
+.remove-step-btn {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 0.875rem;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+}
+
+.remove-step-btn:hover {
+  color: #ef4444;
+  background: #fef2f2;
+  border-color: #fecaca;
+  transform: scale(1.05);
+}
+
+/* Bouton supprimer flottant et discret */
+.remove-step-btn-floating {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 4px 6px;
+  border-radius: var(--radius-full);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  z-index: 10;
+  opacity: 0.7;
+}
+
+.remove-step-btn-floating:hover {
+  color: #ef4444;
+  background: #fef2f2;
+  border-color: #fecaca;
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.step-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  resize: vertical;
+  transition: all 0.2s ease;
+  margin-bottom: 8px;
+  background: #f8fafc;
+  min-height: 48px;
+}
+
+.step-textarea:focus {
+  outline: none;
+  background: var(--color-white);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  transform: translateY(-1px);
+}
+
+.step-textarea::placeholder {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* Bouton d'ajout d'étape */
+.add-step-btn {
+  width: 100%;
+  padding: 16px;
+  background: var(--color-white);
+  border: 2px dashed #cbd5e1;
+  border-radius: var(--radius-lg);
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.add-step-btn:hover {
+  border-color: #3b82f6;
+  color: #3b82f6;
+  background: #f8fafc;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Bouton d'ajout de première méthode */
+.add-first-method-btn {
+  width: 100%;
+  padding: 20px;
+  background: var(--color-white);
+  border: 2px dashed #cbd5e1;
+  border-radius: var(--radius-lg);
+  color: #64748b;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.add-first-method-btn:hover {
+  border-color: #3b82f6;
+  color: #3b82f6;
+  background: #f8fafc;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Bouton Publier en bas de la zone de création */
+.publish-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+  padding: 24px;
+  border-top: 1px solid var(--create-post-border-color-light);
+}
+
+/* Bouton publier en mode plein écran - imite le bottom menu */
+.create-post-fullscreen .publish-button-container {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  background: var(--color-white) !important;
+  z-index: var(--z-navigation) !important;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1) !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 20px 0 !important;
+  margin: 0 !important;
+  min-height: 80px !important;
+  border-top: none !important;
+  /* Support pour les différents environnements mobiles */
+  padding-bottom: max(20px, env(safe-area-inset-bottom)) !important;
+}
+
+.publish-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 25px;
+  background: var(--color-white);
+  border: 2px solid #ff6b35;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.2);
+  transition: var(--transition-base);
+  color: #ff6b35;
+  min-width: 120px;
+  max-width: 200px;
+  justify-content: center;
+  height: 44px;
+}
+
+.publish-button:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
+  background: #ff6b35;
+  color: white;
+}
+
+.publish-button:active {
+  transform: translateY(0) scale(1);
+}
+
+.publish-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  background: #f5f5f5;
+  color: #ccc;
+  border-color: #ddd;
+}
+
+.publish-icon {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2.5;
+  transition: all 0.2s ease;
+}
+
+.publish-text {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.loading-spinner {
+  font-size: 1.1rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Styles pour la barre de progression d'upload */
+.upload-progress-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 0;
+  padding: 20px;
+  background: linear-gradient(135deg, #fff5f2 0%, #fef7f5 100%);
+  border-radius: var(--radius-lg);
+  border: 1px solid #fed7d1;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.15);
+}
+
+.upload-status-text {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: 12px;
+  opacity: 0.8;
+}
+
+.upload-progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--border-light);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin: 8px 0;
+}
+
+.upload-progress-fill {
+  height: 100%;
+  background: var(--brand-primary);
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+  min-width: 2px;
+}
+
+.upload-percentage {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-top: 4px;
+  opacity: 0.7;
+}
+
+/* Mode plein écran - ajustements pour la progress bar */
+.create-post-fullscreen .upload-progress-section {
+  margin-bottom: 8px;
+  background: rgba(248, 250, 252, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+/* Styles pour les boutons */
+.btn-primary {
+  background: var(--create-post-primary);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--create-post-transition);
+  min-width: 120px;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #333333;
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  background: none;
+  color: var(--create-post-gray);
+  border: 1px solid var(--create-post-border-color);
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--create-post-transition);
+  min-width: 120px;
+}
+
+.btn-secondary:hover {
+  color: var(--create-post-primary);
+  border-color: var(--create-post-primary);
+  background: rgba(26, 26, 26, 0.02);
+}
+
+/* ===== STYLES POUR LES ÉTATS ET MESSAGES ===== */
+
+/* Indicateurs de statut */
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: var(--radius-xs);
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-left: 8px;
+}
+
+.status-indicator.uploading {
+  background: rgba(243, 156, 18, 0.1);
+  color: var(--create-post-warning);
+}
+
+.status-indicator.success {
+  background: rgba(39, 174, 96, 0.1);
+  color: var(--create-post-success);
+}
+
+.status-indicator.error {
+  background: rgba(231, 76, 60, 0.1);
+  color: var(--create-post-error);
+}
+
+/* Messages d'aide */
+.help-text {
+  font-size: 0.8rem;
+  color: var(--create-post-gray);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* Amélioration des boutons disabled */
+.btn-primary:disabled,
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Styles pour les alertes et notifications */
+.alert {
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+  border: 1px solid;
+}
+
+.alert.success {
+  background: rgba(39, 174, 96, 0.1);
+  border-color: var(--create-post-success);
+  color: var(--create-post-success);
+}
+
+.alert.error {
+  background: rgba(231, 76, 60, 0.1);
+  border-color: var(--create-post-error);
+  color: var(--create-post-error);
+}
+
+.alert.warning {
+  background: rgba(243, 156, 18, 0.1);
+  border-color: var(--create-post-warning);
+  color: var(--create-post-warning);
+}
+
+/* Styles pour les tooltips */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  background-color: var(--create-post-gray-dark);
+  color: white;
+  text-align: center;
+  border-radius: var(--radius-xs);
+  padding: 5px 8px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 0.75rem;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Amélioration des focus states */
+.title-input:focus,
+.description-textarea:focus,
+.ingredients-textarea:focus,
+.step-textarea:focus {
+  outline: none;
+  border-color: var(--create-post-primary);
+  box-shadow: 0 0 0 2px rgba(26, 26, 26, 0.1);
+}
+
+/* Styles pour les validations */
+.field-error {
+  border-color: var(--create-post-error) !important;
+  box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.1) !important;
+}
+
+.error-message {
+  color: var(--create-post-error);
+  font-size: 0.8rem;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.error-message::before {
+  content: "⚠️";
+  font-size: 0.75rem;
+}
+
+/* Styles pour les sections pliables */
+.collapsible-section {
+  border: 1px solid var(--create-post-border-color-light);
+  border-radius: var(--create-post-border-radius);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.collapsible-header {
+  background: var(--create-post-gray-light);
+  padding: 12px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 500;
+  color: var(--create-post-gray-dark);
+  transition: var(--create-post-transition);
+}
+
+.collapsible-header:hover {
+  background: rgba(26, 26, 26, 0.02);
+}
+
+.collapsible-content {
+  padding: 16px;
+  background: var(--color-white);
+}
+
+.collapsible-arrow {
+  transition: transform 0.3s ease;
+}
+
+.collapsible-section.expanded .collapsible-arrow {
+  transform: rotate(180deg);
+}
+
+/* Amélioration des animations pour les micro-interactions */
+.btn-primary:active,
+.btn-secondary:active {
+  transform: scale(0.98);
+}
+
+.method-step-editor:hover {
+  transform: translateY(-1px);
+}
+
+.step-image-preview:hover {
+  transform: translateY(-1px);
+}
+
+/* Styles pour les badges */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  background: var(--create-post-primary);
+  color: white;
+  border-radius: var(--radius-lg);
+  font-size: 0.7rem;
+  font-weight: 500;
+  margin-left: 8px;
+}
+
+.badge.secondary {
+  background: var(--create-post-gray);
+}
+
+.badge.success {
+  background: var(--create-post-success);
+}
+
+/* Styles pour les progress bars */
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background: var(--create-post-border-color-light);
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--create-post-primary);
+  transition: width 0.3s ease;
+}
+
+/* Styles pour les steps indicators */
+.steps-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32px;
+  gap: 8px;
+}
+
+.step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--create-post-border-color);
+  transition: var(--create-post-transition);
+}
+
+.step-dot.active {
+  background: var(--create-post-primary);
+  transform: scale(1.2);
+}
+
+.step-dot.completed {
+  background: var(--create-post-success);
+}
+
+/* Optimisations pour les petits écrans */
+@media (max-width: 480px) {
+  .create-post-card {
+    padding: 16px;
+  }
+  
+  .step-image-actions {
+    position: static;
+    opacity: 1;
+    margin-top: 8px;
+    justify-content: center;
+  }
+  
+  .edit-image-btn {
+    position: static;
+    margin-top: 8px;
+  }
+  
+  .publish-button-container {
+    justify-content: center;
+    margin-top: 24px;
+    padding-top: 16px;
+  }
+  
+  .publish-button {
+    padding: 12px 16px;
+    min-width: 100px;
+    font-size: 0.8rem;
+  }
+  
+  .publish-text {
+    font-size: 0.75rem;
+  }
+  
+  .publish-icon {
+    width: 18px;
+    height: 18px;
+    stroke-width: 2.5;
+  }
+  
+  .btn-primary,
+  .btn-secondary {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+  }
+}
+
+/* =================================================================== */
+/* SECTION GÉOLOCALISATION                                            */
+/* =================================================================== */
+
+.location-section {
+  margin-bottom: 24px;
+}
+
+.location-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.location-header label {
+  color: var(--create-post-primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.location-toggle-btn {
+  background: #f8f9fa;
+  color: #002739;
+  border: 2px solid #e0e0e0;
+  border-radius: var(--radius-md);
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.location-toggle-btn:hover {
+  background: #e3f2fd;
+  border-color: #ff6b35;
+  transform: translateY(-1px);
+}
+
+.location-toggle-btn.active {
+  background: #ff6b35;
+  color: white;
+  border-color: #ff6b35;
+}
+
+.current-location {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8f9fa;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  border-left: 4px solid #ff6b35;
+  margin-bottom: 16px;
+}
+
+.location-info {
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: #002739;
+}
+
+.remove-location-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: var(--radius-xs);
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.remove-location-btn:hover {
+  background: #c82333;
+}
+
+/* Responsive pour la géolocalisation */
+@media (max-width: 768px) {
+  .location-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+  
+  .location-toggle-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .current-location {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+  
+  .remove-location-btn {
+    align-self: flex-end;
+  }
+}
+
+/* Résumé de localisation validée */
+.location-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #f8fffe, #e8f5f3);
+  padding: 16px 20px;
+  border-radius: var(--radius-lg);
+  border: 2px solid #28a745;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.1);
+  transition: var(--transition-base);
+}
+
+.location-summary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(40, 167, 69, 0.15);
+}
+
+.location-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.location-icon {
+  font-size: 1.5rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.location-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.location-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #155724;
+}
+
+.location-coords {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: #28a745;
+  font-weight: 500;
+}
+
+.edit-location-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-white);
+  color: #28a745;
+  border: 2px solid #28a745;
+  border-radius: var(--radius-md);
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--create-post-transition);
+}
+
+.edit-location-btn:hover {
+  background: rgba(40, 167, 69, 0.1);
+  color: #1e7e34;
+  transform: translateY(-1px);
+}
+
+/* =================================================================== */
+/* SECTION PARAMÈTRES DES RÉPONSES VISUELLES                        */
+/* =================================================================== */
+
+.visual-responses-section {
+  margin-bottom: 24px;
+}
+
+.visual-responses-settings {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+
+.setting-header {
+  margin-bottom: 16px;
+}
+
+.setting-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.setting-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.setting-options {
+  margin-top: 16px;
+}
+
+.setting-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.setting-option:hover {
+  background: #e2e8f0;
+}
+
+.setting-checkbox {
+  margin-top: 2px;
+  accent-color: #6366f1;
+  transform: scale(1.2);
+}
+
+.setting-label {
+  font-size: 15px;
+  font-weight: 500;
+  color: #374151;
+  line-height: 1.4;
+}
+
+.setting-help {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 8px 0 0 24px;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+/* Responsive pour les paramètres de réponses visuelles */
+@media (max-width: 768px) {
+  .visual-responses-settings {
+    padding: 16px;
+  }
+  
+  .setting-title {
+    font-size: 15px;
+  }
+  
+  .setting-subtitle {
+    font-size: 13px;
+  }
+  
+  .setting-option {
+    padding: 10px;
+  }
+  
+  .setting-label {
+    font-size: 14px;
+  }
+  
+  .setting-help {
+    font-size: 12px;
+    margin-left: 20px;
+  }
+}
+
+/* ===== OPTIMISATIONS MOBILES POUR METHOD-STEP-EDITOR ===== */
+@media (max-width: 768px) {
+  .method-step-editor {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: var(--radius-sm);
+  }
+
+  .step-header {
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .step-number {
+    font-size: 0.8rem;
+    padding: 3px 6px;
+  }
+
+  .step-actions {
+    gap: 2px;
+  }
+
+  .edit-step-btn,
+  .remove-step-btn {
+    min-width: 24px;
+    height: 24px;
+    font-size: 0.8rem;
+    padding: 4px 6px;
+  }
+
+  .step-textarea {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+    min-height: 36px;
+  }
+
+  .step-image-section {
+    margin-top: 6px;
+    padding-top: 6px;
+  }
+
+  .add-step-image-btn {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .method-step-editor {
+    padding: 8px;
+    margin-bottom: 8px;
+  }
+
+  .step-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .step-actions {
+    align-self: flex-end;
+  }
+
+  .step-number {
+    font-size: 0.75rem;
+    align-self: flex-start;
+  }
+}
+
+.edit-location-btn .btn-icon {
+  font-size: 1rem;
+}
+
+/* Responsive pour location-summary */
+@media (max-width: 768px) {
+  .location-summary {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+  
+  .edit-location-btn {
+    justify-content: center;
+  }
+}
+
+/* Section des boutons d'ajout d'options */
+.add-options-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.option-added {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 16px;
+  background: var(--color-white);
+  border: 1px solid #e5e7eb;
+  border-radius: var(--create-post-border-radius);
+  color: #374151;
+  gap: 12px;
+}
+
+.option-summary {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.option-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.option-preview {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: #6b7280;
+  background: #f9fafb;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid #e5e7eb;
+}
+
+.option-meta {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.edit-option-btn {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+  align-self: flex-start;
+}
+
+.edit-option-btn:hover {
+  background: #e5e7eb;
+  border-color: #9ca3af;
+  transform: translateY(-1px);
+}
+
+/* Styles des popups */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 0; /* Supprimé le padding pour plein écran */
+}
+
+.popup-content {
+  background: var(--color-white);
+  border-radius: 0; /* Supprimé le border-radius pour plein écran */
+  width: 100vw; /* Largeur plein écran */
+  height: 100vh; /* Hauteur plein écran */
+  overflow-y: auto;
+  box-shadow: none; /* Supprimé l'ombre pour plein écran */
+  display: flex;
+  flex-direction: column;
+  /* Ajout des zones de sécurité pour mobile */
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0; /* Empêche le header de se rétrécir */
+}
+
+.popup-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.close-popup-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.close-popup-btn:hover {
+  color: #374151;
+}
+
+.popup-body {
+  padding: 24px;
+  flex: 1; /* Prend tout l'espace disponible */
+  overflow-y: auto; /* Permet le scroll si nécessaire */
+}
+
+.popup-body label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.popup-body .description-textarea,
+.popup-body .ingredients-textarea {
+  width: 100%;
+  min-height: 200px; /* Augmenté pour plein écran */
+  border: 1px solid #d1d5db;
+  border-radius: var(--radius-md);
+  padding: 12px;
+  font-size: 0.95rem;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+}
+
+.popup-body .description-textarea:focus,
+.popup-body .ingredients-textarea:focus {
+  outline: none;
+  border-color: var(--create-post-primary);
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.popup-footer {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding: 20px 24px;
+  border-top: 1px solid #e5e7eb;
+  background: #f9fafb;
+  flex-shrink: 0; /* Empêche le footer de se rétrécir */
+}
+
+.btn-secondary {
+  padding: 10px 20px;
+  border: 1px solid #d1d5db;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  color: #374151;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.btn-primary {
+  padding: 10px 20px;
+  border: none;
+  background: linear-gradient(135deg, #ff6b35, #ff8c52);
+  border-radius: var(--radius-md);
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #e55a2b, #ff6b35);
+  transform: translateY(-1px);
+}
+
+/* Cacher les menus de navigation quand CreatePost est en plein écran */
+body:has(.create-post-fullscreen) .top-menu,
+body:has(.create-post-fullscreen) .bottom-navigation,
+body:has(.create-post-fullscreen) .app-header,
+body:has(.create-post-fullscreen) header,
+body:has(.create-post-fullscreen) .navigation-header,
+body:has(.create-post-fullscreen) .top-nav {
+  display: none !important;
+}
+
+/* Fallback sans :has() pour d'autres alias */
+body.create-post-active .bottom-navigation,
+body.create-post-active .app-header,
+body.create-post-active header,
+body.create-post-active .navigation-header,
+body.create-post-active .top-nav {
+  display: none !important;
+}
+
+/* Responsive pour les popups plein écran */
+@media (min-width: 1300px) {
+  /* Sur les très grands écrans, on limite la largeur du contenu à 1200px */
+  .create-post-fullscreen .create-post-card {
+    max-width: 1200px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 32px !important;
+    padding-right: 32px !important;
+  }
+  
+  /* Ajouter un padding au conteneur principal sur les grands écrans */
+  .create-post-fullscreen {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .popup-header,
+  .popup-body,
+  .popup-footer {
+    padding: 16px;
+  }
+  
+  .popup-footer {
+    flex-direction: column;
+    padding-bottom: max(80px, env(safe-area-inset-bottom, 80px)) !important; /* Marge garantie pour éviter le menu du navigateur */
+    margin-bottom: 0;
+    position: sticky;
+    bottom: 0;
+    background: #f9fafb;
+    z-index: 1000;
+  }
+  
+  .btn-secondary,
+  .btn-primary {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 20px; /* Padding plus confortable sur mobile */
+    font-size: 16px; /* Empêche le zoom automatique sur iOS */
+  }
+}
+
+/* Media query spécifique pour les écrans courts ou en mode paysage mobile */
+@media (max-height: 600px) and (max-width: 768px) {
+  .popup-footer {
+    padding-bottom: max(100px, env(safe-area-inset-bottom, 100px)) !important; /* Marge encore plus importante sur écrans courts */
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1001 !important;
+    background: #f9fafb !important;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15) !important;
+  }
+  
+  /* Ajuster le padding du body du popup pour compenser le footer fixe */
+  .popup-body {
+    padding-bottom: 160px !important;
+  }
+}
+
+/* Support pour les interfaces utilisateur qui peuvent masquer les boutons */
+@media (max-width: 768px) and (display-mode: standalone) {
+  .popup-footer {
+    padding-bottom: max(120px, env(safe-area-inset-bottom, 120px)) !important; /* Marge maximale pour les PWA */
+  }
+}
+
+/* Styles pour les notices de mode édition */
+.edit-mode-notice {
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: var(--create-post-border-radius);
+  padding: 8px 12px;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.edit-mode-notice-step {
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: var(--create-post-border-radius);
+  padding: 6px 10px;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.edit-mode-text {
+  color: var(--create-post-warning);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Adaptation pour le mode édition */
+[data-edit-mode="true"] .upload-section {
+  display: none; /* Cacher la section d'upload en mode édition */
+}
+
+[data-edit-mode="true"] .create-post-title-inline {
+  color: var(--create-post-warning);
+}
+
+[data-edit-mode="true"] .create-post-title-inline::after {
+  content: " - Mode édition";
+  font-weight: normal;
+  opacity: 0.8;
+}
+
+/* Fin des styles CreatePost */
+
+/* Styles pour la nouvelle organisation - sections intégrées */
+.main-upload-section {
+  margin-bottom: 20px;
+  padding: 20px;
+  background: var(--color-white);
+  border: 0px solid var(--create-post-border-color-light);
+  border-radius: var(--create-post-border-radius);
+}
+
+.description-section,
+.resources-section,
+.location-section {
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #f8fafc;
+  border: none;
+  border-radius: var(--create-post-border-radius);
+}
+
+.description-textarea,
+.ingredients-textarea {
+  width: 100%;
+  padding: 16px;
+  border: none; /* Pas de bordure car la section a déjà une bordure */
+  border-radius: var(--create-post-border-radius);
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+  resize: vertical;
+  transition: var(--create-post-transition);
+  background: var(--color-white);
+  min-height: 100px;
+}
+
+.description-textarea:focus,
+.ingredients-textarea:focus {
+  outline: none;
+  border-color: var(--create-post-primary);
+  box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.1);
+}
+
+/* Style pour la section d'upload principale */
+.upload-area {
+  border: 1px solid #bbdefb;
+  border-radius: var(--create-post-border-radius);
+  padding: 40px 20px;
+  text-align: center;
+  background: #e3f2fd;
+  transition: var(--create-post-transition);
+  cursor: pointer;
+}
+
+.upload-area:hover {
+  border-color: #90caf9;
+  background: #d1ebfa;
+}
+
+.upload-content {
+  pointer-events: none;
+}
+
+.upload-icon {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  opacity: 0.8;
+  color: #0d47a1;
+}
+
+.upload-area:hover .upload-icon {
+  opacity: 1;
+}
+
+.upload-area p {
+  margin: 6px 0;
+  font-size: 0.95rem;
+  color: #0d47a1;
+}
+
+.upload-hint {
+  font-size: 0.85rem !important;
+  color: var(--create-post-gray) !important;
+}
+
+/* Titre sans label */
+.title-section {
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #f8fafc;
+  border: none;
+  border-radius: var(--create-post-border-radius);
+}
+
+.title-input {
+  width: 100%;
+  padding: 16px;
+  border: 1px solid var(--create-post-border-color);
+  border-radius: var(--create-post-border-radius);
+  font-family: inherit;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: var(--create-post-transition);
+  background: var(--color-white);
+}
+
+.title-input:focus {
+  outline: none;
+  border-color: var(--create-post-primary);
+  box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.1);
+}
+
+/* Section de crop sans titre */
+.crop-section {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: var(--color-white);
+  border: 1px solid var(--create-post-border-color-light);
+  border-radius: var(--create-post-border-radius);
+}
+
+.crop-controls {
+  margin: 16px 0;
+  text-align: center;
+}
+
+.crop-controls input[type="range"] {
+  width: 200px;
+  margin: 0 auto;
+}
+
+/* Section vidéo sans titre */
+.video-preview-section {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: var(--color-white);
+  border: 1px solid var(--create-post-border-color-light);
+  border-radius: var(--create-post-border-radius);
+}
+
+/* Responsive pour la nouvelle organisation sans labels */
+@media (max-width: 768px) {
+  .main-upload-section,
+  .title-section,
+  .description-section,
+  .resources-section,
+  .location-section {
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+  
+  .upload-area {
+    padding: 25px 15px;
+  }
+  
+  .upload-icon {
+    font-size: 1.25rem;
+  }
+  
+  .title-input,
+  .description-textarea,
+  .ingredients-textarea {
+    padding: 12px;
+    font-size: 1rem;
+  }
+}
+
+/* ===== STYLES BOUTON SUPPRIMER ÉTAPE ===== */
+.step-delete-section {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-delete-step {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 0.875rem;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+
+.btn-delete-step:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.1);
+}
+
+.btn-delete-step:active {
+  transform: translateY(0);
+}

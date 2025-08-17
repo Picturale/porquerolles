@@ -1,0 +1,170 @@
+/* Import du design system centralisé */
+@import './design-system.css';
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-white);
+  color: var(--brand-dark);
+  z-index: var(--z-navigation);
+  height: 100px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.navbar-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--brand-blue);
+  text-decoration: none;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  color: var(--brand-dark);
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+  text-decoration: none;
+  background: none;
+  border: none;
+}
+
+.nav-item:hover {
+  background-color: rgba(0, 39, 57, 0.05);
+  color: var(--brand-blue);
+}
+
+.nav-icon {
+  font-size: 1.25rem;
+  margin-right: 8px;
+}
+
+.logout-btn {
+  color: var(--light-text);
+}
+
+.logout-btn:hover {
+  color: var(--error-color);
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+.admin-link {
+  background-color: var(--brand-primary);
+  color: #ffffff;
+  border-radius: var(--border-radius);
+}
+
+.admin-link:hover {
+  background-color: var(--brand-primary);
+  filter: brightness(0.9);
+  color: var(--brand-light);
+}
+
+.admin-link .nav-icon {
+  color: var(--brand-light);
+}
+
+.calibration-btn {
+  display: flex !important;
+  align-items: center !important;
+  background: var(--brand-blue) !important; /* Même bleu que la navbar */
+  border: none !important;
+  border-radius: var(--border-radius) !important;
+  padding: 8px 16px !important;
+  transition: var(--transition) !important;
+  color: #ff6600 !important; /* Texte orange */
+  font-weight: 400 !important; /* Police plus fine */
+}
+
+.calibration-btn:hover {
+  background: var(--brand-blue) !important; /* Garde le même bleu */
+  opacity: 0.9 !important; /* Légère transparence au hover */
+  color: #ff6600 !important; /* Garde la couleur orange */
+}
+
+.calibration-btn .nav-icon {
+  color: #ff6600 !important; /* Icône orange */
+  margin-right: 8px !important;
+}
+
+.calibration-btn .nav-text {
+  color: #ff6600 !important; /* Texte orange */
+  font-weight: 400 !important; /* Police plus fine */
+}
+
+
+/* Nouveau container pour les boutons avec dropdowns */
+.nav-item-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.notification-btn,
+.chat-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Styles pour les dropdowns */
+.nav-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-dropdown .nav-item.active {
+  background-color: var(--brand-blue);
+  color: white;
+}
+
+/* Badge de notifications */
+.notification-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #ff4444;
+  color: white;
+  border-radius: var(--radius-full);
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  z-index: 1;
+}
+
+/* Responsive pour mobile */

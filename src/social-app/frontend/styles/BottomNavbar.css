@@ -1,0 +1,137 @@
+/* Bottom Navbar Styles - Style harmonisé avec core-app */
+@import './design-system.css';
+
+.bottom-navbar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: var(--color-white);
+  display: flex;
+  justify-content: space-around;
+  padding: 5px 0;
+  z-index: var(--z-navigation);
+  box-shadow: var(--shadow-card);
+  min-height: 60px; /* Hauteur minimale pour calculer correctement l'espace */
+}
+
+.bottom-nav-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-white);
+  border: none;
+  color: var(--color-gray-600);
+  text-decoration: none;
+  cursor: pointer;
+  padding: 8px 4px;
+  transition: var(--transition-base);
+  box-shadow: none;
+}
+
+.bottom-nav-item:hover {
+  color: var(--color-brand-orange);
+  transform: translateY(-1px);
+}
+
+.bottom-nav-item:hover .bottom-nav-icon {
+  color: var(--color-brand-orange);
+}
+
+.bottom-nav-item:hover .bottom-nav-text {
+  color: var(--color-brand-orange);
+}
+
+.bottom-nav-item .bottom-nav-icon {
+  color: var(--color-gray-600);
+  display: block;
+  font-size: 1.2rem;
+  margin-bottom: 2px;
+}
+
+.bottom-nav-item .bottom-nav-text {
+  color: var(--color-gray-600);
+  font-size: 0.7rem;
+  font-weight: 400;
+  text-align: center;
+}
+
+/* États actifs pour les boutons normaux */
+.bottom-nav-item.active {
+  background: var(--color-white) !important;
+  color: var(--color-brand-orange) !important;
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+  filter: none !important;
+  text-shadow: none !important;
+}
+
+.bottom-nav-item.active .bottom-nav-icon {
+  color: var(--color-brand-orange) !important;
+}
+
+.bottom-nav-item.active .bottom-nav-text {
+  color: var(--color-brand-orange) !important;
+  font-weight: 600;
+}
+
+/* Bouton Outils en bleu nuit permanent */
+.bottom-nav-item.calibration-item {
+  background: var(--color-white) !important;
+  color: #1B4F72 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  position: relative !important;
+  width: auto !important;
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 8px 4px !important;
+}
+
+.bottom-nav-item.calibration-item .bottom-nav-icon {
+  color: #1B4F72 !important;
+}
+
+.bottom-nav-item.calibration-item .bottom-nav-text {
+  color: #1B4F72 !important;
+  font-weight: 600;
+}
+
+/* Le bouton outils reste bleu même quand "actif" */
+.bottom-nav-item.calibration-item.active {
+  background: var(--color-white) !important;
+  color: #1B4F72 !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  filter: none !important;
+  text-shadow: none !important;
+}
+
+.bottom-nav-item.calibration-item.active .bottom-nav-icon {
+  color: #1B4F72 !important;
+}
+
+.bottom-nav-item.calibration-item.active .bottom-nav-text {
+  color: #1B4F72 !important;
+  font-weight: 600;
+}
+
+/* Masquer le bottom navbar quand une conversation chat est active en mobile */
+@media (max-width: 768px) {
+  body.chat-conversation-active .bottom-navbar {
+    display: none !important;
+  }
+}
+

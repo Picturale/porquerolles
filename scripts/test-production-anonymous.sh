@@ -1,0 +1,75 @@
+#!/bin/bash
+
+echo "🌐 Test de la navigation anonyme en PRODUCTION"
+echo "=============================================="
+
+PROD_URL="https://vision-picturale-community.web.app"
+
+echo ""
+echo "📡 Vérification de l'accès à la production..."
+if curl -s "$PROD_URL" > /dev/null; then
+    echo "✅ Application accessible en production"
+else
+    echo "❌ Application non accessible en production"
+    exit 1
+fi
+
+echo ""
+echo "🧪 Tests de navigation anonyme à effectuer:"
+echo ""
+echo "1. 🌍 TEST PRINCIPAL - Navigation anonyme:"
+echo "   URL: $PROD_URL"
+echo "   ✓ La page doit se charger sans redirection vers login"
+echo "   ✓ Le feed doit être visible SANS connexion"
+echo "   ✓ La navbar doit montrer 'Connexion' et 'S'inscrire'"
+echo ""
+echo "2. 🔍 TEST DES BOUTONS - Actions restreintes:"
+echo "   ✓ Cliquer sur ❤️ (j'aime) → Redirection vers /login"
+echo "   ✓ Cliquer sur 💬 (commenter) → Redirection vers /login"
+echo "   ✓ Message informatif: 'Connectez-vous pour...'"
+echo ""
+echo "3. 🎯 TEST DE CONNEXION - Workflow complet:"
+echo "   ✓ Cliquer sur 'Connexion' → Page de login"
+echo "   ✓ Se connecter avec Google ou email"
+echo "   ✓ Retour au feed avec toutes les fonctionnalités"
+echo ""
+echo "4. 🔄 TEST APRÈS CONNEXION:"
+echo "   ✓ Navbar complète: Créer, Profil, Admin, Déconnexion"
+echo "   ✓ Actions like/comment fonctionnelles"
+echo "   ✓ Liens profil utilisateur cliquables"
+echo ""
+echo "5. 📱 TEST RESPONSIVE:"
+echo "   ✓ Fonctionnel sur mobile"
+echo "   ✓ Interface adaptée aux petits écrans"
+echo ""
+
+echo "🎯 URLs de test importantes:"
+echo "🌍 Production: $PROD_URL"
+echo "🔐 Login: $PROD_URL/login"
+echo "👑 Admin: $PROD_URL/admin"
+echo ""
+
+echo "🕵️ DEBUG - Console JavaScript:"
+echo "Ouvrez F12 → Console et cherchez ces logs:"
+echo "✓ '🧭 Navbar rendered'"
+echo "✓ '👤 Current user in Navbar: null' (pour anonyme)"
+echo "✓ '⏳ Loading state in Navbar: false'"
+echo "✓ '🔍 Condition check: !loading = true, currentUser = false'"
+echo ""
+
+echo "🚨 Points de vigilance:"
+echo "• Si la page est blanche → Vider le cache (Cmd+Shift+R)"
+echo "• Si pas de boutons connexion → Vérifier les logs console"
+echo "• Si erreurs JavaScript → Vérifier les imports/exports"
+echo "• Si styles manquants → Problème de build CSS"
+echo ""
+
+echo "🔄 Si problème persistant:"
+echo "1. Tester en navigation privée (Cmd+Shift+N)"
+echo "2. Vider complètement le cache navigateur"
+echo "3. Vérifier les logs dans F12 → Console"
+echo "4. Comparer avec la version locale: http://localhost:8007/src/social-app/"
+echo ""
+
+echo "✅ Tests à effectuer sur: $PROD_URL"
+echo "🚀 Bonne navigation anonyme en production !"

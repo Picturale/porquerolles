@@ -1,0 +1,71 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build",
+			"type": "shell",
+			"command": "npm run build",
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Deploy Validated",
+			"type": "shell",
+			"command": "npm run deploy:validated",
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": [],
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "Deploy with iOS",
+			"type": "shell",
+			"command": "npm run deploy:ios",
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Validate Build",
+			"type": "shell",
+			"command": "npm run validate",
+			"group": "test",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "iOS Build",
+			"type": "shell",
+			"command": "npm run ios",
+			"group": "build",
+			"isBackground": false
+		},
+		{
+			"label": "Run Tests",
+			"type": "shell",
+			"command": "npm run test",
+			"group": "test",
+			"isBackground": false
+		},
+		{
+			"label": "Clean Project",
+			"type": "shell",
+			"command": "npm run clean",
+			"group": "build",
+			"isBackground": false
+		},
+		{
+			"label": "Dev Server",
+			"type": "shell",
+			"command": "npm run dev",
+			"isBackground": true,
+			"group": "build"
+		}
+	]
+}

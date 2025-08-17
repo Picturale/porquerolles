@@ -1,0 +1,393 @@
+/* Import du design system centralisé */
+@import './design-system.css';
+
+/* Optimized video thumbnail wrapper for intelligent cropping and centered play icon */
+.video-thumbnail-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.video-thumbnail-wrapper img.grid-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.play-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0,0,0,0.5);
+  border-radius: var(--radius-full);
+  padding: 12px;
+  color: white;
+  font-size: 36px;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.post-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+
+/* Style pour les PostCard quand ils sont dans la grille */
+.post-grid .post-card {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  display: block;
+  margin-bottom: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Masquer les éléments du PostCard dans la vue grille SAUF les boutons d'action */
+.post-grid .post-card .post-header {
+  display: none;
+}
+
+.post-grid .post-card .post-footer,
+.post-grid .post-card .post-caption {
+  display: none;
+}
+
+/* Boutons d'action spéciaux pour la vue grille - Menu discret */
+.post-grid .post-card .post-actions-grid {
+  display: flex !important;
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+  z-index: 25 !important;
+  opacity: 1;
+  transition: all 0.2s ease;
+}
+
+.post-grid .post-card .post-menu-container {
+  position: relative;
+}
+
+.post-grid .post-card .menu-toggle-btn {
+  background: rgba(255, 255, 255, 0.9) !important;
+  color: #666 !important;
+  padding: 6px !important;
+  font-size: 14px !important;
+  border-radius: 50% !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.post-grid .post-card .menu-toggle-btn:hover {
+  background: rgba(255, 255, 255, 1) !important;
+  color: #333 !important;
+  transform: scale(1.05);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.post-grid .post-card .post-menu-dropdown {
+  position: absolute;
+  top: 32px;
+  right: 0;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 30;
+  min-width: 120px;
+  animation: fadeInDropdown 0.2s ease-out;
+}
+
+@keyframes fadeInDropdown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.post-grid .post-card .menu-item {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  background: var(--color-white);
+  color: #333;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  text-align: left;
+}
+
+.post-grid .post-card .menu-item:hover {
+  background: #f5f5f5;
+}
+
+.post-grid .post-card .edit-item:hover {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.post-grid .post-card .delete-item:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+/* Responsif pour mobile */
+@media (max-width: 768px) {
+  .post-grid .post-card .menu-toggle-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+  
+  .post-grid .post-card .post-menu-dropdown {
+    min-width: 140px;
+    top: 36px;
+  }
+  
+  .post-grid .post-card .menu-item {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+}
+
+/* Masquer les boutons d'action normaux dans la grille */
+.post-grid .post-card .post-actions {
+  display: none !important;
+}
+
+/* Afficher uniquement l'image/vidéo en mode grille */
+.post-grid .post-card .post-content {
+  height: 100%;
+}
+
+.grid-item {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  display: block;
+  text-decoration: none;
+}
+
+.grid-image-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.grid-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.grid-stats {
+  display: flex;
+  gap: 20px;
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.grid-stat {
+  display: flex;
+  align-items: center;
+  color: var(--brand-light);
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 4px 8px;
+  border-radius: var(--radius-lg);
+  font-size: 0.85rem;
+  backdrop-filter: blur(4px);
+}
+
+.grid-stat svg {
+  margin-right: 4px;
+  font-size: 1rem;
+}
+
+/* Styles pour les boutons d'actions */
+.grid-item-container {
+  position: relative;
+}
+
+.post-actions {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  opacity: 1;
+  transform: scale(1);
+  transition: var(--transition-base);
+  z-index: 10;
+}
+
+.edit-post-button,
+.delete-post-button {
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.75rem;
+}
+
+.edit-post-button {
+  background: rgba(34, 197, 94, 0.8);
+}
+
+.edit-post-button:hover {
+  background: rgba(34, 197, 94, 1);
+  transform: scale(1.1);
+}
+
+.delete-post-button {
+  background: rgba(239, 68, 68, 0.9);
+}
+
+.delete-post-button:hover {
+  background: rgba(220, 38, 38, 1);
+  transform: scale(1.1);
+}
+
+.delete-post-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.delete-post-button.deleting {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Amélioration responsive pour éviter la superposition */
+@media (max-width: 768px) {
+  .post-actions {
+    top: 4px;
+    right: 4px;
+    gap: 4px;
+  }
+  
+  .edit-post-button,
+  .delete-post-button {
+    width: 28px;
+    height: 28px;
+    font-size: 0.7rem;
+  }
+  
+  .grid-stats {
+    bottom: 4px;
+    gap: 12px;
+  }
+  
+  .grid-stat {
+    padding: 2px 6px;
+    font-size: 0.75rem;
+  }
+  
+  .grid-stat svg {
+    font-size: 0.9rem;
+  }
+}
+
+/* Amélioration de la visibilité au survol */
+.grid-item-container:hover .grid-overlay {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Éviter les conflits entre les boutons et les stats */
+.grid-item-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.grid-image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.video-thumbnail-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.video-thumbnail-wrapper img.grid-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.play-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0,0,0,0.5);
+  border-radius: var(--radius-full);
+  padding: 12px;
+  color: white;
+  font-size: 36px;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+

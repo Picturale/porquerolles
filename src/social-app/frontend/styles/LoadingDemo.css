@@ -1,0 +1,166 @@
+/* Import du design system centralisé */
+@import './design-system.css';
+
+/* Démonstration du Loading Spinner */
+.loading-demo {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: var(--background);
+  min-height: 100vh;
+}
+
+.loading-demo h1 {
+  text-align: center;
+  color: var(--brand-primary);
+  margin-bottom: 3rem;
+  font-size: 2.5rem;
+}
+
+.demo-section {
+  margin-bottom: 4rem;
+  padding: 2rem;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.demo-section h2 {
+  color: var(--brand-dark);
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  border-bottom: 2px solid var(--brand-primary);
+  padding-bottom: 0.5rem;
+}
+
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.demo-item {
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 107, 53, 0.2);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.demo-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.15);
+}
+
+.demo-item h3 {
+  color: var(--brand-dark);
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+}
+
+.dark-bg {
+  background: var(--brand-dark) !important;
+  color: white;
+}
+
+.dark-bg h3 {
+  color: white !important;
+}
+
+.demo-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-base);
+  background: var(--brand-gray);
+  color: var(--brand-dark);
+  margin: 0.5rem;
+}
+
+.demo-button.primary {
+  background: var(--brand-primary);
+  color: white;
+}
+
+.demo-button.secondary {
+  background: var(--primary-blue);
+  color: white;
+}
+
+.demo-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.skeleton-demo {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.skeleton-line {
+  height: 20px;
+  border-radius: var(--radius-xs);
+}
+
+.skeleton-line.short {
+  width: 60%;
+}
+
+.skeleton-box {
+  height: 120px;
+  border-radius: var(--radius-md);
+  margin-top: 1rem;
+}
+
+/* Spinner personnalisé pour les boutons */
+.demo-button .spinner-button {
+  width: 16px;
+  height: 16px;
+}
+
+/* Animation d'apparition pour les sections */
+.demo-section {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .loading-demo {
+    padding: 1rem;
+  }
+  
+  .demo-section {
+    padding: 1.5rem;
+  }
+  
+  .demo-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .loading-demo h1 {
+    font-size: 2rem;
+  }
+}

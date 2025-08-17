@@ -1,0 +1,2364 @@
+/* PostDetail.css - Version Moderne et Minimaliste */
+/* =================================================================== */
+/* IMPORT DESIGN SYSTEM                                              */
+/* =================================================================== */
+@import './design-system.css';
+
+/* =================================================================== */
+/* SPÉCIFIQUE AU POSTDETAIL - PRÉFIXÉ POUR ÉVITER CONFLITS AVEC POSTCARD */
+/* =================================================================== */
+
+/* =================================================================== */
+/* CONTAINER PRINCIPAL - LAYOUT OPTIMAL SANS CONFLITS               */
+/* =================================================================== */
+
+.post-detail {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0;
+  background: var(--color-white);
+  min-height: 100vh;
+  position: relative;
+  /* Espacement ajusté : header PostDetail (70px) + marge (10px) */
+  padding-top: 80px; /* Header PostDetail maintenant au top de l'écran */
+  padding-bottom: 100px; /* Bottom navbar (70px) + safe area (30px) */
+}
+
+/* Safe area unifié pour toutes les plateformes */
+.post-detail {
+  padding-top: 80px !important; /* Header PostDetail en haut de l'écran */
+  padding-bottom: 100px !important;
+}
+
+/* =================================================================== */
+/* HEADER POSTDETAIL - DESIGN MODERNE SANS CONFLITS                 */
+/* =================================================================== */
+
+.post-detail-header {
+  position: fixed !important;
+  top: 0 !important; /* Aligné sur le haut de l'écran, au-dessus du top menu */
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  background: rgba(255, 255, 255, 0.95) !important; /* Unifié pour toutes les plateformes */
+  z-index: 9999 !important; /* Z-index très élevé pour être au-dessus de tout */
+  display: flex !important;
+  align-items: center !important;
+  padding: 16px 20px !important; /* Unifié pour toutes les plateformes */
+  justify-content: center !important;
+  transition: transform 0.2s ease-out !important; /* Transition fluide comme la topnav */
+  height: 80px !important; /* Unifié pour toutes les plateformes */
+  backdrop-filter: blur(10px) !important; /* Effet de flou pour distinction */
+  -webkit-backdrop-filter: blur(10px) !important; /* Safari */
+}
+
+/* États du header avec animations fluides - Utilisation de scrollOffset comme la topnav */
+.post-detail-header.visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.post-detail-header.hidden {
+  opacity: 0.3;
+  visibility: visible;
+  pointer-events: none;
+}
+
+/* Sécurité : masquer les headers hors contexte et le top menu dans PostDetail */
+.post-detail-header:not(.post-detail .post-detail-header) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Masquer le top menu quand on est dans PostDetail */
+.post-detail ~ * .top-menu,
+.post-detail + * .top-menu,
+body:has(.post-detail) .top-menu,
+.post-detail-active .top-menu {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  z-index: -1 !important;
+}
+
+/* =================================================================== */
+/* CONTENU HEADER - LAYOUT MODERNE                                   */
+/* =================================================================== */
+
+.post-detail-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Distribution égale entre gauche, centre et droite */
+  width: 100%;
+  max-width: 800px; /* Unifié pour toutes les plateformes */
+  margin: 0 auto;
+  gap: 16px; /* Unifié pour toutes les plateformes */
+}
+
+/* Nouvelle structure : Auteur à gauche */
+.post-author-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1; /* Prend l'espace disponible à gauche */
+}
+
+/* Bouton Follow au centre */
+.header-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto; /* Taille fixe au centre */
+}
+
+/* Actions à droite */
+.post-actions-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1; /* Prend l'espace disponible à droite */
+}
+
+/* Ancien titre retiré - plus utilisé */
+.header-title {
+  display: none; /* Masqué car le titre est retiré du header */
+}
+
+.post-title-header {
+  display: none; /* Masqué car le titre est retiré du header */
+}
+
+/* Bouton fermeture (remplace le bouton retour) */
+.header-close-btn {
+  background: none;
+  border: none;
+  font-size: 20px; /* Légèrement plus grand pour le X */
+  color: #1a1a1a;
+  cursor: pointer;
+  padding: 10px; /* Unifié pour toutes les plateformes */
+  border-radius: var(--radius-full);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px; /* Unifié pour toutes les plateformes */
+  height: 40px; /* Unifié pour toutes les plateformes */
+  flex-shrink: 0;
+  font-weight: 300; /* Pour un X plus élégant */
+}
+
+.header-close-btn:hover {
+  background: #f5f5f5;
+}
+
+.header-close-btn:active {
+  transform: scale(0.95);
+}
+
+/* Ancien bouton retour - maintenant inutilisé */
+.header-back-btn {
+  display: none; /* Masqué car remplacé par le bouton fermeture */
+}
+
+.author-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #1b4f72;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.author-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.author-name {
+  font-weight: bold;
+  color: #1b4f72;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.author-name:hover {
+  text-decoration: underline;
+}
+
+.post-time {
+  color: var(--color-gray-600);
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+/* Actions header - Design ultra-minimaliste */
+.post-actions-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Bouton de chat simple et épuré */
+.modern-chat-button,
+.chat-button {
+  background: #1a1a1a;
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+  width: 36px;
+  height: 36px;
+  font-size: 14px;
+}
+
+.modern-chat-button:hover,
+.chat-button:hover {
+  background: #333333;
+}
+
+.modern-chat-button .chat-icon {
+  font-size: 14px;
+}
+
+/* Container simplifié */
+.chat-button-container {
+  display: inline-block;
+}
+
+/* =================================================================== */
+/* CONTENU PRINCIPAL - DESIGN MODERNE ET MINIMALISTE               */
+/* =================================================================== */
+
+/* Section image principale - Hero compact */
+.post-image-container {
+  width: 100%;
+  margin: 0 0 16px 0;
+  padding: 5px;
+  position: relative;
+}
+
+.post-image-large,
+.post-video-large {
+  width: 100%;
+  height: auto;
+  min-height: 300px;
+  max-height: 70vh;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  transition: opacity 0.3s ease;
+}
+
+.post-image-large {
+  cursor: pointer;
+}
+
+.post-image-large:hover {
+  opacity: 0.9;
+}
+
+/* Styles pour les vidéos principales */
+.post-video-large {
+  background: #000;
+  max-height: 600px;
+}
+
+/* Styles spécifiques pour VideoPlayer principal dans PostDetail */
+.post-detail-main-video {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  max-height: 70vh !important;
+  min-height: 300px !important;
+}
+
+.post-detail-main-video .video-player-video {
+  max-height: 70vh !important;
+  min-height: 300px !important;
+}
+
+.post-video-large::-webkit-media-controls-panel {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* Styles pour les vidéos dans les étapes */
+.step-video {
+  border-radius: var(--radius-md);
+  background: #000;
+}
+
+.step-video::-webkit-media-controls-panel {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* Informations auteur dans PostDetail - Unifié pour toutes les plateformes */
+.post-detail .post-detail-author-info {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* Unifié pour toutes les plateformes */
+  padding: 16px 20px; /* Unifié pour toutes les plateformes */
+  margin: 0 16px 16px 16px; /* Unifié pour toutes les plateformes */
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  transition: var(--transition-base);
+}
+
+.post-detail .post-detail-author-avatar {
+  width: 48px; /* Unifié pour toutes les plateformes */
+  height: 48px; /* Unifié pour toutes les plateformes */
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.post-detail .post-detail-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-detail .post-detail-avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #1a1a1a;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.post-detail .post-detail-author-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.post-detail .post-detail-author-name {
+  font-weight: 600;
+  color: #1a1a1a;
+  text-decoration: none;
+  font-size: 15px; /* Unifié pour toutes les plateformes */
+  display: block;
+  margin-bottom: 2px; /* Unifié pour toutes les plateformes */
+  transition: color 0.2s ease;
+}
+
+.post-detail .post-detail-author-name:hover {
+  color: #1a1a1a;
+  text-decoration: underline;
+}
+
+.post-detail .post-detail-time {
+  color: #6b7280;
+  font-size: 13px; /* Unifié pour toutes les plateformes */
+  font-weight: 400;
+}
+
+/* Section titre principal */
+.post-title-section {
+  margin-bottom: 24px;
+  padding: 0 20px;
+}
+
+.post-title-main {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1.3;
+  margin: 0;
+  text-align: center;
+}
+
+/* Section description */
+.post-description-section {
+  margin-bottom: 32px;
+  padding: 0 20px;
+}
+
+.post-description-section h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12px;
+  border-left: 4px solid #ff6b35;
+  padding-left: 12px;
+}
+
+.post-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #555;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+/* Section ingrédients - Pleine largeur */
+.post-ingredients-section {
+  margin-bottom: 32px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 0;
+  margin-left: 0;
+  margin-right: 0;
+  border: none;
+  border-top: 1px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
+  width: 100%;
+}
+
+.post-ingredients-section h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.post-ingredients {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ingredient-item {
+  font-size: 1rem;
+  color: #34495e;
+  padding: 8px 0;
+  border-bottom: 1px solid #e9ecef;
+  line-height: 1.4;
+}
+
+.ingredient-item:last-child {
+  border-bottom: none;
+}
+
+/* =================================================================== */
+/* METHOD SECTION - MODERN MINIMALIST DESIGN                         */
+/* =================================================================== */
+
+.method-section {
+  margin: 32px 0;
+  padding: 24px 20px;
+  background: var(--color-white);
+  border-radius: 16px;
+  border: none;
+  transition: var(--transition-base);
+  position: relative;
+}
+
+.method-section h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 24px 0;
+  text-align: left;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.method-section h3::before {
+  content: '📋';
+  font-size: 1.1rem;
+}
+
+/* Modern method steps layout */
+.method-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.method-step {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  background: var(--color-white);
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  border: 1px solid #f0f0f0;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  position: relative;
+}
+
+.method-step:hover {
+  border-color: #d0d0d0;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-1px);
+}
+
+/* Smooth transitions for content */
+.method-step .step-content,
+.method-step .step-image-container {
+  transition: var(--transition-base);
+}
+
+/* Hover effects for desktop */
+.method-step:hover .step-content {
+  transform: translateY(-2px);
+}
+
+.method-step:hover .step-image {
+  transform: scale(1.03);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Desktop alternating layout */
+@media (min-width: 769px) {
+  .method-step {
+    display: grid;
+    grid-template-columns: auto 1fr 1fr;
+    gap: 24px;
+    align-items: center;
+    min-height: 200px;
+  }
+  
+  /* Step number positioning for desktop */
+  .method-step .step-number {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    align-self: flex-start;
+    margin-top: 8px;
+  }
+  
+  /* Left layout (odd steps: 1, 3, 5...) - text left, image right */
+  .method-step.step-left .step-content {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  
+  .method-step.step-left .step-image-container {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  
+  /* Right layout (even steps: 2, 4, 6...) - image left, text right */
+  .method-step.step-right .step-image-container {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  
+  .method-step.step-right .step-content {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  /* Ensure step images fill their column nicely on large screens */
+  .method-step .step-image-container {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .method-step .step-image {
+    max-height: 480px;
+  }
+}
+
+/* Base styles for step images (applies to all screens, refined per breakpoint) */
+.method-step .step-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+}
+
+.method-step .step-image-container {
+  width: 100%;
+}
+
+/* Unifier l'affichage du texte riche pour qu'il corresponde à la description */
+.post-detail .rich-text-viewer {
+  padding: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #555;
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+
+.post-detail .rich-text-viewer p {
+  margin: 0 0 1em;
+  min-height: 1.5em;
+}
+
+.post-detail .rich-text-viewer p:last-child {
+  margin-bottom: 0;
+}
+
+/* Spécifique aux étapes: le texte occupe toute la largeur de la colonne */
+.post-detail .method-section .step-content .rich-text-viewer {
+  width: 100%;
+}
+
+/* Harmonisation finale: le texte des étapes doit refléter exactement la description */
+.method-section .step-content .step-text.rich-text-viewer {
+  color: #555 !important; /* même teinte que .post-description */
+  line-height: 1.6;
+  padding: 0;
+  word-break: break-word;
+}
+
+.method-section .step-content .step-text.rich-text-viewer p {
+  margin: 0 0 1em; /* même espacement que la description */
+}
+
+.method-section .step-content .step-text.rich-text-viewer p:last-child {
+  margin-bottom: 0;
+}
+
+/* Amélioration grand écran: éviter les lignes trop longues à l'intérieur des colonnes */
+@media (min-width: 1024px) {
+  .method-section .step-content .step-text.rich.text-viewer {
+    max-width: 100%;
+  }
+}
+
+/* Harmonisation du style des liens pour correspondre à la description */
+.post-detail .rich-text-viewer a,
+.post-detail .rich-text-viewer .link-popup {
+  color: #0366d6;
+  text-decoration: none;
+}
+
+.post-detail .rich-text-viewer a:hover,
+.post-detail .rich-text-viewer .link-popup:hover {
+  text-decoration: underline;
+}
+
+/* Correctifs grand écran: éviter les arrière-plans divergents et resserrer les espacements */
+@media (min-width: 1024px) {
+  .post-detail .method-step {
+    gap: 24px;
+  }
+  .post-detail .method-step.step-right {
+    background: var(--color-white);
+  }
+}
+
+/* Mobile responsive - Design compact et moderne */
+@media (max-width: 768px) {
+  .method-section {
+    margin: 16px 0;
+    padding: 16px 12px;
+    border-radius: var(--radius-md);
+    background: var(--color-white);
+    border: none;
+  }
+  
+  .method-section h3 {
+    font-size: 1rem;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    font-weight: 600;
+  }
+  
+  .method-section h3::before {
+    font-size: 0.9rem;
+  }
+  
+  .method-steps {
+    gap: 8px;
+  }
+  
+  .method-step {
+    display: flex !important;
+    flex-direction: row;
+    padding: 12px;
+    gap: 12px;
+    border-radius: var(--radius-sm);
+    grid-template-columns: none !important;
+    background: #fafafa;
+    border: 1px solid #f5f5f5;
+    align-items: flex-start;
+    min-height: auto;
+  }
+  
+  .method-step:hover {
+    background: #f8f8f8;
+    transform: none; /* Désactiver le hover transform sur mobile */
+  }
+  
+  .method-step .step-number {
+    width: 24px;
+    height: 24px;
+    font-size: 0.75rem;
+    margin: 0;
+    flex-shrink: 0;
+    background: #1a1a1a;
+    color: white;
+  }
+  
+  .method-step .step-content {
+    flex: 1;
+    min-height: auto;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .method-step .step-text {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    margin: 0;
+    color: #333;
+  }
+  
+  .method-step .step-image-container {
+    margin-top: 8px;
+    min-height: auto;
+    padding: 0;
+    justify-content: flex-start;
+    width: 100%;
+  }
+  
+  .method-step .step-image {
+    border-radius: var(--radius-sm);
+    max-height: 200px;
+    max-width: 100%;
+    width: 100%;
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+  
+  /* Layout horizontal compact pour les étapes avec image */
+  .method-step:has(.step-image-container) {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .method-step:has(.step-image-container) .step-content {
+    width: 100%;
+  }
+  
+  .method-step:has(.step-image-container) .step-image-container {
+    width: 100%;
+    margin-top: 8px;
+  }
+  
+  /* Étapes sans image - layout horizontal très compact */
+  .method-step:not(:has(.step-image-container)) {
+    padding: 10px 12px;
+    min-height: 44px;
+  }
+  
+  .method-step:not(:has(.step-image-container)) .step-number {
+    margin-top: 2px;
+  }
+}
+
+/* Très petits écrans - design ultra-compact */
+@media (max-width: 480px) {
+  .method-section {
+    margin: 12px 0;
+    padding: 12px 8px;
+  }
+  
+  .method-section h3 {
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+  }
+  
+  .method-steps {
+    gap: 6px;
+  }
+  
+  .method-step {
+    padding: 10px;
+    gap: 10px;
+    border-radius: var(--radius-xs);
+  }
+  
+  .method-step .step-number {
+    width: 20px;
+    height: 20px;
+    font-size: 0.7rem;
+  }
+  
+  .method-step .step-text {
+    font-size: 0.8rem;
+    line-height: 1.3;
+  }
+  
+  .method-step .step-image {
+    max-height: 180px;
+    border-radius: var(--radius-xs);
+  }
+  
+  .method-step:not(:has(.step-image-container)) {
+    padding: 8px 10px;
+    min-height: 40px;
+  }
+}
+
+/* Responsive pour mobile */
+@media (max-width: 768px) {
+  .post-title-main {
+    font-size: 1.6rem;
+  }
+  
+  .post-ingredients-section {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 16px;
+    border-radius: 0;
+  }
+  
+  .post-description-section {
+    padding: 0 16px;
+  }
+  
+  .post-title-section {
+    padding: 0 16px;
+  }
+}
+
+/* Amélioration de la lisibilité */
+.post-content {
+  line-height: 1.6;
+}
+
+.post-content h3 {
+  margin-top: 0;
+}
+
+/* Animation pour l'apparition des sections */
+.post-description-section,
+.post-ingredients-section,
+.method-section {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =================================================================== */
+/* SECTION COMMENTAIRES POSTDETAIL - SÉPARÉE DU POSTCARD            */
+/* =================================================================== */
+
+/* Commentaires récents dans PostDetail - Unifié pour toutes les plateformes */
+.post-detail .post-detail-recent-comments {
+  padding: 20px; /* Unifié pour toutes les plateformes */
+  margin: 16px 16px; /* Unifié pour toutes les plateformes */
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+}
+
+.post-detail .post-detail-recent-comments h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.post-detail .post-detail-recent-comments h3::before {
+  content: '💬';
+  font-size: 16px;
+}
+
+.post-detail .post-detail-comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.post-detail .post-detail-comment-item {
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  transition: background-color 0.3s ease;
+}
+
+.post-detail .post-detail-comment-item:hover {
+  background: #f5f5f5;
+}
+
+.post-detail .post-detail-comment-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.post-detail .post-detail-comment-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-detail .post-detail-comment-avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #1a1a1a;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.post-detail .post-detail-comment-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.post-detail .post-detail-comment-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.post-detail .post-detail-comment-author {
+  font-weight: 600;
+  color: #1a1a1a;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.post-detail .post-detail-comment-author:hover {
+  color: #1a1a1a;
+  text-decoration: underline;
+}
+
+.post-detail .post-detail-comment-time {
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.post-detail .post-detail-comment-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #1a1a1a;
+  word-wrap: break-word;
+}
+.no-comments {
+  text-align: center;
+  color: #1a1a1a;
+  font-style: italic;
+  margin: 0;
+  padding: 40px 20px;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+}
+
+.no-comments::before {
+  content: '💭';
+  display: block;
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+/* Boutons commentaires simplifiés */
+.view-all-comments, .add-first-comment, .show-comments-btn {
+  width: 100%;
+  background: #1a1a1a;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 16px;
+  transition: background-color 0.2s ease;
+}
+
+.view-all-comments:hover, .add-first-comment:hover, .show-comments-btn:hover {
+  background: #333333;
+}
+
+
+
+/* Styles communs pour les boutons de commentaires discrets */
+.show-comments-btn,
+.view-all-comments-btn {
+  width: 100%;
+  background: transparent;
+  color: #8e8e8e;
+  padding: 8px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: var(--radius-xs);
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  margin-top: 8px;
+  margin-bottom: 4px;
+  transition: all 0.2s ease;
+  text-align: center;
+  /* Amélioration pour le clic */
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.show-comments-btn:hover,
+.view-all-comments-btn:hover {
+  background: #f8f8f8;
+  color: #1a1a1a;
+  border-color: #d0d0d0;
+}
+
+.show-comments-btn:active,
+.view-all-comments-btn:active {
+  background: #f0f0f0;
+  transform: translateY(1px);
+}
+
+.show-comments-btn:focus,
+.view-all-comments-btn:focus {
+  outline: 2px solid #0095f6;
+  outline-offset: 2px;
+}
+
+/* Suppression des animations scale pour simplicité */
+
+/* =================================================================== */
+/* SECTION ACTIONS UTILISATEUR - EN BAS SOUS LES COMMENTAIRES       */
+/* =================================================================== */
+
+/* Actions principales du PostDetail : Follow/Unfollow + Chat - Unifié pour toutes les plateformes */
+.post-detail .post-detail-bottom-actions {
+  padding: 20px; /* Unifié pour toutes les plateformes */
+  margin: 16px 16px 32px 16px; /* Unifié pour toutes les plateformes */
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Unifié pour toutes les plateformes */
+  align-items: center;
+}
+
+/* Actions Follow/Message simplifiées */
+.post-detail .post-detail-follow-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.post-detail .post-detail-follow-button, 
+.post-detail .post-detail-unfollow-button {
+  background: #1a1a1a;
+  color: white;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  flex: 1;
+  max-width: 140px;
+  text-align: center;
+}
+
+.post-detail .post-detail-follow-button:hover, 
+.post-detail .post-detail-unfollow-button:hover {
+  background: #333333;
+}
+
+.post-detail .post-detail-unfollow-button {
+  background: #6b7280;
+}
+
+.post-detail .post-detail-unfollow-button:hover {
+  background: #9ca3af;
+}
+
+.post-detail .post-detail-chat-action {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.post-detail .post-detail-message-button {
+  background: #1a1a1a;
+  color: white;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 140px;
+  justify-content: center;
+}
+
+.post-detail .post-detail-message-button:hover {
+  background: #333333;
+}
+
+.post-detail .post-detail-message-button .post-detail-message-icon {
+  font-size: 14px;
+}
+
+/* =================================================================== */
+
+/* Loading et Error states - Ultra minimaliste */
+.loading-container, .error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+  text-align: center;
+  padding: 30px 20px;
+  background: var(--surface-primary);
+  border-radius: var(--radius-md);
+  margin: 12px;
+  gap: 12px;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #1a1a1a;
+  text-decoration: none;
+  font-weight: 500;
+  margin-top: 20px;
+  padding: 10px 15px;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.back-button:hover {
+  background: #f5f5f5;
+}
+
+/* Header unifié pour toutes les plateformes - aucune variation */
+
+/* =================================================================== */
+/* LAYOUT UNIFIÉ - AUCUNE VARIATION ENTRE PLATEFORMES               */
+/* =================================================================== */
+
+/* Suppression de toutes les variations responsive pour uniformité parfaite */
+
+/* =================================================================== */
+/* STYLES FINAUX UNIFIÉS - IDENTIQUES SUR TOUTES PLATEFORMES       */
+/* =================================================================== */
+
+/* Focus et accessibilité - valeurs fixes */
+.header-back-btn:focus-visible,
+.like-button:focus-visible,
+.comment-button:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+  border-radius: var(--radius-md);
+}
+
+/* =================================================================== */
+/* BOUTONS D'ACTIONS PRINCIPAUX - DESIGN MODERNE ET ATTRACTIF       */
+/* =================================================================== */
+
+/* Container des actions principales */
+.post-actions {
+  padding: 20px;
+  margin: 0 16px 16px 16px;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 12px;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 8px;
+}
+
+/* Styles de base pour tous les boutons d'actions */
+.like-button, 
+.comment-button,
+.post-detail-chat-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  min-width: 80px;
+  background: #f8fafc;
+  color: #64748b;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Bouton Like - Design spécial */
+.like-button {
+  border: 2px solid #e2e8f0;
+  color: #64748b;
+}
+
+.like-button:hover {
+  border-color: #fca5a5;
+  color: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+}
+
+.like-button.liked {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  border-color: #dc2626;
+  color: white;
+  animation: likeAnimation 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.like-button.liked:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+}
+
+.like-button .heart-filled {
+  color: #ffffff;
+  animation: heartBeat 0.6s ease-in-out;
+}
+
+/* Animation pour le like */
+@keyframes likeAnimation {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.3); }
+  50% { transform: scale(1.1); }
+  75% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+/* Bouton Comment - Design moderne */
+.comment-button {
+  border: 2px solid #e2e8f0;
+  color: #64748b;
+}
+
+.comment-button:hover {
+  border-color: #38bdf8;
+  color: #0369a1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
+}
+
+.comment-button:active {
+  transform: translateY(0);
+  animation: commentTap 0.2s ease-in-out;
+}
+
+@keyframes commentTap {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+/* Compteurs stylisés */
+.like-count, 
+.comment-count {
+  font-weight: 700;
+  font-size: 14px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.like-button.liked .like-count {
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Container pour les actions de chat (si nécessaire plus tard) */
+
+/* Effet de pulse pour attirer l'attention */
+.like-button:not(.liked):hover::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: var(--radius-full);
+  transform: translate(-50%, -50%);
+  animation: pulseEffect 0.6s ease-out;
+}
+
+@keyframes pulseEffect {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    width: 100px;
+    height: 100px;
+    opacity: 0;
+  }
+}
+
+/* Amélioration de l'accessibilité */
+.like-button:focus-visible,
+.comment-button:focus-visible {
+  outline: 3px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 25px;
+}
+
+/* États désactivés */
+.like-button:disabled,
+.comment-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.like-button:disabled:hover,
+.comment-button:disabled:hover {
+  transform: none;
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  color: #64748b;
+}
+
+/* =================================================================== */
+/* SECTION COMMENTAIRES COMPLETS - POUR ÉDITION                     */
+/* =================================================================== */
+
+.full-comments-section {
+  margin: 16px;
+  padding: 20px;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid #f1f5f9;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.full-comments-section .comments-container {
+  max-height: none;
+}
+
+/* Styles spécifiques pour les commentaires dans PostDetail */
+.post-detail .full-comments-section {
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =================================================================== */
+/* COMMENTS PREVIEW - Aperçu des commentaires avec liens cliquables   */
+/* =================================================================== */
+
+.comments-preview {
+  padding: 16px 20px;
+  margin: 0 16px;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+}
+
+.comment-preview-item {
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.comment-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px;
+}
+
+/* Liens vers les profils utilisateur */
+.comment-author-link {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s ease;
+}
+
+.comment-author-link:hover {
+  color: #0095f6;
+  text-decoration: underline;
+}
+
+.comment-author-link strong {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.comment-author-link:hover strong {
+  color: #0095f6;
+}
+
+.comment-text {
+  color: #1a1a1a;
+  font-weight: 400;
+}
+
+/* Indicateur de chargement pour les noms d'utilisateur */
+.comment-author-link strong.loading,
+.comment-preview-item strong.loading {
+  opacity: 0.6;
+  animation: pulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from {
+    opacity: 0.6;
+  }
+  to {
+    opacity: 0.9;
+  }
+}
+
+/* Responsive pour mobile */
+@media (max-width: 768px) {
+  .comments-preview {
+    padding: 12px 16px;
+    margin: 0 12px;
+  }
+  
+  .comment-preview-item {
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+}
+
+/* =================================================================== */
+/* SECTION RATING EN BAS AU CENTRE - COLLAPSED INTERACTIVE          */
+/* =================================================================== */
+
+.post-rating-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 20px;
+  margin: 16px 16px 32px 16px;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.post-rating-section .star-rating {
+  width: 100%;
+  max-width: 300px;
+}
+
+/* Style pour le rating large en mode collapsed */
+.post-rating-section .star-rating.large.collapsed .rating-button {
+  width: 100%;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  padding: 16px 24px;
+  border-radius: var(--radius-lg);
+  font-size: 16px;
+  font-weight: 600;
+  color: #495057;
+  transition: var(--transition-base);
+}
+
+.post-rating-section .star-rating.large.collapsed .rating-button:hover {
+  background: #e9ecef;
+  border-color: #dee2e6;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.post-rating-section .star-rating.large.collapsed .rating-button .star-icon {
+  font-size: 20px;
+  color: #fbbf24;
+}
+
+.post-rating-section .star-rating.large.collapsed .rating-button span {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Style pour le rating large en mode expanded */
+.post-rating-section .star-rating.large.expanded {
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: var(--radius-lg);
+  border: 2px solid #e9ecef;
+}
+
+.post-rating-section .star-rating.large.expanded .stars-container {
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.post-rating-section .star-rating.large.expanded .star-button {
+  padding: 4px;
+  border-radius: var(--radius-xs);
+}
+
+.post-rating-section .star-rating.large.expanded .star-icon {
+  font-size: 28px;
+}
+
+.post-rating-section .star-rating.large.expanded .rating-info {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Animation pour la transition collapsed/expanded */
+.post-rating-section .star-rating {
+  transition: var(--transition-base);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .post-rating-section {
+    margin: 12px 12px 24px 12px;
+    padding: 20px 16px;
+  }
+  
+  .post-rating-section .star-rating.large.collapsed .rating-button {
+    padding: 14px 20px;
+    font-size: 15px;
+  }
+  
+  .post-rating-section .star-rating.large.expanded .star-icon {
+    font-size: 24px;
+  }
+}
+
+/* =================================================================== */
+/* EDIT POST BUTTON - USING DESIGN SYSTEM                           */
+/* =================================================================== */
+
+.edit-post-button {
+  /* Hérite de btn-tertiary avec quelques ajustements */
+  background: none;
+  color: var(--color-muted-text, #888888);
+  border: 1px solid var(--color-border-light, #f0f0f0);
+  padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);
+  border-radius: var(--radius-sm, 4px);
+  font-size: var(--text-sm, 0.8rem);
+  font-weight: var(--font-normal, 400);
+  cursor: pointer;
+  transition: var(--transition-fast, 0.15s ease);
+  margin-top: var(--spacing-sm, 8px);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs, 4px);
+}
+
+.edit-post-button:hover {
+  color: var(--color-primary-text, #1a1a1a);
+  border-color: var(--color-border-medium, #e0e0e0);
+  background: var(--color-bg-tertiary, #f8f8f8);
+}
+
+.edit-post-button:active {
+  transform: scale(0.98);
+}
+
+/* Edit button in header - minimalist design */
+.edit-post-button-header {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #374151;
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-card);
+}
+
+.edit-post-button-header::after {
+  content: "Modifier";
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.edit-post-button-header:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(0, 0, 0, 0.2);
+  color: #111827;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.edit-post-button-header:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.post-title-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-sm, 8px);
+}
+
+/* Mobile responsive for edit button */
+@media (max-width: 768px) {
+  .edit-post-button {
+    font-size: var(--text-xs, 0.7rem);
+    padding: 5px 10px;
+    border-radius: var(--radius-sm, 4px);
+  }
+}
+
+/* =================================================================== */
+/* IMAGES CLIQUABLES ET MODAL                                        */
+/* =================================================================== */
+
+/* Styles pour les images cliquables */
+.clickable-image {
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.clickable-image:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.clickable-image:active {
+  transform: scale(0.98);
+}
+
+/* Indicateur visuel que l'image est cliquable */
+.clickable-image::after {
+  content: '🔍';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 4px 8px;
+  border-radius: var(--radius-xs);
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.clickable-image:hover::after {
+  opacity: 1;
+}
+
+/* Modal d'image */
+.image-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  cursor: pointer;
+  animation: fadeIn 0.2s ease;
+}
+
+.image-modal-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  cursor: default;
+  animation: zoomIn 0.2s ease;
+}
+
+.image-modal-content img {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.image-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.image-modal-close:hover {
+  background: rgba(0, 0, 0, 0.9);
+  transform: scale(1.1);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Mobile responsive pour la modal */
+@media (max-width: 768px) {
+  .image-modal-content {
+    max-width: 95vw;
+    max-height: 85vh;
+  }
+  
+  .image-modal-close {
+    top: 5px;
+    right: 5px;
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
+  }
+  
+  .clickable-image::after {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+}
+
+/* =================================================================== */
+/* ECHOES RATING FIXED - SYSTÈME DE NOTATION EN DESSOUS DES COMMENTAIRES */
+/* =================================================================== */
+
+.echoes-rating-fixed {
+  background: var(--color-white);
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  border: 1px solid #e5e5e5;
+  margin: 20px 0;
+  max-width: 100%;
+}
+
+.echoes-rating-fixed .echoes-header {
+  margin-bottom: 20px;
+}
+
+.echoes-rating-fixed .echoes-title {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.echoes-rating-fixed .echoes-subtitle {
+  font-size: 14px;
+  color: var(--color-gray-600);
+  margin: 0 0 20px 0;
+}
+
+.echoes-rating-fixed .echoes-axes {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.echoes-rating-fixed .echoes-axis {
+  display: flex;
+  flex-direction: column;
+}
+
+.echoes-rating-fixed .axis-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.echoes-rating-fixed .axis-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.echoes-rating-fixed .axis-value {
+  font-size: 16px;
+  color: #f59e0b;
+  font-weight: 600;
+  min-width: 20px;
+  text-align: center;
+}
+
+.echoes-rating-fixed .axis-slider {
+  width: 100%;
+  height: 6px;
+  cursor: pointer;
+  background: #e5e7eb;
+  border-radius: 3px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.echoes-rating-fixed .axis-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: #f59e0b;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.echoes-rating-fixed .axis-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: #f59e0b;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.echoes-rating-fixed .echoes-submit-btn {
+  background-color: #f59e0b;
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.echoes-rating-fixed .echoes-submit-btn:hover:not(:disabled) {
+  background-color: #d97706;
+  transform: translateY(-1px);
+}
+
+.echoes-rating-fixed .echoes-submit-btn:active {
+  transform: translateY(0);
+}
+
+.echoes-rating-fixed .echoes-submit-btn.publishing {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.echoes-rating-fixed .echoes-submit-btn.updated {
+  background-color: #10b981;
+}
+
+.echoes-rating-fixed .echoes-submit-btn.updated:hover:not(:disabled) {
+  background-color: #059669;
+}
+
+/* Responsive pour mobile */
+@media (max-width: 768px) {
+  .echoes-rating-fixed {
+    padding: 16px;
+    margin: 16px 0;
+  }
+  
+  .echoes-rating-fixed .echoes-title {
+    font-size: 16px;
+  }
+  
+  .echoes-rating-fixed .echoes-subtitle {
+    font-size: 13px;
+  }
+  
+  .echoes-rating-fixed .echoes-axes {
+    gap: 12px;
+  }
+  
+  .echoes-rating-fixed .echoes-submit-btn {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+}
+
+/* =================================================================== */
+/* STYLES VIDÉO PERSONNALISÉS POUR POSTDETAIL                        */
+/* =================================================================== */
+
+/* Vidéo principale */
+.post-detail-main-video {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.post-detail-main-video .video-player-video {
+  max-height: 600px;
+}
+
+/* Vidéos d'étapes */
+.post-detail-step-video {
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.post-detail-step-video .video-player-video {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+}
+
+/* Responsive pour vidéos PostDetail */
+@media (max-width: 768px) {
+  .post-detail-main-video {
+    margin: 0;
+  }
+  
+  .post-detail-main-video .video-player-video {
+    max-height: 400px;
+  }
+  
+  .post-detail-step-video {
+    max-width: 280px;
+  }
+  
+  .post-detail-step-video .video-player-video {
+    width: 280px;
+    height: 280px;
+  }
+}
+
+@media (max-width: 480px) {
+  .post-detail-main-video .video-player-video {
+    max-height: 300px;
+  }
+  
+  .post-detail-step-video {
+    max-width: 250px;
+  }
+  
+  .post-detail-step-video .video-player-video {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+/* =================================================================== */
+/* SECTION DES APERÇUS EN BAS DE PAGE                               */
+/* =================================================================== */
+
+/* Style pour la section des aperçus en bas de page */
+.post-detail-previews {
+  margin: 32px 0 120px 0; /* Espace pour le menu du bas */
+  padding: 0 16px;
+  /* Assurer la visibilité */
+  position: relative;
+  z-index: 1;
+  background: #ffffff;
+  min-height: 200px;
+}
+
+.comments-preview-section {
+  background: #ffffff;
+  border: 1px solid #f0f0f0;
+  border-radius: 16px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.preview-section-header {
+  padding: 1rem;
+  background: #ffffff;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.preview-section-header h3 {
+  margin: 0;
+  font-size: 1.25rem; /* ~20px - Titre principal comme comments-thread-container */
+  font-weight: 600; /* semi-bold pour "Commentaires" */
+  color: #000; /* Noir pour le titre */
+  text-align: center;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.comments-preview {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 40vh; /* Limiter la hauteur pour un aperçu */
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Style de la barre de défilement pour les aperçus */
+.comments-preview::-webkit-scrollbar {
+  width: 6px;
+}
+
+.comments-preview::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.comments-preview::-webkit-scrollbar-thumb {
+  background: #c2c8d5;
+  border-radius: 10px;
+}
+
+.comments-preview::-webkit-scrollbar-thumb:hover {
+  background: #667eea;
+}
+
+.comment-preview-item {
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 0.75rem;
+  padding-bottom: 1rem;
+  overflow: visible;
+  max-height: none;
+  height: auto;
+}
+
+.comment-preview-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.comment-content {
+  font-size: 0.875rem; /* 14px pour le texte du commentaire */
+  font-weight: 400; /* regular pour lecture fluide */
+  color: #000; /* Noir pour le texte */
+  line-height: 1.5;
+  margin: 0;
+}
+
+.comment-author-link {
+  color: #000; /* Noir pour le nom d'utilisateur */
+  text-decoration: none;
+  font-weight: 700; /* bold pour hiérarchiser l'émetteur */
+  font-size: 0.95rem; /* ~15px pour le nom d'utilisateur */
+  transition: color 0.2s ease;
+}
+
+.comment-author-link:hover {
+  color: #333; /* Légèrement plus clair au hover mais reste lisible */
+  text-decoration: underline;
+}
+
+.comment-text {
+  color: #475569;
+}
+
+/* Styles spécifiques pour l'aperçu des commentaires */
+.comments-preview .comment-thread {
+  position: relative;
+  transition: all 0.2s ease;
+  overflow: visible;
+  max-height: none;
+  height: auto;
+  flex-shrink: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.comments-preview .comment-main-content {
+  position: relative;
+}
+
+.comments-preview .comment-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.comments-preview .comment-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.comments-preview .comment-author-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.comments-preview .comment-author-name {
+  color: #000;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-right: auto;
+}
+
+.comments-preview .comment-date {
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 500;
+  font-style: normal;
+  display: inline-flex;
+  align-items: center;
+}
+
+.comments-preview .comment-content {
+  margin: 8px 0 6px;
+  position: relative;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #000;
+  line-height: 1.5;
+}
+
+.comments-preview .comment-text-container {
+  width: 100%;
+}
+
+.comments-preview .comment-text {
+  width: 100%;
+  margin: 0;
+  color: #000;
+  line-height: 1.5;
+}
+
+/* Assurer que les liens hashtag et mention sont cliquables dans l'aperçu */
+.comments-preview .mention-link,
+.comments-preview .hashtag-link,
+.comments-preview .comment-text .mention-link,
+.comments-preview .comment-text .hashtag-link,
+.comments-preview .formatted-text .mention-link,
+.comments-preview .formatted-text .hashtag-link {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  z-index: 999 !important;
+  position: relative !important;
+  display: inline !important;
+  text-decoration: none !important;
+}
+
+.comments-preview .mention-link:hover,
+.comments-preview .hashtag-link:hover,
+.comments-preview .comment-text .mention-link:hover,
+.comments-preview .comment-text .hashtag-link:hover,
+.comments-preview .formatted-text .mention-link:hover,
+.comments-preview .formatted-text .hashtag-link:hover {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
+
+/* Assurer que le conteneur de texte formaté permet les interactions */
+.comments-preview .formatted-text {
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 5;
+}
+
+.comments-preview .comment-text-container {
+  pointer-events: auto !important;
+  position: relative;
+}
+
+/* Assurer qu'aucun élément parent ne bloque les clics */
+.comments-preview .comment-content,
+.comments-preview .comment-main-content,
+.comments-preview .comment-preview-item {
+  pointer-events: auto !important;
+  position: relative;
+}
+
+/* Force l'activation des événements sur tous les éléments de FormattedText */
+.comments-preview .formatted-text *,
+.comments-preview .comment-text * {
+  pointer-events: auto !important;
+}
+
+/* Assurer que les liens sont au-dessus de tout */
+.comments-preview .mention-link *,
+.comments-preview .hashtag-link * {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+.view-all-comments-btn {
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  font-size: 0.75rem; /* 12px pour les actions */
+  font-weight: 400; /* regular */
+  color: #64748b; /* gris pour action discrète */
+  cursor: pointer;
+  transition: color 0.2s ease;
+  margin-top: 12px;
+  width: 100%;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.view-all-comments-btn:hover {
+  color: #333; /* Légèrement plus foncé au hover */
+  background: #f8fafc;
+}
+
+.view-all-comments-btn:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Message quand il n'y a pas de commentaires */
+.no-comments-message {
+  text-align: center;
+  padding: 1rem;
+}
+
+.no-comments-message p {
+  color: #64748b;
+  font-style: italic;
+  margin: 12px 0;
+  font-size: 0.875rem;
+}
+
+.no-comments-message .view-all-comments-btn {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  font-style: normal;
+  font-weight: 500;
+  padding: 8px 16px;
+}
+
+.no-comments-message .view-all-comments-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+.location-preview-section {
+  margin-bottom: 16px;
+}
+
+/* Responsive pour les aperçus */
+@media (max-width: 768px) {
+  .post-detail-previews {
+    padding: 0 12px;
+    margin-bottom: 100px;
+  }
+  
+  .preview-section-header {
+    padding: 12px 16px;
+  }
+  
+  .preview-section-header h3 {
+    font-size: 15px;
+  }
+  
+  .comments-preview {
+    padding: 12px 16px;
+  }
+}
+

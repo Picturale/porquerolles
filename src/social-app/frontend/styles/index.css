@@ -1,0 +1,391 @@
+/* Import du design system centralisé */
+@import './design-system.css';
+
+/* Import z-index variables */
+@import url('./z-index.css');
+@import url('./SafeAreaView.css');
+
+/* Import react-easy-crop styles */
+@import url('react-easy-crop/react-easy-crop.css');
+
+/* Empêcher le zoom automatique sur tous les éléments de saisie - Global */
+* {
+  -webkit-text-size-adjust: none !important;
+  -ms-text-size-adjust: none !important;
+  text-size-adjust: none !important;
+}
+
+input, 
+textarea, 
+select, 
+button,
+[contenteditable] {
+  font-size: 16px !important; /* Taille minimale pour empêcher le zoom sur iOS */
+  transform-origin: left top;
+  zoom: 1;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Empêcher le zoom par pincement sur toute l'application */
+html {
+  touch-action: manipulation;
+}
+
+body {
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Permettre la sélection de texte dans les zones d'édition */
+input, textarea, [contenteditable] {
+  -webkit-user-select: text;
+  -khtml-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Main styles - Vision Picturale Community */
+:root {
+  /* Brand colors from core-app */
+  --brand-primary: #ff6b35;
+  --brand-blue: #002739;
+  --brand-dark: #0f0d12;
+  --brand-light: #ffffff;
+  --brand-gray: #c7c7c7;
+  --background: var(--color-white);
+  --card-bg: #ffffff;
+  --border-radius: var(--radius-md);
+  --transition: 0.3s;
+  
+  /* Core-app primary colors */
+  --primary-blue: #2563eb;
+  --primary-blue-dark: #1d4ed8;
+  --primary-blue-light: #3b82f6;
+  
+  /* Alert colors */
+  --error-bg: #f8d7da;
+  --error-text: #721c24;
+  --success-bg: #d4edda;
+  --success-text: #155724;
+  --warning-bg: #fff3cd;
+  --warning-text: #856404;
+  --info-bg: #cce5ff;
+  --info-text: #004085;
+  
+  /* Button states */
+  --secondary-button-bg: #6c757d;
+  --secondary-button-hover: #545b62;
+  --cancel-button-bg: var(--secondary-button-bg);
+  --cancel-button-hover: var(--secondary-button-hover);
+  
+  /* Modal backdrop */
+  --modal-backdrop: rgba(0, 0, 0, 0.6);
+  --modal-overlay: rgba(0, 0, 0, 0.4);
+  
+  /* Alias for compatibility */
+  --primary-color: var(--primary-blue);
+  --primary-dark: var(--primary-blue-dark);
+  --secondary-color: var(--primary-blue);
+  --text-color: var(--brand-dark);
+  --light-text: #666;
+  --bg-color: var(--background);
+  --error-color: #e74c3c;
+  --success-color: #2ecc71;
+  --text-primary: var(--brand-dark);
+  --text-secondary: var(--light-text);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Roboto, sans-serif;
+  background-color: #ffffff; /* Blanc uni */
+  color: var(--brand-dark);
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  border: none; /* Retire tous les bords */
+  outline: none; /* Retire les contours */
+}
+
+a {
+  text-decoration: none;
+  color: var(--primary-blue);
+  transition: var(--transition);
+}
+
+a:hover {
+  color: var(--brand-blue);
+}
+
+button {
+  cursor: pointer;
+  font: inherit;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff; /* Fond blanc uni */
+  border: none; /* Retire tous les bords */
+  margin: 0;
+  padding: 0;
+}
+
+.main-content {
+  flex: 1;
+  padding: 65px 0 80px; /* Ajusté pour TopMenu (60px) + marge (5px) + marge élargie pour bottom menu (80px) */
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  background-color: #ffffff; /* Fond blanc uni */
+  border: none; /* Retire tous les bords */
+  z-index: var(--z-content);
+  position: relative;
+}
+
+
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: var(--surface-primary);
+  color: var(--text-secondary);
+}
+
+.loading-container p {
+  margin-top: 12px;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+/* Animation pour le texte de chargement */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* Button styles matching core-app */
+.btn {
+  background: var(--primary-blue);
+  color: var(--brand-light);
+  border: none;
+  padding: 12px 24px;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  transition: var(--transition);
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.btn:hover {
+  background: var(--brand-primary);
+  filter: brightness(0.9);
+}
+
+.btn-secondary {
+  background: var(--brand-blue);
+  color: var(--brand-light);
+}
+
+.btn-secondary:hover {
+  background: var(--brand-blue);
+  filter: brightness(1.1);
+}
+
+.btn-outline {
+  background: transparent;
+  color: #ff6b35;
+  border: 2px solid #ff6b35;
+  border-radius: var(--border-radius);
+  padding: 12px 24px;
+  font-weight: 500;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.btn-outline:hover {
+  background: #ff6b35;
+  color: var(--brand-light);
+  border-color: #ff6b35;
+}
+
+/* Card styles matching core-app */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: var(--transition);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+/* Form styles matching core-app */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--brand-dark);
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: var(--transition);
+  background: var(--brand-light);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.form-control:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Spinner moderne amélioré avec animations fluides */
+.loading-spinner {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  margin-bottom: 20px;
+}
+
+/* Cercle principal avec gradient rotatif */
+.loading-spinner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(255, 107, 53, 0.2) 60deg,
+    var(--brand-primary) 120deg,
+    rgba(255, 107, 53, 0.8) 180deg,
+    transparent 240deg,
+    transparent 360deg
+  );
+  animation: spinGradient 1.5s linear infinite;
+}
+
+/* Cercle intérieur avec pulsation */
+.loading-spinner::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-full);
+  background: radial-gradient(
+    circle at center,
+    var(--brand-primary) 0%,
+    rgba(255, 107, 53, 0.3) 70%,
+    transparent 100%
+  );
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Animation de rotation pour le gradient */
+@keyframes spinGradient {
+  0% { 
+    transform: rotate(0deg);
+    filter: blur(0px);
+  }
+  50% {
+    filter: blur(1px);
+  }
+  100% { 
+    transform: rotate(360deg);
+    filter: blur(0px);
+  }
+}
+
+/* Animation de pulsation pour le centre */
+@keyframes pulse {
+  0%, 100% { 
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  50% { 
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+/* Version compacte du spinner pour les petits espaces */
+.loading-spinner-small {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+}
+
+.loading-spinner-small::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    var(--brand-primary) 120deg,
+    transparent 240deg
+  );
+  animation: spinGradient 1s linear infinite;
+}
+
+.loading-spinner-small::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background: var(--brand-primary);
+  opacity: 0.3;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Animation de rotation classique (fallback) */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

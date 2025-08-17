@@ -1,0 +1,437 @@
+/* Import du design system centralisé */
+@import './design-system.css';
+
+/* Styles pour le lecteur vidéo personnalisé */
+.video-player-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #000;
+  box-shadow: var(--shadow-lg);
+  cursor: pointer;
+  /* Format carré rogné */
+  aspect-ratio: 1 / 1;
+}
+
+.video-player-video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: #000;
+  /* Rognage centré pour format carré */
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Mode plein écran - vidéo non rognée */
+.video-player-video:fullscreen {
+  object-fit: contain !important;
+  aspect-ratio: unset !important;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Support pour les différents navigateurs en plein écran */
+.video-player-video:-webkit-full-screen {
+  object-fit: contain !important;
+  aspect-ratio: unset !important;
+  width: 100vw;
+  height: 100vh;
+}
+
+.video-player-video:-moz-full-screen {
+  object-fit: contain !important;
+  aspect-ratio: unset !important;
+  width: 100vw;
+  height: 100vh;
+}
+
+.video-player-video:-ms-fullscreen {
+  object-fit: contain !important;
+  aspect-ratio: unset !important;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Overlay d'erreur vidéo */
+.video-error-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.video-error-message {
+  text-align: center;
+  color: white;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: var(--radius-md);
+  max-width: 80%;
+}
+
+.video-error-message p {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.video-download-link {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: #3b82f6;
+  color: white;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  transition: background 0.2s ease;
+}
+
+.video-download-link:hover {
+  background: #2563eb;
+  color: white;
+}
+
+.video-controls-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(transparent 0%, transparent 70%, rgba(0, 0, 0, 0.6) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.video-controls-overlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Bouton Play/Pause central minimaliste */
+.video-control-play-center {
+  background: transparent;
+  border: none;
+  color: white;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: auto;
+  margin-top: auto;
+  position: relative;
+}
+
+.video-control-play-center:hover {
+  transform: scale(1.1);
+}
+
+/* Triangle play simple */
+.video-control-play-center::before {
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 20px solid white;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  margin-left: 4px; /* Décalage pour centrer visuellement */
+}
+
+/* Triangle pause (deux barres) */
+.video-control-play-center.paused::before {
+  display: none;
+}
+
+.video-control-play-center.paused::after {
+  content: '';
+  width: 6px;
+  height: 24px;
+  background: var(--color-white);
+  box-shadow: 10px 0 0 white;
+  margin-left: 0;
+}
+
+/* Barre de contrôles en bas */
+.video-controls-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Barre de progression cliquable et draggable */
+.video-progress-container {
+  width: 100%;
+  height: 6px;
+  cursor: pointer;
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.video-progress-background {
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.video-progress-fill {
+  height: 100%;
+  background: #ff6b6b;
+  border-radius: 3px;
+  transition: width 0.1s ease;
+  position: relative;
+}
+
+.video-progress-handle {
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background: #ff6b6b;
+  border: 2px solid white;
+  border-radius: var(--radius-full);
+  cursor: grab;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.video-progress-container:hover .video-progress-handle {
+  opacity: 1;
+}
+
+.video-progress-handle:active {
+  cursor: grabbing;
+  transform: translateY(-50%) scale(1.2);
+}
+
+/* Timecode mm:ss / MM:SS */
+.video-time-display {
+  text-align: center;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  font-family: 'Monaco', 'Menlo', monospace;
+}
+
+/* Contrôles en bas avec timecode et plein écran */
+.video-bottom-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.video-fullscreen-button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-xs);
+  transition: all 0.2s ease;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.video-fullscreen-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+/* Suppression des anciens contrôles - on garde seulement le nouveau design */
+.video-controls-right {
+  display: none;
+}
+
+.video-time {
+  display: none;
+}
+
+.video-control-button {
+  display: none;
+}
+
+.video-control-button.mute-button {
+  display: none;
+}
+
+.video-control-button.fullscreen-button {
+  display: none;
+}
+
+/* Masquer la barre de progression par défaut - elle sera visible dans le nouveau design */
+.video-progress-container {
+  display: block;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .video-player-container {
+    max-width: 100%;
+    border-radius: var(--radius-md);
+  }
+
+  .video-control-play-center {
+    font-size: 1.5rem;
+    width: 50px;
+    height: 50px;
+  }
+
+  .video-controls-bar {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .video-progress-container {
+    height: 8px;
+  }
+
+  .video-progress-handle {
+    width: 20px;
+    height: 20px;
+    right: -10px;
+  }
+
+  .video-time-display {
+    font-size: 0.8rem;
+  }
+}
+
+/* Styles pour l'intégration dans CreatePost */
+.create-post .video-player-container {
+  margin: 16px 0;
+}
+
+.video-preview-section .video-player-container {
+  margin-bottom: 20px;
+}
+
+.image-preview .video-player-container {
+  margin: 0;
+}
+
+/* Animation pour les contrôles */
+@keyframes fadeInControls {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.video-controls-overlay.show .video-controls-bar {
+  animation: fadeInControls 0.3s ease;
+}
+
+.video-controls-overlay.show .video-control-play-center {
+  animation: fadeInControls 0.3s ease 0.1s both;
+}
+
+/* Optimisations mobiles pour le lecteur vidéo */
+@media (max-width: 768px) {
+  .video-player-container {
+    max-width: 100%;
+    border-radius: var(--radius-md);
+  }
+  
+  .video-player-video {
+    /* Améliorer le rendu sur mobile */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  
+  .video-controls-bar {
+    padding: 8px 12px;
+  }
+  
+  .video-control-button {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+  
+  .video-progress-container {
+    height: 6px;
+    margin: 0 8px;
+  }
+  
+  .video-time-display {
+    font-size: 12px;
+  }
+}
+
+/* Optimisations spécifiques iPhone */
+@media (max-width: 480px) {
+  .video-player-container {
+    border-radius: var(--radius-sm);
+  }
+  
+  .video-player-video {
+    /* Force hardware acceleration sur iOS */
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    /* Optimiser le rendu iOS */
+    -webkit-perspective: 1000;
+    perspective: 1000;
+  }
+  
+  .video-controls-bar {
+    padding: 6px 10px;
+  }
+  
+  .video-control-button {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+  
+  .video-control-play-center {
+    width: 48px;
+    height: 48px;
+    font-size: 18px;
+  }
+  
+  .video-progress-container {
+    height: 8px; /* Plus large pour le touch sur iPhone */
+    margin: 0 6px;
+  }
+  
+  .video-time-display {
+    font-size: 11px;
+  }
+}
+
+/* Optimisations pour les écrans retina */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .video-player-video {
+    /* Améliorer la netteté sur les écrans haute densité */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimize-contrast;
+  }
+}

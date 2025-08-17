@@ -1,0 +1,99 @@
+{
+  "name": "vision-picturale",
+  "version": "1.1.0",
+  "type": "module",
+  "scripts": {
+  "dev": "vite",
+  "start": "vite",
+  "dev:emulators": "firebase emulators:start --only firestore,auth,storage,functions --project vision-picturale-community",
+  "emu:all": "firebase emulators:start --only firestore,auth,storage,functions --project vision-picturale-community --import ./.emulator-data --export-on-exit",
+  "emu:api": "firebase emulators:start --only functions,storage --project vision-picturale-community",
+  "emu:ui": "open http://127.0.0.1:4002",
+  "dev:emulators:ui": "open http://127.0.0.1:4000",
+    "dev:functions": "cross-env DEV_OWNER_EMAIL=admin@test.com firebase emulators:start --only functions --project vision-picturale-community",
+    "dev:api": "cross-env FUNCTIONS_BASE_URL=http://127.0.0.1:5001/vision-picturale-community/us-central1 vite",
+    "build": "npm run tokens:generate && vite build && node scripts/post-build.js",
+    "tokens:generate": "node scripts/generate-tokens.js",
+    "deploy": "npm run build && firebase deploy",
+    "deploy:hosting": "npm run build && firebase deploy --only hosting --non-interactive",
+    "deploy:functions": "firebase deploy --only functions --non-interactive",
+    "deploy:backend": "firebase deploy --only firestore,functions,storage --non-interactive --except database",
+    "deploy:full": "firebase deploy --non-interactive --except database",
+    "indexes:pull": "firebase firestore:indexes --project vision-picturale-community > config/firestore.indexes.json",
+    "indexes:push": "firebase deploy --only firestore --non-interactive",
+    "deploy:safe": "./scripts/deploy-safe.sh",
+    "deploy:validated": "./scripts/build-deploy-validate.sh",
+    "validate": "./scripts/validate-build.sh",
+    "ios": "npm run build && npx cap copy ios && npx cap sync ios && npx cap open ios",
+  "ports:kill": "node scripts/kill-ports.cjs 5001 8080 9099 9199 4001 4002",
+    "format": "prettier --write 'src/**/*.{js,ts,tsx,css,html}'",
+    "lint": "eslint 'src/**/*.{js,ts,tsx}' --fix",
+    "test": "jest --config jest.config.cjs",
+    "test:e2e": "playwright test",
+  "clean": "./scripts/cleanup.sh",
+  "clean:heavy": "node scripts/heavy-clean.cjs"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.3.0",
+    "@capacitor/core": "^7.3.0",
+    "@jest/globals": "^29.7.0",
+    "@playwright/test": "^1.53.1",
+    "@testing-library/jest-dom": "^6.1.0",
+    "@testing-library/react": "^14.0.0",
+    "@types/jest": "^29.5.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@typescript-eslint/eslint-plugin": "^8.39.1",
+    "@typescript-eslint/parser": "^8.39.1",
+    "@vitejs/plugin-react": "^4.2.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.0",
+    "firebase-admin": "^13.4.0",
+    "husky": "^8.0.3",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^30.0.5",
+    "lint-staged": "^15.0.0",
+    "prettier": "^3.5.3",
+    "terser": "^5.43.1",
+    "vite": "^5.1.0"
+  },
+  "lint-staged": {
+    "src/**/*.{js,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "src/**/*.{css,html,md}": [
+      "prettier --write"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.4.0",
+    "@capacitor/browser": "^7.0.2",
+    "@capacitor/ios": "^7.3.0",
+    "@tiptap/extension-heading": "^3.0.8",
+    "@tiptap/extension-image": "^3.0.8",
+    "@tiptap/extension-link": "^3.0.8",
+    "@tiptap/extension-placeholder": "^3.0.8",
+    "@tiptap/react": "^3.0.8",
+    "@tiptap/starter-kit": "^3.0.8",
+    "dompurify": "^3.2.6",
+    "firebase": "^10.7.1",
+    "leaflet": "^1.9.4",
+    "leaflet.markercluster": "^1.5.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-easy-crop": "^5.4.2",
+    "react-icons": "^5.5.0",
+    "react-leaflet": "^4.2.1",
+    "react-router-dom": "^7.7.1",
+    "timeago.js": "^4.0.2"
+  }
+}

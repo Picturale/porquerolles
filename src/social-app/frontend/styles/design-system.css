@@ -1,0 +1,319 @@
+/* =================================================================== */
+/* DESIGN SYSTEM - CSS VARIABLES                                     */
+/* =================================================================== */
+/* Ce fichier contient toutes les variables CSS du design system     */
+/* À importer dans tous les fichiers CSS pour maintenir la cohérence */
+/* =================================================================== */
+
+:root {
+  /* =================================================================== */
+  /* COULEURS - PALETTE MINIMALISTE                                    */
+  /* =================================================================== */
+  
+  /* Texte */
+  --color-primary-text: #1a1a1a;
+  --color-secondary-text: #666666;
+  --color-muted-text: #888888;
+  --color-light-text: #999999;
+  
+  /* Arrière-plans */
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #fafafa;
+  --color-bg-tertiary: #f8f8f8;
+  --color-bg-muted: #f5f5f5;
+  
+  /* Bordures */
+  --color-border-light: #f0f0f0;
+  --color-border-medium: #e0e0e0;
+  --color-border-dark: #d0d0d0;
+  
+  /* =================================================================== */
+  /* TYPOGRAPHIE                                                        */
+  /* =================================================================== */
+  
+  /* Tailles */
+  --text-xs: 0.7rem;     /* 11.2px */
+  --text-sm: 0.8rem;     /* 12.8px */
+  --text-base: 0.9rem;   /* 14.4px */
+  --text-lg: 1rem;       /* 16px */
+  --text-xl: 1.125rem;   /* 18px */
+  --text-2xl: 1.25rem;   /* 20px */
+  
+  /* Poids */
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  
+  /* =================================================================== */
+  /* ESPACEMENTS                                                        */
+  /* =================================================================== */
+  
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-2xl: 24px;
+  
+  /* =================================================================== */
+  /* BORDER RADIUS                                                      */
+  /* =================================================================== */
+  
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  
+  /* =================================================================== */
+  /* TRANSITIONS                                                        */
+  /* =================================================================== */
+  
+  --transition-fast: 0.15s ease;
+  --transition-medium: 0.2s ease;
+  --transition-slow: 0.3s ease;
+  
+  /* =================================================================== */
+  /* BREAKPOINTS                                                        */
+  /* =================================================================== */
+  
+  --mobile-max: 768px;
+  --desktop-min: 769px;
+  
+  /* =================================================================== */
+  /* OMBRES                                                             */
+  /* =================================================================== */
+  
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 8px 20px rgba(0, 0, 0, 0.15);
+  
+  /* =================================================================== */
+  /* BORDER RADIUS STANDARDISÉS                                        */
+  /* =================================================================== */
+  
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 50%;
+  
+  /* =================================================================== */
+  /* COULEURS ÉTENDUES (patterns identifiés)                          */
+  /* =================================================================== */
+  
+  /* Couleurs système communes */
+  --color-white: #ffffff;
+  --color-gray-50: #fafafa;
+  --color-gray-100: #f5f5f5;
+  --color-gray-200: #e0e0e0;
+  --color-gray-300: #d0d0d0;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+  
+  /* Couleurs de marque consolidées */
+  --color-brand-primary: #007AFF;
+  --color-brand-secondary: #667eea;
+  --color-brand-accent: #ff6b35;
+  --color-brand-orange: #ff6b35;
+  --color-brand-orange-hover: #ff5722;
+  
+  /* =================================================================== */
+  /* BOX SHADOWS STANDARDISÉES                                         */
+  /* =================================================================== */
+  
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-dropdown: 0 4px 20px rgba(0, 0, 0, 0.15);
+  --shadow-modal: 0 10px 40px rgba(0, 0, 0, 0.2);
+  --shadow-focus: 0 0 0 3px rgba(0, 122, 255, 0.1);
+}
+
+/* =================================================================== */
+/* CLASSES UTILITAIRES - BOUTONS STANDARDS                           */
+/* =================================================================== */
+
+.btn-primary {
+  background: var(--color-primary-text);
+  color: var(--color-bg-primary);
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.btn-primary:hover {
+  background: #333333;
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-secondary {
+  background: none;
+  color: var(--color-secondary-text);
+  border: 1px solid var(--color-border-medium);
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: var(--font-normal);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.btn-secondary:hover {
+  color: var(--color-primary-text);
+  border-color: var(--color-primary-text);
+  background: var(--color-bg-secondary);
+}
+
+.btn-secondary:active {
+  transform: scale(0.98);
+}
+
+.btn-tertiary {
+  background: none;
+  color: var(--color-muted-text);
+  border: 1px solid var(--color-border-light);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  font-weight: var(--font-normal);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.btn-tertiary:hover {
+  color: var(--color-primary-text);
+  border-color: var(--color-border-medium);
+  background: var(--color-bg-tertiary);
+}
+
+.btn-tertiary:active {
+  transform: scale(0.98);
+}
+
+/* =================================================================== */
+/* CLASSES UTILITAIRES - CARTES                                      */
+/* =================================================================== */
+
+.card {
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-medium);
+}
+
+.card:hover {
+  border-color: var(--color-border-medium);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-1px);
+}
+
+/* =================================================================== */
+/* CLASSES UTILITAIRES - CHAMPS                                      */
+/* =================================================================== */
+
+.input-field {
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-white);
+  font-size: var(--text-base);
+  transition: var(--transition-fast);
+  outline: none;
+}
+
+.input-field:focus {
+  border-color: var(--color-brand-primary);
+  box-shadow: var(--shadow-focus);
+}
+
+/* =================================================================== */
+/* CLASSES UTILITAIRES - BACKGROUNDS COMMUNS                        */
+/* =================================================================== */
+
+.bg-white { background: var(--color-white) !important; }
+.bg-gray-50 { background: var(--color-gray-50) !important; }
+.bg-primary { background: var(--color-brand-primary) !important; }
+
+/* =================================================================== */
+/* CLASSES UTILITAIRES - BORDER RADIUS COMMUNS                      */
+/* =================================================================== */
+
+.rounded-xs { border-radius: var(--radius-xs) !important; }
+.rounded-sm { border-radius: var(--radius-sm) !important; }
+.rounded-md { border-radius: var(--radius-md) !important; }
+.rounded-lg { border-radius: var(--radius-lg) !important; }
+.rounded-xl { border-radius: var(--radius-xl) !important; }
+.rounded-full { border-radius: var(--radius-full) !important; }
+
+/* =================================================================== */
+/* CLASSES UTILITAIRES - SHADOWS COMMUNS                            */
+/* =================================================================== */
+
+.shadow-card { box-shadow: var(--shadow-card) !important; }
+.shadow-dropdown { box-shadow: var(--shadow-dropdown) !important; }
+.shadow-modal { box-shadow: var(--shadow-modal) !important; }
+
+/* =================================================================== */
+/* CLASSES UTILITAIRES - TEXTE COMMUNS                              */
+/* =================================================================== */
+
+.text-primary { color: var(--color-primary-text) !important; }
+.text-secondary { color: var(--color-secondary-text) !important; }
+.text-muted { color: var(--color-muted-text) !important; }
+.text-gray-500 { color: var(--color-gray-500) !important; }
+.text-gray-700 { color: var(--color-gray-700) !important; }
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--color-primary-text);
+  box-shadow: 0 0 0 2px rgba(26, 26, 26, 0.1);
+}
+
+.input-field::placeholder {
+  color: var(--color-light-text);
+}
+
+/* =================================================================== */
+/* RESPONSIVE UTILITIES                                               */
+/* =================================================================== */
+
+@media (max-width: 768px) {
+  .btn-primary,
+  .btn-secondary {
+    padding: 8px 14px;
+    font-size: var(--text-sm);
+  }
+  
+  .btn-tertiary {
+    padding: 4px 8px;
+    font-size: var(--text-xs);
+  }
+  
+  .card {
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+  }
+}

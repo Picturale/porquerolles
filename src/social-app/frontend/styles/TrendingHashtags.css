@@ -1,0 +1,254 @@
+/* Import du design system centralisé */
+@import './design-system.css';
+
+/* Styles pour le widget des hashtags populaires - Design moderne */
+
+.trending-hashtags {
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  overflow: hidden;
+}
+
+.trending-hashtags.compact {
+  padding: 0;
+  border-radius: 0;
+}
+
+.trending-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.trending-title::before {
+  content: '';
+  display: none;
+}
+
+/* États de chargement et d'erreur */
+.loading-state,
+.error-state,
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e5e7eb;
+  border-top: 2px solid #3b82f6;
+  border-radius: var(--radius-full);
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Liste des hashtags - Design moderne et compact avec scroll */
+.hashtags-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+/* Scrollbar pour la liste des hashtags */
+.hashtags-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.hashtags-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.hashtags-list::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 2px;
+}
+
+.hashtags-list::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+.hashtag-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background: #f8fafc;
+  margin-bottom: 2px;
+}
+
+.hashtag-item:hover {
+  background: #e2e8f0;
+  transform: none;
+  box-shadow: none;
+}
+
+.hashtag-item:active {
+  transform: scale(0.98);
+  background: #cbd5e1;
+}
+
+.hashtag-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.hashtag-rank {
+  display: none;
+}
+
+.hashtag-info {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.hashtag-name {
+  font-weight: 500;
+  color: #1f2937;
+  font-size: 0.9rem;
+}
+
+.hashtag-count {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 400;
+}
+
+.trending-badge {
+  display: none;
+}
+
+/* Aperçu des hashtags (non compact) */
+.hashtag-preview {
+  width: 60px;
+  height: 40px;
+  background: linear-gradient(45deg, #e5e7eb 0%, #d1d5db 100%);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Footer - Simplifié et non sticky */
+.trending-footer {
+  flex-shrink: 0;
+  padding-top: 8px;
+  margin-top: 8px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.view-all-btn {
+  width: 100%;
+  padding: 8px 12px;
+  background: #f8fafc;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.view-all-btn:hover {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+/* Mode compact */
+.trending-hashtags.compact .hashtags-list {
+  gap: 6px;
+}
+
+.trending-hashtags.compact .hashtag-item {
+  padding: 8px 12px;
+}
+
+.trending-hashtags.compact .hashtag-rank {
+  width: 20px;
+  height: 20px;
+  font-size: 0.7rem;
+}
+
+.trending-hashtags.compact .hashtag-name {
+  font-size: 0.9rem;
+}
+
+.trending-hashtags.compact .hashtag-count {
+  font-size: 0.75rem;
+}
+
+.trending-hashtags.compact .hashtag-preview {
+  display: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .trending-hashtags {
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .hashtag-item {
+    padding: 10px 12px;
+  }
+  
+  .hashtag-content {
+    gap: 10px;
+  }
+  
+  .hashtag-rank {
+    width: 22px;
+    height: 22px;
+    font-size: 0.7rem;
+  }
+  
+  .hashtag-name {
+    font-size: 0.95rem;
+  }
+  
+  .hashtag-count {
+    font-size: 0.75rem;
+  }
+  
+  .hashtag-preview {
+    width: 50px;
+    height: 35px;
+  }
+}

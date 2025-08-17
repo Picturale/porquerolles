@@ -1,0 +1,833 @@
+/* PostDetailBottomMenu.css */
+.post-detail-bottom-menu {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  z-index: 1000;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.15s cubic-bezier(0.25, 0.1, 0.25, 1);
+  /* S'assurer que le menu est toujours visible */
+  transform: translateY(0) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+/* Classes pour contrôler la visibilité */
+.post-detail-bottom-menu.visible {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.post-detail-bottom-menu.hidden {
+  transform: translateY(100%);
+  opacity: 0.3;
+  visibility: visible;
+  pointer-events: none;
+}
+
+.bottom-menu {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 12px 16px;
+  max-width: 600px;
+  margin: 0 auto;
+  border: none !important; /* Garantir aucune bordure pour le menu */
+}
+
+.bottom-menu-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: none;
+  border: none !important; /* Forcer l'absence de bordure */
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  min-width: 60px;
+  position: relative; /* Ajout pour le positionnement correct du badge */
+}
+
+.bottom-menu-btn:hover {
+  background: #f3f4f6;
+  transform: translateY(-1px);
+  border: none !important; /* Garantir aucune bordure au survol */
+}
+
+.bottom-menu-btn.active {
+  background: #eff6ff;
+  color: #2563eb;
+  border: none !important; /* Garantir aucune bordure à l'état actif */
+}
+
+.bottom-menu-btn.active .btn-count {
+  background: #ef4444; /* Assurer que le badge reste rouge même sur bouton actif */
+  color: white;
+}
+
+.btn-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.bottom-menu-btn.active .btn-label {
+  color: #2563eb;
+}
+
+.btn-count {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: #ef4444;
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 16px;
+  height: 16px;
+  text-align: center;
+  line-height: 12px;
+  z-index: 10;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  border: none; /* Retirer la bordure du badge */
+}
+
+@keyframes badgeAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Panneau coulissant optimisé */
+.sliding-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.15);
+  z-index: 1500;
+  transform: translateY(100%);
+  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  will-change: transform, opacity;
+  max-height: 70vh; /* Hauteur par défaut - 70% de la hauteur de la fenêtre */
+  min-height: 200px;
+  overflow: hidden;
+}
+
+/* Variantes de hauteur pour les différents panneaux */
+.sliding-panel.comments-panel {
+  max-height: 70vh; /* Hauteur par défaut pour les commentaires */
+}
+
+/* Variantes selon le nombre de commentaires */
+.sliding-panel.comments-panel.comments-empty {
+  max-height: 50vh; /* Plus compact quand il n'y a pas de commentaires */
+}
+
+.sliding-panel.comments-panel.comments-few {
+  max-height: 60vh; /* Pour 1-2 commentaires */
+}
+
+.sliding-panel.comments-panel.comments-some {
+  max-height: 70vh; /* Pour 3-5 commentaires */
+}
+
+.sliding-panel.comments-panel.comments-many {
+  max-height: 80vh; /* Pour 6-10 commentaires */
+}
+
+.sliding-panel.comments-panel.comments-lots {
+  max-height: 85vh; /* Pour plus de 10 commentaires */
+}
+
+.sliding-panel.echoes-panel {
+  max-height: 65vh;
+}
+
+.sliding-panel.share-panel {
+  max-height: 50vh;
+}
+
+.sliding-panel.active {
+  transform: translateY(0);
+  opacity: 1 !important; /* Forcer l'opacité à 100% pour éviter les problèmes après postage */
+}
+
+/* Fix pour Safari iOS - forcer l'opacité et la visibilité */
+.sliding-panel.active,
+.sliding-panel.active.safari-fixed {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+  z-index: 1500 !important;
+  bottom: 0 !important;
+  position: fixed !important;
+  width: 100% !important;
+  left: 0 !important;
+}
+
+/* Restaurer les transitions après un court délai */
+.sliding-panel.active.safari-fixed {
+  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+}
+
+/* Adaptations pour petits écrans */
+@media screen and (max-height: 600px) {
+  .sliding-panel {
+    max-height: 75vh; /* Hauteur par défaut augmentée pour les petits écrans */
+    border-radius: 12px 12px 0 0;
+  }
+  
+  .sliding-panel.comments-panel.comments-empty {
+    max-height: 60vh; /* Plus d'espace pour les petits écrans */
+  }
+  
+  .sliding-panel.comments-panel.comments-few {
+    max-height: 70vh;
+  }
+  
+  .sliding-panel.comments-panel.comments-some,
+  .sliding-panel.comments-panel.comments-many,
+  .sliding-panel.comments-panel.comments-lots {
+    max-height: 85vh; /* Maximum pour les petits écrans avec beaucoup de contenu */
+  }
+}
+
+/* Style global pour empêcher le rebond de page sur iOS */
+@supports (-webkit-touch-callout: none) {
+  /* Ces règles s'appliquent uniquement sur iOS */
+  body.panel-open,
+  html.panel-open {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: auto;
+  }
+}
+
+/* Styles spécifiques pour Safari iOS */
+@supports (-webkit-touch-callout: none) {
+  /* CSS spécifique à iOS */
+  .sliding-panel.active {
+    bottom: 0 !important;
+    position: fixed !important;
+    width: 100% !important;
+    left: 0 !important;
+    max-height: 85vh !important; /* Hauteur max plus grande pour éviter des problèmes */
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
+    border-radius: 16px 16px 0 0 !important;
+    z-index: 1500 !important;
+    transition: transform 0.3s, opacity 0.3s !important;
+    /* Empêcher l'effet de rebond qui fait fermer le panneau */
+    overscroll-behavior: none !important;
+    -webkit-overflow-scrolling: auto !important;
+  }
+  
+  /* Classe spécifique pour empêcher le rebond */
+  .sliding-panel.active.no-bounce {
+    overscroll-behavior: none !important;
+    -webkit-overflow-scrolling: auto !important;
+    touch-action: none !important;
+  }
+  
+  /* Corrections additionnelles pour le contenu */
+  .sliding-panel.active .panel-content {
+    display: flex !important;
+    flex-direction: column !important;
+    max-height: 85vh !important;
+    overflow: hidden !important;
+    overscroll-behavior: none !important;
+  }
+  
+  .sliding-panel.active .panel-body {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  
+  /* Assurer que le panneau reste visible même avec le clavier */
+  .sliding-panel.active.with-keyboard {
+    height: auto !important;
+    max-height: 50vh !important;
+  }
+  
+  /* Éviter les problèmes de déplacement quand le clavier se ferme */
+  .sliding-panel.active.keyboard-closing {
+    transition: none !important;
+  }
+}
+
+/* Backdrop avec blur */
+.sliding-panel-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1400;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.sliding-panel-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Handle de drag */
+.panel-drag-handle {
+  padding: 12px 0 8px;
+  display: flex;
+  justify-content: center;
+  cursor: grab;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.panel-drag-handle:active {
+  cursor: grabbing;
+}
+
+.drag-indicator {
+  width: 40px;
+  height: 4px;
+  background: #d1d5db;
+  border-radius: 2px;
+  transition: background 0.2s ease;
+}
+
+.panel-drag-handle:hover .drag-indicator {
+  background: #9ca3af;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.panel-content {
+  max-width: 600px;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Zone du header avec gestion tactile pour le glissement */
+.panel-header-zone {
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-y; /* Permet seulement le scroll vertical */
+}
+
+.panel-header-zone:active {
+  cursor: grabbing;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.panel-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.comment-count {
+  color: #6b7280;
+  font-weight: normal;
+  font-size: 0.9em;
+}
+
+.panel-close-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.panel-close-btn:hover {
+  background: #f3f4f6;
+  color: #374151;
+  transform: scale(1.1);
+}
+
+.panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 10px 24px; /* espace bas accru pour les boutons sticky du formulaire */
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 60px); /* Adjust for panel header height */
+  position: relative;
+}
+
+/* Panneau Steps */
+.steps-panel {
+  text-align: center;
+}
+
+/* Feedback tactile et améliorations de performance */
+@media (hover: none) and (pointer: coarse) {
+  .sliding-panel {
+    touch-action: pan-y;
+  }
+  
+  .panel-drag-handle {
+    padding: 16px 0 12px;
+  }
+  
+  .drag-indicator {
+    width: 50px;
+    height: 5px;
+  }
+}
+
+/* Animation en cascade pour les éléments du panel */
+.panel-header {
+  animation: slideInDown 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s both;
+}
+
+.panel-body {
+  animation: slideInUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s both;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Amélioration de l'accessibilité */
+@media (prefers-reduced-motion: reduce) {
+  .sliding-panel {
+    transition: transform 0.2s ease;
+  }
+  
+  .panel-header,
+  .panel-body {
+    animation: none;
+  }
+}
+
+/* Optimisation pour les écrans plus petits */
+@media screen and (max-height: 600px) {
+  .sliding-panel {
+    max-height: 85vh; /* Modifié de 95vh à 85vh pour cohérence */
+    border-radius: 12px 12px 0 0;
+  }
+  
+  .panel-header {
+    padding: 0 16px 12px;
+  }
+  
+  .panel-body {
+    padding: 0 16px 16px;
+  }
+}
+
+.steps-quick-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 16px;
+}
+
+.step-stat {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.view-all-steps-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.view-all-steps-btn:hover {
+  background: #1d4ed8;
+}
+
+/* Panneau Echoes */
+.echoes-panel {
+  text-align: center;
+}
+
+.rating-stars {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.star {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #d1d5db;
+  transition: color 0.2s ease;
+}
+
+.star:hover,
+.star.filled {
+  color: #fbbf24;
+}
+
+.rating-info {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* Panneau Share */
+.share-panel {
+  text-align: center;
+}
+
+.share-options {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.share-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: none;
+  border: 1px solid #e5e7eb;
+  padding: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+}
+
+.share-option:hover {
+  background: #f3f4f6;
+  border-color: #2563eb;
+}
+
+.share-icon {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+/* Modal plein écran pour commentaires */
+.comments-fullscreen-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.comments-modal-content {
+  background: white;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90%;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  animation: scaleIn 0.3s ease;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.comments-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.comments-modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.close-modal-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #6b7280;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.close-modal-btn:hover {
+  background: #f3f4f6;
+}
+
+.comments-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.comments-section-fullscreen {
+  height: 100%;
+  border: none;
+  border-radius: 0;
+}
+
+/* EchoesViewOnly Modal */
+.echoes-modal-content {
+  max-height: 80%;
+}
+
+.echoes-view-only {
+  padding: 20px;
+}
+
+.echoes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.echoes-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.echoes-content {
+  color: #6b7280;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .post-detail-bottom-menu {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-top: 1px solid #e5e7eb;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    background: white;
+    z-index: 1000;
+    display: block !important;
+  }
+  .bottom-menu {
+    background: white;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0 auto;
+    display: flex !important;
+  }
+  .comments-fullscreen-modal .comments-modal-content {
+    width: 95%;
+    max-width: 800px;
+    max-height: 85%;
+  }
+}
+/* Force l'affichage sur toutes les tailles d'écran */
+.post-detail-bottom-menu {
+  display: block !important;
+}
+.bottom-menu {
+  display: flex !important;
+}
+
+/* Dark overlay behind sliding panel */
+.sliding-panel-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1400;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.sliding-panel-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* New fullscreen modal overlay and container */
+.fullscreen-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  z-index: 1400;
+  opacity: 1;
+}
+
+.fullscreen-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1500;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  max-width: 900px;
+  margin: 0 auto;
+  animation: slideInUp 0.25s ease;
+}
+
+.fullscreen-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.fullscreen-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.fullscreen-body {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 12px 10px calc(env(safe-area-inset-bottom, 0) + 140px);
+}
+
+/* Fix the comment form to the bottom inside the fullscreen modal */
+.fullscreen-modal .section-comment-form {
+  position: fixed !important;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 900px;
+  z-index: 1600;
+  background: var(--bg-primary, #f8f9fa);
+  border-top: 1px solid #e5e7eb;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0));
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
+}
+
+@media (min-width: 768px) {
+  .fullscreen-modal {
+    border-radius: 10px;
+    top: 20px;
+    bottom: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  }
+}

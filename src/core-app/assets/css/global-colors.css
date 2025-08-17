@@ -1,0 +1,55 @@
+/* Global Color Palette - Core App */
+:root {
+  /* Primary Brand Colors */
+  --primary-blue: #1B4F72;
+  --primary-blue-light: #2560846;
+  --primary-blue-dark: #15405c;
+  --primary-blue-alpha-10: rgba(27, 79, 114, 0.1);
+  --primary-blue-alpha-15: rgba(27, 79, 114, 0.15);
+  --primary-blue-alpha-20: rgba(27, 79, 114, 0.2);
+  --primary-blue-alpha-30: rgba(27, 79, 114, 0.3);
+  --primary-blue-alpha-40: rgba(27, 79, 114, 0.4);
+  --primary-blue-alpha-50: rgba(27, 79, 114, 0.5);
+  --primary-blue-alpha-60: rgba(27, 79, 114, 0.6);
+  --primary-blue-alpha-70: rgba(27, 79, 114, 0.7);
+  --primary-blue-alpha-80: rgba(27, 79, 114, 0.8);
+  --primary-blue-alpha-90: rgba(27, 79, 114, 0.9);
+  
+  /* Orange accent colors (for specific elements) */
+  --accent-orange: #ff6b35;
+  --accent-orange-light: #ff8c42;
+  --accent-orange-dark: #e55a2b;
+  --accent-orange-alpha-10: rgba(255, 107, 53, 0.1);
+  --accent-orange-alpha-15: rgba(255, 107, 53, 0.15);
+  --accent-orange-alpha-20: rgba(255, 107, 53, 0.2);
+  --accent-orange-alpha-30: rgba(255, 107, 53, 0.3);
+  --accent-orange-alpha-50: rgba(255, 107, 53, 0.5);
+  
+  /* Neutral colors */
+  --white: #ffffff;
+  --light-gray: #f8f9fa;
+  --gray: #6c757d;
+  --dark-gray: #343a40;
+  --black: #000000;
+  
+  /* Gradient definitions */
+  --gradient-primary: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-light) 100%);
+  --gradient-accent: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-orange-light) 100%);
+}
+
+/* Utility classes for quick color application */
+.bg-primary { background-color: var(--primary-blue) !important; }
+.bg-primary-light { background-color: var(--primary-blue-light) !important; }
+.bg-primary-dark { background-color: var(--primary-blue-dark) !important; }
+.bg-accent { background-color: var(--accent-orange) !important; }
+
+.text-primary { color: var(--primary-blue) !important; }
+.text-primary-light { color: var(--primary-blue-light) !important; }
+.text-primary-dark { color: var(--primary-blue-dark) !important; }
+.text-accent { color: var(--accent-orange) !important; }
+
+.border-primary { border-color: var(--primary-blue) !important; }
+.border-accent { border-color: var(--accent-orange) !important; }
+
+.gradient-primary { background: var(--gradient-primary) !important; }
+.gradient-accent { background: var(--gradient-accent) !important; }

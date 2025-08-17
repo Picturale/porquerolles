@@ -1,0 +1,362 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build",
+			"type": "shell",
+			"command": "npm run build",
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Deploy Validated",
+			"type": "shell",
+			"command": "npm run deploy:validated",
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": [],
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "Validate Build",
+			"type": "shell",
+			"command": "npm run validate",
+			"group": "test",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "iOS Build",
+			"type": "shell",
+			"command": "npm run ios",
+			"group": "build",
+			"isBackground": false
+		},
+		{
+			"label": "Run Tests",
+			"type": "shell",
+			"command": "npm run test",
+			"group": "test",
+			"isBackground": false
+		},
+		{
+			"label": "Clean Project",
+			"type": "shell",
+			"command": "npm run clean",
+			"group": "build",
+			"isBackground": false
+		},
+		{
+			"label": "Dev Server",
+			"type": "shell",
+			"command": "npm run dev",
+			"isBackground": true,
+			"group": "build"
+		},
+		{
+			"label": "Run Lint",
+			"type": "shell",
+			"command": "npm run lint",
+			"isBackground": false,
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Run Lint",
+			"type": "shell",
+			"command": "npm run lint",
+			"isBackground": false,
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		},
+		{
+			"label": "lint",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"lint"
+			],
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		},
+		{
+			"label": "build",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"group": "build"
+		},
+		{
+			"label": "deploy",
+			"type": "shell",
+			"command": "firebase",
+			"args": [
+				"deploy"
+			],
+			"group": "build"
+		},
+		{
+			"label": "deploy:except-database",
+			"type": "shell",
+			"command": "firebase",
+			"args": [
+				"deploy",
+				"--except",
+				"database"
+			],
+			"group": "build"
+		},
+		{
+			"label": "deploy:noninteractive",
+			"type": "shell",
+			"command": "firebase",
+			"args": [
+				"deploy",
+				"--except",
+				"database",
+				"--non-interactive"
+			],
+			"group": "build"
+		},
+		{
+			"label": "deploy:hosting-only",
+			"type": "shell",
+			"command": "firebase",
+			"args": [
+				"deploy",
+				"--only",
+				"hosting",
+				"--non-interactive"
+			],
+			"group": "build"
+		},
+		{
+			"label": "lint",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"lint"
+			],
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		},
+		{
+			"label": "build",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"group": "build"
+		},
+		{
+			"label": "prod-build-now",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			]
+		},
+		{
+			"label": "deploy-hosting",
+			"type": "shell",
+			"command": "firebase",
+			"args": [
+				"deploy",
+				"--only",
+				"hosting",
+				"--non-interactive"
+			]
+		},
+		{
+			"label": "deploy-hosting-only",
+			"type": "shell",
+			"command": "firebase",
+			"args": [
+				"deploy",
+				"--only",
+				"hosting",
+				"--non-interactive"
+			]
+		},
+		{
+			"label": "export-firestore-indexes",
+			"type": "shell",
+			"command": "firebase",
+			"args": [
+				"firestore:indexes",
+				"--project",
+				"vision-picturale-community",
+				"--format",
+				"json"
+			]
+		},
+		{
+			"label": "sync-firestore-indexes",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-lc",
+				"cp config/firestore.indexes.json config/firestore.indexes.backup.json 2>/dev/null || true; firebase firestore:indexes --project vision-picturale-community --format json > config/firestore.indexes.json && echo 'INDEX_EXPORT_DONE'"
+			]
+		},
+		{
+			"label": "export-firestore-indexes-raw",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-lc",
+				"firebase firestore:indexes --project vision-picturale-community > config/firestore.indexes.json && echo 'INDEX_EXPORT_DONE'"
+			]
+		},
+		{
+			"label": "deploy-firestore-and-functions",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-lc",
+				"firebase deploy --only firestore,functions --non-interactive --project vision-picturale-community"
+			]
+		},
+		{
+			"label": "deploy-firestore-and-functions-2",
+			"type": "shell",
+			"command": "firebase",
+			"args": [
+				"deploy",
+				"--only",
+				"firestore,functions",
+				"--non-interactive",
+				"--project",
+				"vision-picturale-community"
+			]
+		},
+		{
+			"label": "deploy-firestore-only",
+			"type": "shell",
+			"command": "firebase",
+			"args": [
+				"deploy",
+				"--only",
+				"firestore",
+				"--non-interactive",
+				"--project",
+				"vision-picturale-community"
+			]
+		},
+		{
+			"label": "deploy-functions-only",
+			"type": "shell",
+			"command": "firebase",
+			"args": [
+				"deploy",
+				"--only",
+				"functions",
+				"--non-interactive",
+				"--project",
+				"vision-picturale-community"
+			]
+		},
+		{
+			"label": "deploy-functions-only-2",
+			"type": "shell",
+			"command": "firebase",
+			"args": [
+				"deploy",
+				"--only",
+				"functions",
+				"--non-interactive",
+				"--project",
+				"vision-picturale-community"
+			]
+		},
+		{
+			"label": "functions-deploy-run",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-lc",
+				"firebase deploy --only functions --non-interactive --project vision-picturale-community"
+			]
+		},
+		{
+			"label": "list-functions-secrets",
+			"type": "shell",
+			"command": "firebase",
+			"args": [
+				"functions:secrets:list",
+				"--project",
+				"vision-picturale-community"
+			]
+		},
+		{
+			"label": "safe-repo-cleanup",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-lc",
+				"set -e\n# Show initial size\nprintf \"Initial size: \"; du -sh . | awk '{print $1}'\n\n# Remove generated build artifacts and emulator data\nrm -rf dist .emulator-data firebase-debug.log* storage_export firestore_export\n\n# Remove platform build outputs & caches (regenerable)\nrm -rf android/build android/app/build android/.gradle android/.idea android/capacitor-cordova-android-plugins\nrm -rf ios/build ios/App/Pods ios/capacitor-cordova-ios-plugins ios/App/Podfile.lock\n\n# Remove test/coverage reports\nrm -rf coverage playwright-report test-results .nyc_output\n\n# Remove large deployment logs and backups\nrm -f DEPLOYMENT-LOG-*.md BUILD-REPORT.md CLEANUP-*.md\nrm -f CreatePost_backup.jsx RichTextEditor_backup.jsx\n\n# Optional: prune leftover archives\nfind . -maxdepth 2 -type f \\( -name \"*.tar\" -o -name \"*.tar.gz\" -o -name \"*.zip\" -o -name \"*.tgz\" \\) -print -delete || true\n\n# Show final size\nprintf \"Final size:   \"; du -sh . | awk '{print $1}'\n"
+			]
+		},
+		{
+			"label": "deploy-firestore-only",
+			"type": "shell",
+			"command": "firebase",
+			"args": [
+				"deploy",
+				"--only",
+				"firestore",
+				"--non-interactive",
+				"--project",
+				"vision-picturale-community"
+			]
+		},
+		{
+			"label": "deploy-firestore-only",
+			"type": "shell",
+			"command": "firebase",
+			"args": [
+				"deploy",
+				"--only",
+				"firestore",
+				"--non-interactive",
+				"--project",
+				"vision-picturale-community"
+			]
+		},
+		{
+			"label": "deploy-firestore-only",
+			"type": "shell",
+			"command": "firebase",
+			"args": [
+				"deploy",
+				"--only",
+				"firestore",
+				"--non-interactive",
+				"--project",
+				"vision-picturale-community"
+			]
+		}
+	]
+}

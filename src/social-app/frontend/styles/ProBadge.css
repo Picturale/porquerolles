@@ -1,0 +1,30 @@
+.pro-badge {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  margin-left: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1b4f72 0%, #2e86c1 100%);
+  position: relative;
+  vertical-align: middle;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.9);
+}
+
+.pro-badge::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border: 2px solid #fff;
+  border-top: 0;
+  border-left: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .pro-badge {
+    box-shadow: 0 0 0 2px rgba(30,30,30,0.9);
+  }
+}

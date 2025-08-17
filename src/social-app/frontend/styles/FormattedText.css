@@ -1,0 +1,166 @@
+/* Import du design system centralisé */
+@import './design-system.css';
+
+/* FormattedText.css - Styling pour le texte avec mentions et hashtags */
+
+.formatted-text {
+  line-height: 1.4;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  position: relative;
+}
+
+/* Styles pour les mentions */
+.mention-link {
+  color: #ff6b35;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border-radius: 3px;
+  padding: 1px 2px;
+  position: relative;
+  z-index: 10;
+  pointer-events: auto;
+  display: inline-block;
+}
+
+/* Force le curseur pointeur même si hérité */
+.mention-link * {
+  cursor: pointer !important;
+}
+
+.mention-link:hover {
+  color: #e55a2b;
+  /* Suppression de text-decoration: underline - remplacé par ::before */
+}
+
+.mention-link:focus {
+  outline: 2px solid #ff6b35;
+  outline-offset: 1px;
+}
+
+/* Effet au survol pour mentions */
+.mention-link::before {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #ff6b35, #e55a2b);
+  opacity: 0;
+  transform: scaleX(0);
+  transition: all 0.2s ease;
+  border-radius: 1px;
+}
+
+.mention-link:hover::before {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+/* Styles pour les hashtags */
+.hashtag-link {
+  color: #1d4ed8;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  border-radius: var(--radius-xs);
+  padding: 1px 3px;
+  transition: all 0.2s ease;
+  position: relative;
+  display: inline-block;
+}
+
+.hashtag-link:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* Suppression de transform: translateY(-1px); */
+}
+
+.hashtag-link:focus {
+  outline: 2px solid #1d4ed8;
+  outline-offset: 1px;
+}
+
+/* Effet au survol pour hashtags */
+.hashtag-link::before {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+  opacity: 0;
+  transform: scaleX(0);
+  transition: all 0.2s ease;
+  border-radius: 1px;
+}
+
+.hashtag-link:hover::before {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+/* Styles spécifiques selon le contexte */
+.formatted-text.comment-text .mention-link,
+.formatted-text.comment-text .hashtag-link {
+  font-weight: 700;
+}
+
+.formatted-text.bio-text .mention-link,
+.formatted-text.bio-text .hashtag-link {
+  font-weight: 600;
+  font-size: inherit;
+}
+
+.formatted-text.post-description .mention-link,
+.formatted-text.post-description .hashtag-link {
+  font-weight: 600;
+}
+
+.formatted-text.post-caption-text .mention-link,
+.formatted-text.post-caption-text .hashtag-link {
+  font-weight: 600;
+}
+
+/* Boutons voir plus/moins */
+.show-more-btn,
+.show-less-btn {
+  color: #6b7280;
+  font-size: 0.9em;
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 2px 4px;
+  margin-left: 8px;
+  border-radius: var(--radius-xs);
+  transition: all 0.2s ease;
+}
+
+.show-more-btn:hover,
+.show-less-btn:hover {
+  color: #374151;
+  background-color: #f3f4f6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hashtag-link {
+    font-size: 0.95em;
+    padding: 2px 4px;
+  }
+  
+  .mention-link {
+    padding: 2px 3px;
+    font-size: inherit;
+  }
+}

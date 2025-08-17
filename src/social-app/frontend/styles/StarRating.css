@@ -1,0 +1,172 @@
+/* Import du design system centralisé */
+@import './design-system.css';
+
+.star-rating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.star-rating.small {
+  font-size: 12px;
+}
+
+.star-rating.medium {
+  font-size: 14px;
+}
+
+.star-rating.large {
+  font-size: 16px;
+}
+
+.stars-container {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.star-button {
+  background: none;
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+  border-radius: 2px;
+}
+
+.star-button:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.star-button.clickable:hover {
+  transform: scale(1.1);
+}
+
+.star-button.loading {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.star-button:disabled {
+  cursor: default;
+}
+
+.star-icon {
+  display: block;
+  transition: color 0.2s ease;
+}
+
+.star-rating.small .star-icon {
+  font-size: 14px;
+}
+
+.star-rating.medium .star-icon {
+  font-size: 18px;
+}
+
+.star-rating.large .star-icon {
+  font-size: 22px;
+}
+
+.star-icon.filled {
+  color: #fbbf24; /* text-amber-400 */
+}
+
+.star-icon.partial {
+  color: #fbbf24;
+  opacity: 0.5;
+}
+
+.star-icon.empty {
+  color: #d1d5db; /* text-gray-300 */
+}
+
+.interactive .star-button:hover .star-icon.empty,
+.interactive .star-button:hover .star-icon.partial {
+  color: #fbbf24;
+  opacity: 0.8;
+}
+
+.rating-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.875em;
+  color: #6b7280;
+}
+
+.user-rating {
+  font-weight: 500;
+  color: #374151;
+}
+
+.average-rating {
+  font-size: 0.8em;
+  color: #9ca3af;
+}
+
+/* Mode collapsed - Style action-button */
+.star-rating.collapsed .rating-button {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.star-rating.collapsed .rating-button:hover {
+  background: rgba(0, 39, 57, 0.05);
+  color: #002739;
+}
+
+.star-rating.collapsed .rating-button:hover .star-icon {
+  color: #002739;
+}
+
+.star-rating.collapsed .rating-button:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.star-rating.collapsed .rating-button .star-icon {
+  font-size: 16px;
+  color: #6b7280; /* Étoile grise comme les autres action-buttons */
+}
+
+/* Mode expanded - Style étoiles complètes */
+.star-rating.expanded {
+  align-items: flex-start;
+}
+
+.star-rating.expanded .stars-container {
+  gap: 4px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .star-rating.medium .star-icon {
+    font-size: 16px;
+  }
+  
+  .star-rating.large .star-icon {
+    font-size: 20px;
+  }
+  
+  .stars-container {
+    gap: 1px;
+  }
+  
+  .rating-info {
+    font-size: 0.8em;
+  }
+}

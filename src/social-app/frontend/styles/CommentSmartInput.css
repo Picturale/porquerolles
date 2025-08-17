@@ -1,0 +1,100 @@
+/* Styles spécifiques pour le SmartInput quand utilisé dans les commentaires */
+
+/* Réduction de la hauteur pour le champ de commentaire avec auto-expansion */
+.comment-input.smart-input,
+.comment-input.smart-input input,
+.comment-input.smart-input textarea {
+  min-height: 36px !important; /* Hauteur initiale encore plus réduite */
+  max-height: 120px !important; /* Hauteur max pour le texte long */
+  height: 36px !important; /* Hauteur fixe initiale */
+  padding: 8px 12px !important; /* Padding réduit */
+  font-size: 14px !important; /* Taille de texte légèrement réduite */
+  line-height: 1.3 !important; /* Interligne réduit */
+  transition: height 0.2s ease !important; /* Animation fluide */
+  overflow-y: auto !important; /* Scrollbar si nécessaire */
+  resize: none !important; /* Désactiver le redimensionnement manuel */
+  box-sizing: border-box !important;
+}
+
+/* Forcer le conteneur à s'adapter à la hauteur minimale */
+.comment-input-wrapper .smart-input-container {
+  min-height: auto !important;
+  height: auto !important;
+  max-height: 120px !important;
+  overflow: visible !important;
+  position: relative !important; /* Important pour le positionnement des suggestions */
+}
+
+/* Style spécifique pour l'état focus du champ commentaire */
+.comment-input.smart-input.focused,
+.comment-input.smart-input.focused input,
+.comment-input.smart-input.focused textarea {
+  min-height: 36px !important; /* Maintenir la hauteur minimale même en focus */
+  border-color: #667eea !important;
+  background-color: #fff !important;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1) !important;
+}
+
+/* Styles de transition pour le redimensionnement dynamique */
+.comment-input.smart-input.has-content,
+.comment-input.smart-input.has-content textarea {
+  height: auto !important; /* Permettre l'expansion quand il y a du contenu */
+  min-height: 36px !important;
+}
+
+/* Positionnement des suggestions au-dessus du formulaire pour les commentaires */
+.comment-input-wrapper .smart-suggestions,
+.comment-input-wrapper .mention-suggestions,
+.comment-input-wrapper .hashtag-suggestions {
+  top: auto !important;
+  bottom: 100% !important;
+  margin-top: 0 !important;
+  margin-bottom: 4px !important;
+  max-height: 200px !important; /* Hauteur réduite pour les suggestions */
+  z-index: 1001 !important; /* S'assurer qu'elles sont au-dessus des autres éléments */
+}
+
+/* Masquer le bouton de prévisualisation dans les commentaires */
+.comment-input-wrapper .preview-toggle {
+  display: none !important;
+}
+
+/* Style pour l'en-tête de réponse au-dessus du champ de saisie */
+.reply-form-header {
+  width: 100%;
+  margin-bottom: 6px;
+  background-color: rgba(241, 245, 249, 0.5);
+  border-radius: 4px;
+  padding: 6px 10px;
+}
+
+.reply-form-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.reply-label {
+  font-size: 12px;
+  color: var(--color-gray-600);
+  font-weight: 500;
+}
+
+.reply-cancel-button {
+  background: none;
+  border: none;
+  color: var(--color-gray-400);
+  cursor: pointer;
+  padding: 0;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  transition: color 0.2s ease;
+}
+
+.reply-cancel-button:hover {
+  color: var(--color-gray-700);
+}

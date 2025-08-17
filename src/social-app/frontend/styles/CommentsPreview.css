@@ -1,0 +1,60 @@
+/* Import du design system centralisé */
+@import './design-system.css';
+
+/* Comments Preview Styles */
+.comments-preview {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.comment-preview-item {
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+  color: #333;
+}
+
+.comment-preview-item strong {
+  color: #667eea;
+}
+
+.view-all-comments-btn {
+  background: none;
+  border: none;
+  color: #667eea;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0.25rem 0;
+  text-decoration: underline;
+}
+
+.view-all-comments-btn:hover {
+  color: #5a67d8;
+}
+
+/* Comments Count Display */
+.comments-count-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.comments-icon {
+  font-size: 1rem;
+  color: #f59e0b;
+  flex-shrink: 0;
+}
+
+.comments-number {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+  min-width: 20px;
+}
+
+.comments-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+}

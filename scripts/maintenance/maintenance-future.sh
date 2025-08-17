@@ -1,0 +1,22 @@
+#!/bin/bash
+
+echo "🔧 MAINTENANCE VISION PICTURALE COMMUNITY"
+echo "========================================"
+
+echo "📋 Actions de maintenance disponibles :"
+echo ""
+echo "1. Mise à jour des applications :"
+echo "   npm run build"
+echo "   cp -r dist/src/core-app alternative-structure/calibrateur/app"
+echo "   cp -r dist/src/social-app alternative-structure/communaute/app"
+echo "   npx cap sync ios"
+echo ""
+echo "2. Test de régression :"
+echo "   npx cap run ios"
+echo "   # Tester navigation complète"
+echo ""
+echo "3. Sauvegarde avant modification :"
+echo "   cp -r alternative-structure backup-$(date +%Y%m%d)"
+echo ""
+echo "⚠️  IMPORTANT : Ne pas modifier la structure multi-page"
+echo "   qui résout le problème de navigation iOS !"

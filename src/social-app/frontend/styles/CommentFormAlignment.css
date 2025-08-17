@@ -1,0 +1,51 @@
+/* Styles pour l'alignement des formulaires de commentaires */
+
+/* Alignement général pour tous les formulaires de commentaires */
+.comment-form,
+.section-comment-form,
+.modal-comment-form {
+  display: flex;
+  align-items: flex-start; /* Aligner tous les éléments en haut */
+  gap: 12px;
+}
+
+/* Alignement spécifique pour l'avatar utilisateur */
+.comment-form .comment-user-avatar,
+.section-comment-form .comment-user-avatar,
+.modal-comment-form .comment-user-avatar {
+  align-self: flex-start;
+  margin-top: 2px; /* Petit ajustement pour l'alignement optique avec le bouton submit */
+  flex-shrink: 0;
+}
+
+/* Alignement spécifique pour le bouton submit */
+.comment-form .comment-submit,
+.section-comment-form .comment-submit,
+.modal-comment-form .comment-submit {
+  align-self: flex-start; /* Aligner au même niveau que l'avatar */
+  margin-top: 0;
+  flex-shrink: 0;
+}
+
+/* S'assurer que l'input wrapper prend l'espace restant */
+.comment-form .comment-input-wrapper,
+.section-comment-form .comment-input-wrapper,
+.modal-comment-form .comment-input-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 40px;
+}
+
+/* Alignement du character-count dans input-shortcuts */
+.input-shortcuts {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.input-shortcuts .character-count {
+  margin-left: auto;
+  align-self: center;
+}

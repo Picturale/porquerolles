@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "vision-picturale-community"
+  },
+  "targets": {
+    "vision-picturale-community": {
+      "hosting": {
+        "production": [
+          "vision-picturale-community"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

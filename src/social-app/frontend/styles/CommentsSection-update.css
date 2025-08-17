@@ -1,0 +1,17 @@
+/* Styles additionnels pour l'intégration du ModernCommentEditor */
+.comment-input-container {
+  display: flex;
+  flex: 1;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.section-comment-form .modern-comment-editor {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.section-comment-form .comment-submit {
+  align-self: flex-end;
+  margin-bottom: 8px;
+}

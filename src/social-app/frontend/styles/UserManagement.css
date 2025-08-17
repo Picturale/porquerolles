@@ -1,0 +1,255 @@
+/* Import du design system centralisé */
+@import './design-system.css';
+
+/* UserManagement.css */
+.user-management-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.user-management-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.user-management-header h1 {
+  color: var(--brand-primary);
+  margin-bottom: 0.5rem;
+}
+
+.user-management-header p {
+  color: var(--light-text);
+  font-size: 1.1rem;
+}
+
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.user-card {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+}
+
+.user-card:hover {
+  transform: translateY(-2px);
+}
+
+.user-card.suspended {
+  opacity: 0.7;
+  border-color: var(--error-border);
+}
+
+.user-avatar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.user-avatar img {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-full);
+  background-color: var(--primary-blue);
+  color: var(--brand-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.user-info {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.user-info h3 {
+  margin: 0 0 5px 0;
+  color: var(--text-color);
+  font-size: 1.1rem;
+}
+
+.user-email {
+  color: var(--light-text);
+  font-size: 0.9rem;
+  margin: 0 0 5px 0;
+}
+
+.user-date {
+  color: var(--light-text);
+  font-size: 0.8rem;
+  margin: 0 0 10px 0;
+}
+
+.user-badges {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  padding: 2px 8px;
+  border-radius: var(--radius-lg);
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.badge.admin {
+  background-color: var(--brand-primary);
+  color: var(--brand-light);
+}
+
+.badge.suspended {
+  background-color: var(--error-bg);
+  color: var(--error-text);
+}
+
+.badge.posts {
+  background-color: var(--info-bg);
+  color: var(--info-text);
+}
+
+.user-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.action-button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.action-button.info {
+  background-color: var(--primary-blue);
+  color: var(--brand-light);
+}
+
+.action-button.info:hover {
+  background-color: var(--primary-blue-dark);
+}
+
+.action-button.success {
+  background-color: var(--success-bg);
+  color: var(--success-text);
+}
+
+.action-button.success:hover {
+  background-color: var(--success-color);
+  color: var(--brand-light);
+}
+
+.action-button.warning {
+  background-color: var(--warning-bg);
+  color: var(--warning-text);
+}
+
+.action-button.warning:hover {
+  background-color: var(--warning-text);
+  color: var(--brand-light);
+}
+
+.action-button.danger {
+  background-color: var(--error-bg);
+  color: var(--error-text);
+}
+
+.action-button.danger:hover {
+  background-color: var(--error-color);
+  color: var(--brand-light);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--modal-backdrop);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-header);
+}
+
+.modal-content {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: var(--text-color);
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--light-text);
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-button:hover {
+  color: var(--text-color);
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.detail-row {
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.detail-row strong {
+  display: inline-block;
+  width: 120px;
+  color: var(--text-color);
+}
+

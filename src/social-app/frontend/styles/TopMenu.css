@@ -1,0 +1,348 @@
+/* Import du design system centralisé */
+@import './design-system.css';
+
+/* Top Menu Style Instagram */
+.top-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-white);
+  border-bottom: 1px solid #dbdbdb;
+  height: 60px;
+  z-index: var(--z-header);
+  display: flex;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  /* Animation ultra-fluide et rapide comme Instagram */
+  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+  /* Optimisation pour les performances */
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Si un header d'édition est présent, le top-menu passe en dessous */
+body:has(.edit-profile-header) .top-menu {
+  z-index: calc(var(--z-header) - 1) !important;
+}
+
+/* Fallback sans :has() pour certains moteurs: utiliser une classe body */
+body.edit-profile-active .top-menu {
+  z-index: calc(var(--z-header) - 1) !important;
+}
+
+/* États de visibilité du menu */
+.top-menu.visible {
+  transform: translateY(0) translateZ(0);
+}
+
+.top-menu.hidden {
+  transform: translateY(-100%) translateZ(0);
+}
+
+.top-menu-container {
+  max-width: 975px;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Logo avec image et texte */
+.top-menu-logo {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+
+.top-menu-logo:hover,
+.top-menu-logo:focus {
+  text-decoration: none;
+  color: inherit;
+}
+
+.top-menu-logo:hover .top-menu-title h1 {
+  color: #0095f6;
+}
+
+.top-menu-logo-image {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  box-shadow: var(--shadow-card);
+}
+
+.top-menu-title {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.top-menu-title h1 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #262626;
+  margin: 0;
+  font-family: 'Instagram Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  letter-spacing: 0.5px;
+}
+
+.top-menu-subtitle {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #ff6b35;
+  margin: 0;
+  font-family: 'Instagram Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  text-transform: lowercase;
+  letter-spacing: 0.3px;
+}
+
+/* Actions à droite */
+.top-menu-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.top-menu-item {
+  position: relative;
+}
+
+/* Boutons style Instagram */
+.top-menu-btn {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  /* Améliorations pour la compatibilité */
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.top-menu-btn:hover {
+  background-color: #f5f5f5;
+  transform: scale(1.1);
+}
+
+.top-menu-btn:active {
+  transform: scale(0.95);
+  background-color: #e0e0e0;
+}
+
+.top-menu-btn.active {
+  background-color: #0095f6;
+  box-shadow: 0 2px 8px rgba(0, 149, 246, 0.3);
+}
+
+.top-menu-btn.active .top-menu-icon {
+  color: #ffffff;
+}
+
+/* Focus visible pour l'accessibilité */
+.top-menu-btn:focus-visible {
+  outline: 2px solid #0095f6;
+  outline-offset: 2px;
+}
+
+/* Icônes */
+.top-menu-icon {
+  font-size: 1.3rem;
+  color: #262626;
+  transition: color 0.2s ease;
+}
+
+.top-menu-btn:hover .top-menu-icon {
+  color: #0095f6;
+}
+
+/* Badge de notifications style Instagram */
+.top-menu-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: #ff3040;
+  color: white;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: 600;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  animation: badge-pulse 2s infinite;
+}
+
+@keyframes badge-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* Animation pour le bouton chat avec activité */
+.top-menu-btn.chat-active {
+  animation: chat-pulse 2s infinite;
+}
+
+@keyframes chat-pulse {
+  0%, 100% { 
+    transform: scale(1); 
+    box-shadow: 0 0 0 0 rgba(0, 149, 246, 0.4);
+  }
+  50% { 
+    transform: scale(1.05); 
+    box-shadow: 0 0 0 8px rgba(0, 149, 246, 0);
+  }
+}
+
+/* Amélioration pour le bouton chat spécifiquement */
+.top-menu-btn[aria-label="Messages"] {
+  position: relative;
+}
+
+.top-menu-btn[aria-label="Messages"]:hover .top-menu-icon {
+  color: #0095f6;
+  transform: rotate(5deg);
+}
+
+.top-menu-btn[aria-label="Messages"].active .top-menu-icon {
+  animation: chat-bounce 0.6s ease;
+}
+
+@keyframes chat-bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-3px); }
+  60% { transform: translateY(-2px); }
+}
+
+/* Responsive mobile */
+
+/* Style pour écrans très petits */
+
+/* Adaptation des dropdowns pour le top menu (sauf chat-dropdown qui a ses propres règles) */
+.top-menu-item .notifications-dropdown {
+  top: calc(100% + 8px);
+  right: 0;
+  left: auto;
+  transform: none;
+}
+
+/* Animation d'apparition (sauf chat-dropdown qui a ses propres animations) */
+.top-menu-item .notifications-dropdown {
+  animation: dropdown-appear 0.2s ease-out;
+}
+
+@keyframes dropdown-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Ajustement pour éviter le conflit avec la navbar existante */
+.app-container {
+  padding-top: 60px; /* Pour compenser la hauteur du top menu fixe */
+}
+
+/* Safe area pour iOS */
+@supports (padding: max(0px)) {
+  .top-menu {
+    padding-left: max(env(safe-area-inset-left), 0);
+    padding-right: max(env(safe-area-inset-right), 0);
+  }
+}
+
+/* Animation pour le badge quand on marque comme lu */
+.top-menu-badge.fading {
+  animation: badge-fade-out 0.3s ease forwards !important;
+}
+
+@keyframes badge-fade-out {
+  0% { 
+    opacity: 1; 
+    transform: scale(1); 
+  }
+  50% { 
+    opacity: 0.5; 
+    transform: scale(0.8); 
+  }
+  100% { 
+    opacity: 0; 
+    transform: scale(0.5); 
+  }
+}
+
+/* =================================================================== */
+/* OPTIMISATIONS PERFORMANCE CHAT NOTIFICATIONS                        */
+/* =================================================================== */
+
+/* Transition optimisée pour les badges */
+.top-menu-badge {
+  transition: opacity 0.2s ease, transform 0.2s ease !important;
+  will-change: opacity, transform !important;
+}
+
+/* Animation plus fluide pour chat-active */
+.top-menu-btn.chat-active {
+  animation: chat-pulse-optimized 2s ease-in-out infinite !important;
+}
+
+@keyframes chat-pulse-optimized {
+  0%, 100% { 
+    transform: scale(1); 
+    box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.4);
+  }
+  50% { 
+    transform: scale(1.02); 
+    box-shadow: 0 0 0 6px rgba(255, 107, 53, 0);
+  }
+}
+
+/* Indicateur de loading pour les notifications */
+.chat-notifications-loading {
+  opacity: 0.6 !important;
+  transition: opacity 0.2s ease !important;
+}
+
+.chat-notifications-loading .top-menu-badge {
+  animation: pulse-loading 1.5s ease-in-out infinite !important;
+}
+
+@keyframes pulse-loading {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* Force l'affichage du chat dropdown */
+.top-menu-item .chat-dropdown {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 9999 !important;
+}

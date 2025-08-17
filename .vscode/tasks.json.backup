@@ -1,0 +1,150 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build and Sync iOS with Mac Catalyst",
+      "type": "shell",
+      "command": "npx cap copy ios && npx cap sync ios && npx cap open ios",
+      "group": "build",
+      "isBackground": false
+    },
+    {
+      "label": "Vite",
+      "type": "shell",
+      "command": "npm run dev",
+      "isBackground": true
+    },
+    {
+      "label": "iOS Dev",
+      "type": "shell",
+      "command": "npm run ios:dev"
+    },
+    {
+      "label": "Quick Build",
+      "type": "shell",
+      "command": "echo 'Dossier dist déjà prêt'",
+      "group": "build",
+      "isBackground": false
+    },
+    {
+      "label": "Sync iOS Only",
+      "type": "shell",
+      "command": "npx cap sync ios",
+      "group": "build",
+      "isBackground": false
+    },
+    {
+      "label": "Open iOS Simulator",
+      "type": "shell",
+      "command": "npx cap open ios",
+      "group": "build",
+      "isBackground": true
+    },
+    {
+      "label": "Run Validation Script",
+      "type": "shell",
+      "command": "./quick-status-check.sh",
+      "group": "test",
+      "isBackground": false
+    },
+    {
+      "label": "Full Mac Catalyst Validation",
+      "type": "shell",
+      "command": "./mac-catalyst-final-validation.sh",
+      "group": "test",
+      "isBackground": false
+    },
+    {
+      "label": "Build with APP sync",
+      "type": "shell",
+      "command": "./build-with-app.sh",
+      "group": "build",
+      "isBackground": false
+    },
+		{
+			"label": "Deploy with Full Sync",
+			"type": "shell",
+			"command": "./deploy-with-full-sync.sh",
+			"group": "build",
+			"isBackground": false
+		},
+		{
+			"label": "Build and Deploy with Validation",
+			"type": "shell",
+			"command": "./scripts/build-deploy-validate.sh",
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": [],
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "Validate Build",
+			"type": "shell",
+			"command": "./scripts/validate-build.sh",
+			"group": "test",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Deploy with iOS Sync",
+			"type": "shell",
+			"command": "./scripts/build-deploy-validate.sh --ios",
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+    {
+      "label": "Deploy Social App to Firebase",
+      "type": "shell",
+      "command": "./scripts/deploy-social-app.sh",
+      "group": "build",
+      "isBackground": false,
+      "problemMatcher": []
+    },
+    {
+      "label": "Start Firebase Emulators",
+      "type": "shell",
+      "command": "./scripts/start-social-emulators.sh",
+      "group": "test",
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Social App Development",
+      "type": "shell",
+      "command": "./scripts/dev-social-app.sh",
+      "group": "test",
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Verify Social App Integration",
+      "type": "shell",
+      "command": "./scripts/verify-social-app.sh",
+      "group": "test",
+      "isBackground": false,
+      "problemMatcher": []
+    },
+    {
+      "label": "Firebase Quick Setup & Deploy",
+      "type": "shell",
+      "command": "./scripts/firebase-quick-setup.sh",
+      "group": "build",
+      "isBackground": false,
+      "problemMatcher": []
+    },
+    {
+      "label": "Deploy to vision-picturale-community",
+      "type": "shell",
+      "command": "./scripts/deploy-to-vision-picturale.sh",
+      "group": "build",
+      "isBackground": false,
+      "problemMatcher": []
+    }
+  ]
+}

@@ -1,0 +1,492 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Usernames collection rules (for username reservation)
+    match /usernames/{username} {
+      // Anyone can read to check availability
+      allow read: if true;
+      
+      // Only authenticated users can create/reserve a username
+      allow create: if request.auth != null && 
+                      request.auth.uid == request.resource.data.userId;
+      
+      // No updates allowed (usernames are permanent)
+      allow update: if false;
+      
+      // Only the owner can delete their username reservation
+      allow delete: if request.auth != null && 
+                      request.auth.uid == resource.data.userId;
+    }
+    
+    // Users collection rules
+    match /users/{userId} {
+      // Anyone can read user data
+      allow read: if true;
+      
+      // Only authenticated users can create their own profile
+      // Check both the document ID and the uid field in the document
+      allow create: if request.auth != null && 
+                      request.auth.uid == userId &&
+                      request.auth.uid == request.resource.data.uid;
+      
+  // User can update their own profile OR other users can update followers/following
+      // Additional guard: shopEnabled cannot be true unless isPro is true
+      allow update: if request.auth != null && 
+                      (
+                        request.auth.uid == resource.data.uid && shopGuard() ||
+        onlyUpdatingFollowFields()
+                      );
+      
+      // Only the user can delete their own profile
+      allow delete: if request.auth != null && 
+                      request.auth.uid == resource.data.uid;
+                      
+      // Helper function to check if only updating follow-related fields
+      function onlyUpdatingFollowFields() {
+        return request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['followers', 'following']);
+      }
+
+      // Guard to ensure shopEnabled => isPro on updates (pure expression, no let/if)
+      function shopGuard() {
+        // Allow if not modifying these fields
+        return !request.resource.data.diff(resource.data).affectedKeys().hasAny(['isPro', 'shopEnabled']) ||
+          // Else enforce: not (nextShopEnabled is true AND nextIsPro is not true)
+          !(
+            (
+              (request.resource.data.shopEnabled == true) ||
+              (request.resource.data.shopEnabled == null && resource.data.shopEnabled == true)
+            ) &&
+            !(
+              (request.resource.data.isPro == true) ||
+              (request.resource.data.isPro == null && resource.data.isPro == true)
+            )
+          );
+      }
+    }
+    
+    // Posts collection rules
+    match /posts/{postId} {
+      // Lecture publique pour tous les posts
+      allow read: if true;
+      
+      // Écriture seulement pour les utilisateurs authentifiés
+      allow create: if request.auth != null 
+        && request.auth.uid == request.resource.data.userId;
+      
+      // Mise à jour par l'auteur OU mises à jour limitées par des membres invités
+      // Interdiction explicite de modifier le sous-objet "agg" côté client (CF only)
+      allow update: if request.auth != null 
+        && !isTouchingAgg()
+        && (
+          request.auth.uid == resource.data.userId 
+          || (onlyUpdatingLikes() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.invited == true)
+          || (onlyUpdatingRatingStats() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.invited == true)
+            || (onlyUpdatingEchoesStats() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.invited == true)
+            || (onlyUpdatingVisualResponsesCount() && request.auth != null)
+        );
+      
+      // Suppression seulement par l'auteur
+      allow delete: if request.auth != null 
+        && request.auth.uid == resource.data.userId;
+        
+      // Fonction helper pour vérifier si on ne modifie que les likes
+      function onlyUpdatingLikes() {
+        return request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['likes']);
+      }
+      
+      // Fonction helper pour vérifier si on ne modifie que les stats de rating
+      function onlyUpdatingRatingStats() {
+        return request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['ratingCount', 'ratingTotal']);
+      }
+      
+      // Fonction helper pour vérifier si on ne modifie que les stats ECHOES
+      function onlyUpdatingEchoesStats() {
+        return request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['echoesStats']);
+      }
+      
+        // Autoriser la mise à jour du compteur de réponses visuelles par des utilisateurs invités
+        function onlyUpdatingVisualResponsesCount() {
+          return request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['visualResponsesCount']);
+        }
+
+      // Empêche toute écriture client sur les agrégats de confiance/stabilité
+      function isTouchingAgg() {
+        return request.resource.data.diff(resource.data).changedKeys().hasAny(['agg']);
+      }
+    }
+    
+    // Règles pour les likes (tracking des likes par utilisateur)
+    match /likes/{likeId} {
+      // Lecture publique
+      allow read: if true;
+      
+      // Création seulement par l'utilisateur authentifié
+      // et disposant d'une invitation (profil.invited == true)
+      allow create: if request.auth != null 
+        && request.auth.uid == request.resource.data.userId
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.invited == true
+        && request.resource.data.keys().hasAll(['userId', 'postId', 'createdAt']);
+      
+      // Suppression par l'auteur du like OU par l'auteur du post
+      allow delete: if request.auth != null 
+        && (request.auth.uid == resource.data.userId ||
+            request.auth.uid == get(/databases/$(database)/documents/posts/$(resource.data.postId)).data.userId);
+    }
+    
+    // Règles pour les ratings (nouvelles - système d'étoiles)
+    match /ratings/{ratingId} {
+      // Lecture publique
+      allow read: if true;
+      
+  // Création/Mise à jour seulement par l'utilisateur authentifié pour sa propre note
+  // et disposant d'une invitation (profil.invited == true)
+      allow create, update: if request.auth != null 
+        && request.auth.uid == request.resource.data.userId
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.invited == true
+        && request.resource.data.rating >= 0 
+        && request.resource.data.rating <= 5
+        && request.resource.data.postId is string
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.keys().hasAll(['postId', 'userId', 'rating', 'createdAt', 'updatedAt']);
+      
+      // Suppression par l'auteur de la note OU par l'auteur du post
+      allow delete: if request.auth != null 
+        && (request.auth.uid == resource.data.userId ||
+            request.auth.uid == get(/databases/$(database)/documents/posts/$(resource.data.postId)).data.userId);
+    }
+    
+    // Règles pour les commentaires
+    match /comments/{commentId} {
+      // Lecture publique des commentaires
+      allow read: if true;
+      
+      // Création seulement par utilisateur authentifié avec validation des champs
+      // Les utilisateurs peuvent commenter leurs propres posts ET répondre aux commentaires des autres
+      allow create: if request.auth != null 
+        && request.auth.uid == request.resource.data.authorId
+        && request.resource.data.keys().hasAll(['postId', 'content', 'authorId', 'authorName', 'createdAt'])
+        && request.resource.data.content is string
+        && request.resource.data.content.size() > 0
+        && request.resource.data.content.size() <= 1000;
+      
+      // Mise à jour seulement par l'auteur (pour édition) OU pour incrémenter le compteur de réponses
+      allow update: if request.auth != null 
+        && (request.auth.uid == resource.data.authorId ||
+            onlyUpdatingReplyCount());
+      
+      // Suppression par l'auteur du commentaire OU par l'utilisateur lui-même (pour suppression de profil) OU par l'auteur du post
+      allow delete: if request.auth != null 
+        && (request.auth.uid == resource.data.authorId || 
+            request.auth.uid == resource.data.userId ||
+            request.auth.uid == get(/databases/$(database)/documents/posts/$(resource.data.postId)).data.userId);
+            
+      // Fonction helper pour vérifier si on ne met à jour que le compteur de réponses
+      function onlyUpdatingReplyCount() {
+        return request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['replyCount']);
+      }
+    }
+    
+    // Règles pour les notifications
+    match /notifications/{notificationId} {
+      // Lecture pour le destinataire OU pour l'auteur du post référencé (pour suppression)
+      allow read: if request.auth != null 
+        && (request.auth.uid == resource.data.recipientId ||
+            request.auth.uid == resource.data.senderId ||
+            (resource.data.postId != null && 
+             request.auth.uid == get(/databases/$(database)/documents/posts/$(resource.data.postId)).data.userId) ||
+            (resource.data.contentId != null && 
+             exists(/databases/$(database)/documents/posts/$(resource.data.contentId)) &&
+             request.auth.uid == get(/databases/$(database)/documents/posts/$(resource.data.contentId)).data.userId) ||
+            (resource.data.relatedPostId != null && 
+             exists(/databases/$(database)/documents/posts/$(resource.data.relatedPostId)) &&
+             request.auth.uid == get(/databases/$(database)/documents/posts/$(resource.data.relatedPostId)).data.userId));
+      
+      // Création par tout utilisateur authentifié (pour notifier d'autres utilisateurs)
+      allow create: if request.auth != null 
+        && request.resource.data.keys().hasAll(['recipientId', 'senderId', 'type', 'message', 'createdAt', 'read'])
+        && request.resource.data.recipientId is string
+        && request.resource.data.senderId is string
+        && request.resource.data.type in ['follow', 'unfollow', 'comment', 'like']
+        && request.resource.data.message is string
+        && request.resource.data.read is bool;
+      
+      // Mise à jour seulement par le destinataire (pour marquer comme lu)
+      allow update: if request.auth != null 
+        && request.auth.uid == resource.data.recipientId
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['read']);
+      
+      // Suppression étendue pour inclure la suppression de profil
+      // Permet à un utilisateur de supprimer toutes ses notifications (reçues ET envoyées)
+      allow delete: if request.auth != null 
+        && (request.auth.uid == resource.data.recipientId ||
+            request.auth.uid == resource.data.senderId ||
+            (resource.data.postId != null && 
+             exists(/databases/$(database)/documents/posts/$(resource.data.postId)) &&
+             request.auth.uid == get(/databases/$(database)/documents/posts/$(resource.data.postId)).data.userId) ||
+            (resource.data.contentId != null && 
+             exists(/databases/$(database)/documents/posts/$(resource.data.contentId)) &&
+             request.auth.uid == get(/databases/$(database)/documents/posts/$(resource.data.contentId)).data.userId) ||
+            (resource.data.relatedPostId != null && 
+             exists(/databases/$(database)/documents/posts/$(resource.data.relatedPostId)) &&
+             request.auth.uid == get(/databases/$(database)/documents/posts/$(resource.data.relatedPostId)).data.userId));
+    }
+    
+    // Règles pour les messages (chat)
+    match /messages/{messageId} {
+      // Lecture seulement pour les participants de la conversation
+      allow read: if request.auth != null 
+        && (request.auth.uid == resource.data.senderId || 
+            request.auth.uid == resource.data.receiverId ||
+            (resource.data.conversationId != null && 
+             exists(/databases/$(database)/documents/conversations/$(resource.data.conversationId)) &&
+             request.auth.uid in get(/databases/$(database)/documents/conversations/$(resource.data.conversationId)).data.participants));
+      
+      // Création par utilisateur authentifié avec validation
+      // et disposant d'une invitation (profil.invited == true)
+      allow create: if request.auth != null 
+        && request.auth.uid == request.resource.data.senderId
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.invited == true
+        && request.resource.data.keys().hasAll(['senderId', 'receiverId', 'content', 'createdAt', 'read'])
+        && request.resource.data.senderId is string
+        && request.resource.data.receiverId is string
+        && request.resource.data.content is string
+        && request.resource.data.content.size() > 0
+        && request.resource.data.content.size() <= 1000
+        && request.resource.data.read is bool
+        && (
+          !request.resource.data.keys().hasAny(['conversationId', 'senderName']) ||
+          (request.resource.data.conversationId is string && request.resource.data.senderName is string)
+        );
+      
+      // Mise à jour seulement par le destinataire (pour marquer comme lu)
+      allow update: if request.auth != null 
+        && request.auth.uid == resource.data.receiverId
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['read']);
+      
+      // Suppression par l'expéditeur ou le destinataire
+      allow delete: if request.auth != null 
+        && (request.auth.uid == resource.data.senderId || 
+            request.auth.uid == resource.data.receiverId);
+    }
+    
+    // Règles pour les conversations (métadonnées des chats)
+    match /conversations/{conversationId} {
+      // Lecture seulement pour les participants
+      allow read: if request.auth != null 
+        && request.auth.uid in resource.data.participants;
+      
+      // Création par utilisateur authentifié
+      // et disposant d'une invitation (profil.invited == true)
+      allow create: if request.auth != null 
+        && request.auth.uid in request.resource.data.participants
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.invited == true
+        && request.resource.data.keys().hasAll(['participants', 'lastMessage', 'lastMessageAt', 'createdAt'])
+        && request.resource.data.participants is list
+        && request.resource.data.participants.size() == 2;
+      
+      // Mise à jour seulement par les participants
+      allow update: if request.auth != null 
+        && request.auth.uid in resource.data.participants;
+      
+      // Suppression par les participants
+      allow delete: if request.auth != null 
+        && request.auth.uid in resource.data.participants;
+    }
+    
+    // Règles pour les notations ECHOES
+    match /echoes/{echoesId} {
+      // Lecture publique pour calculer les statistiques
+      allow read: if true;
+      
+      // Création/Mise à jour seulement par l'utilisateur authentifié pour sa propre notation
+      // et disposant d'une invitation (profil.invited == true)
+      allow create, update: if request.auth != null 
+        && request.auth.uid == request.resource.data.userId
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.invited == true
+        && request.resource.data.postId is string
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.rating is map
+        && request.resource.data.rating.keys().hasAll(['intention', 'composition', 'matiere', 'technique', 'emotion'])
+        && request.resource.data.rating.intention >= 1 && request.resource.data.rating.intention <= 5
+        && request.resource.data.rating.composition >= 1 && request.resource.data.rating.composition <= 5
+        && request.resource.data.rating.matiere >= 1 && request.resource.data.rating.matiere <= 5
+        && request.resource.data.rating.technique >= 1 && request.resource.data.rating.technique <= 5
+        && request.resource.data.rating.emotion >= 1 && request.resource.data.rating.emotion <= 5
+        && request.resource.data.keys().hasAll(['postId', 'userId', 'rating']);
+      
+      // Suppression par l'auteur de la notation OU par l'auteur du post
+      allow delete: if request.auth != null 
+        && (request.auth.uid == resource.data.userId ||
+            request.auth.uid == get(/databases/$(database)/documents/posts/$(resource.data.postId)).data.userId);
+    }
+    
+    // Règles pour les hashtags (système de tags Instagram-like)
+    match /hashtags/{hashtagId} {
+      // Lecture publique pour afficher les hashtags populaires et la recherche
+      allow read: if true;
+      
+      // Création/Mise à jour par les utilisateurs authentifiés pour incrementer les compteurs
+      // Le hashtagId doit correspondre au nom du hashtag (sans le #)
+      allow create, update: if request.auth != null &&
+        // Pour la création, tous les champs sont requis
+        ((request.resource.data.keys().hasAll(['tag', 'count', 'lastUsed', 'createdAt', 'trending']) &&
+          request.resource.data.tag is string &&
+          request.resource.data.tag.size() > 0 &&
+          request.resource.data.tag.size() <= 50 &&
+          request.resource.data.count is number &&
+          request.resource.data.count >= 0 &&
+          request.resource.data.lastUsed is timestamp &&
+          request.resource.data.createdAt is timestamp &&
+          request.resource.data.trending is bool &&
+          request.resource.data.tag.lower() == hashtagId.lower() &&
+          (!request.resource.data.keys().hasAny(['posts']) || request.resource.data.posts is list)) ||
+        // Pour la mise à jour (nettoyage), permettre la mise à jour des champs existants uniquement
+        (resource != null && 
+         request.resource.data.keys().hasOnly(['tag', 'count', 'posts', 'lastUsed', 'createdAt', 'trending']) &&
+         request.resource.data.count is number &&
+         request.resource.data.count >= 0));
+      
+      // Suppression autorisée pour les utilisateurs authentifiés (nettoyage des hashtags vides)
+      allow delete: if request.auth != null;
+    }
+
+    // Règles pour les signalements (reports)
+    match /reports/{reportId} {
+      // Lecture interdite publiquement (protège les reporters)
+      allow read: if false;
+      // Création par tout utilisateur authentifié (pas besoin d'être "invited")
+      // avec contraintes minimales (on évite les checks stricts sur serverTimestamp)
+      allow create: if request.auth != null
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.postId is string
+        && (
+          // severité optionnelle ou bornée si présente
+          !request.resource.data.keys().hasAny(['severity']) ||
+          (
+            request.resource.data.severity is number &&
+            request.resource.data.severity >= 1 && request.resource.data.severity <= 3
+          )
+        );
+      // Pas de mise à jour/suppression côté client
+      allow update, delete: if false;
+    }
+
+    // Règles pour les réponses visuelles
+    match /visualResponses/{visualResponseId} {
+      // Helpers pour compatibilité schéma (authorId/isPrivate vs userId/isPublic)
+      function responseAuthorId() {
+        return resource.data.authorId != null ? resource.data.authorId : resource.data.userId;
+      }
+      function requestAuthorId() {
+        return request.resource.data.authorId != null ? request.resource.data.authorId : request.resource.data.userId;
+      }
+      function isResponsePublic() {
+        // Public si isPublic == true OU si ancien champ isPrivate == false
+        return (resource.data.isPublic == true) || (resource.data.isPrivate == false);
+      }
+
+      // Lecture publique des réponses publiques.
+      // L'auteur peut toujours lire sa propre réponse (même privée/brouillon).
+      allow read: if isResponsePublic() || (request.auth != null && request.auth.uid == responseAuthorId());
+
+      // Création par tout utilisateur authentifié (plus de contrainte d'invitation)
+      // On accepte userId/isPublic (nouveau) ou authorId/isPrivate (ancien) et on assouplit les champs requis.
+      // IMPORTANT: vérifier d'abord les types (postId). Autoriser pour tout utilisateur authentifié.
+      allow create: if request.auth != null 
+        && request.resource.data.postId is string
+        && (request.resource.data.isPublic is bool || request.resource.data.isPrivate is bool);
+
+      // Mise à jour: auteur de la réponse OU auteur du post (limité aux champs ECHOES)
+      allow update: if request.auth != null && (
+        request.auth.uid == responseAuthorId() ||
+        (
+          // Le créateur du post peut mettre à jour uniquement les champs de notation ECHOES
+          request.auth.uid == get(/databases/$(database)/documents/posts/$(resource.data.postId)).data.userId &&
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['echoesRatings', 'averageEchoesScore', 'updatedAt'])
+        )
+      );
+
+      // Suppression: auteur de la réponse OU auteur du post original
+      allow delete: if request.auth != null 
+        && (request.auth.uid == responseAuthorId() ||
+            request.auth.uid == get(/databases/$(database)/documents/posts/$(resource.data.postId)).data.userId);
+    }
+    
+    // Règles pour les ratings ECHOES des réponses visuelles
+    match /visualResponseEchoes/{echoesId} {
+      // Helper pour récupérer l'auteur d'une réponse visuelle (compat authorId/userId)
+      function visualResponseAuthor(visualResponseId) {
+        return get(/databases/$(database)/documents/visualResponses/$(visualResponseId)).data.authorId != null
+          ? get(/databases/$(database)/documents/visualResponses/$(visualResponseId)).data.authorId
+          : get(/databases/$(database)/documents/visualResponses/$(visualResponseId)).data.userId;
+      }
+      // Lecture publique pour calculer les statistiques
+      allow read: if true;
+      
+      // Création/Mise à jour seulement par l'auteur du post original (qui a créé le défi)
+      // L'utilisateur doit être authentifié et avoir une invitation
+      allow create, update: if request.auth != null 
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.invited == true
+        && request.resource.data.postId is string
+        && request.resource.data.visualResponseId is string
+        && request.resource.data.userId == request.auth.uid
+        && request.auth.uid == get(/databases/$(database)/documents/posts/$(request.resource.data.postId)).data.userId
+        && request.resource.data.rating is map
+        && request.resource.data.rating.keys().hasAll(['intention', 'composition', 'matiere', 'technique', 'emotion'])
+        && request.resource.data.rating.intention >= 1 && request.resource.data.rating.intention <= 10
+        && request.resource.data.rating.composition >= 1 && request.resource.data.rating.composition <= 10
+        && request.resource.data.rating.matiere >= 1 && request.resource.data.rating.matiere <= 10
+        && request.resource.data.rating.technique >= 1 && request.resource.data.rating.technique <= 10
+        && request.resource.data.rating.emotion >= 1 && request.resource.data.rating.emotion <= 10
+        && request.resource.data.keys().hasAll(['postId', 'visualResponseId', 'userId', 'rating']);
+      
+      // Suppression par l'auteur du rating (créateur du post) OU par l'auteur de la réponse visuelle
+      allow delete: if request.auth != null 
+        && (request.auth.uid == resource.data.userId ||
+            request.auth.uid == visualResponseAuthor(resource.data.visualResponseId));
+    }
+
+    // Règles pour les produits (boutique Pro)
+    match /products/{productId} {
+      // Lecture publique seulement des produits actifs
+      // Le propriétaire peut toujours lire ses propres produits
+      allow read: if resource.data.active == true ||
+                  (request.auth != null && request.auth.uid == resource.data.ownerId);
+
+  // Création: uniquement par l'utilisateur authentifié propriétaire ET boutique activée
+  allow create: if request.auth != null &&
+        request.auth.uid == request.resource.data.ownerId &&
+        // L'utilisateur doit avoir shopEnabled == true dans son profil
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.shopEnabled == true &&
+        request.resource.data.keys().hasAll(['ownerId', 'title', 'active', 'createdAt', 'imageUrl', 'price']) &&
+        request.resource.data.ownerId is string &&
+        request.resource.data.title is string && request.resource.data.title.size() > 0 &&
+        request.resource.data.imageUrl is string && request.resource.data.imageUrl.size() > 0 &&
+        request.resource.data.price is number && request.resource.data.price >= 0 &&
+        request.resource.data.active is bool;
+
+      // Mise à jour/Suppression: uniquement par le propriétaire
+      allow update, delete: if request.auth != null && request.auth.uid == resource.data.ownerId;
+    }
+
+    // Règles pour la file de modération (CF only)
+    match /moderation_queue/{docId} {
+      allow read: if false; // pas d'accès direct public
+      allow write, update, delete: if false; // uniquement via CF
+    }
+
+    // Règles pour l'audit de confiance (CF only)
+    match /trust_audit/{docId} {
+      allow read: if false;
+      allow write, update, delete: if false;
+    }
+  }
+}

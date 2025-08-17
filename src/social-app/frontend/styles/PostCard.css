@@ -1,0 +1,612 @@
+/* Import du design system centralisé */
+@import './design-system.css';
+
+/* PostCard - Design moderne et organisé */
+.post-card {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: none; /* Retire les bords */
+  box-shadow: none; /* Pas d'ombre */
+  transition: var(--transition-base);
+}
+
+.post-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Header avec informations auteur */
+.post-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Distribue l'espace entre les informations auteur et les boutons d'action */
+  padding: 0px 20px;
+  border-bottom: none; /* Retire la bordure */
+  background: var(--color-white);
+  gap: 12px; /* Espace entre les éléments */
+  min-height: 72px; /* Assure une hauteur suffisante pour les boutons */
+}
+
+/* Zone droite du header pour les boutons d'action */
+.post-header .post-actions {
+  flex-shrink: 0; /* Empêche la compression des boutons */
+}
+
+/* RÈGLE ULTRA-SPÉCIFIQUE pour forcer la visibilité des boutons */
+.post-card .post-header .post-actions,
+.post-card .post-header .post-actions .action-btn,
+.post-detailed-view .post-card .post-header .post-actions,
+.post-detailed-view .post-card .post-header .post-actions .action-btn {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  pointer-events: auto !important;
+}
+
+.post-author-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0; /* Évite la compression */
+}
+
+.author-avatar {
+  position: relative;
+}
+
+.avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #002739, #ff6b35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.avatar-image {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Avatar cliquable */
+.avatar-link {
+  display: block;
+  text-decoration: none;
+}
+
+.avatar-image.clickable,
+.avatar-placeholder.clickable {
+  cursor: pointer;
+}
+
+.author-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.author-name {
+  font-weight: 600;
+  font-size: 15px;
+  color: #002739;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.author-name:hover {
+  color: #ff6b35;
+}
+
+.post-time {
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 400;
+}
+
+/* Date du post dans le header */
+.post-date {
+  font-size: 8px; /* Modifié de 6px à 8px */
+  color: #6b7280;
+  font-weight: 400;
+}
+
+/* Styles pour les boutons d'action (modifier, supprimer) - TOUJOURS VISIBLES */
+.post-actions,
+.post-actions .action-btn,
+.post-header .post-actions,
+.post-header .post-actions .action-btn,
+.post-detailed-view .post-actions,
+.post-detailed-view .post-actions .action-btn {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  animation: none !important;
+  transition: all 0.2s ease !important;
+  position: static !important;
+  z-index: auto !important;
+  pointer-events: auto !important;
+}
+
+.post-actions {
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* Masquer les boutons spéciaux de la grille dans la vue normale */
+.post-actions-grid {
+  display: none;
+}
+
+/* Vue détaillée - Forcer la visibilité des boutons */
+.post-detailed-view .post-actions,
+.post-view-switcher .post-actions,
+.post-card .post-actions {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.action-btn {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: none !important;
+  padding: 8px !important;
+  cursor: pointer;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px !important;
+  color: #6b7280 !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  animation: none !important;
+  position: static !important;
+  z-index: auto !important;
+  /* Suppression de la box-shadow sur tous les boutons d'action */
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Style spécifique pour le bouton de commentaire */
+.comment-btn {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Style spécifique pour le bouton de volume */
+.volume-btn {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Style spécifique pour le bouton echoes */
+.echoes-btn {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Style spécifique pour le bouton d'étapes - même style que commentaire */
+.steps-btn {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 8px !important;
+  cursor: pointer;
+  display: flex !important;
+  align-items: center;
+  font-size: 24px !important;
+  color: rgb(38, 38, 38) !important;
+  transition: 0.2s;
+  border-radius: 50% !important;
+}
+
+.steps-btn:hover {
+  transform: scale(1.1) !important;
+  box-shadow: none !important;
+}
+
+.action-btn:hover {
+  transform: scale(1.05) !important;
+  box-shadow: none !important;
+}
+
+.edit-btn {
+  color: #3b82f6 !important;
+  border-color: #3b82f6 !important;
+}
+
+.delete-btn {
+  color: #ef4444 !important;
+  border-color: #ef4444 !important;
+}
+
+.edit-btn:hover {
+  background-color: #3b82f6 !important;
+  color: white !important;
+  border-color: #3b82f6 !important;
+}
+
+.delete-btn:hover {
+  background-color: #ef4444 !important;
+  color: white !important;
+  border-color: #ef4444 !important;
+}
+
+/* Container principal pour l'image - assure le format carré */
+.post-image-container {
+  width: 100%;
+  padding: 5px;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* Container image - Format carré parfait avec technique padding-bottom */
+.post-image {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%; /* Force un ratio carré 1:1 */
+  overflow: hidden;
+  background: #f8f9fa;
+  border-radius: var(--radius-lg);
+}
+
+.post-image img,
+.post-image video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.2s ease;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+}
+
+/* Styles spécifiques pour les vidéos */
+.post-image video {
+  background: #000;
+}
+
+.post-image video::-webkit-media-controls-panel {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.post-image video::-webkit-media-controls {
+  border-radius: 0 0 12px 12px;
+}
+
+.post-image-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f3f4;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: var(--radius-lg);
+}
+
+/* Footer avec actions et métadonnées */
+.post-footer {
+  padding: 0px 23px 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.post-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+  flex-wrap: nowrap;
+}
+
+/* Container pour titre et description en vertical */
+.post-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 4px 0;
+  padding: 18px;
+  padding-top: 0px;
+  padding-right: 18px;
+  padding-bottom: 0px;
+  padding-left: 18px;
+}
+
+/* Titre en haut */
+.post-title {
+  margin: 0;
+  text-align: center;
+}
+
+.post-title h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  color: #002739;
+  line-height: 1.3;
+}
+
+/* Description/Caption en bas */
+.post-caption {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.post-caption p {
+  margin: 0;
+  font-size: 14px;
+  color: #002739;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+/* Conteneur pour la caption avec troncature */
+.caption-container {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  min-height: 80px;
+}
+
+.caption-ellipsis {
+  font-size: 14px;
+  color: #002739;
+  font-weight: 400;
+}
+
+.see-more-btn {
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.see-more-btn:hover {
+  color: #ff6b35;
+  text-decoration: underline;
+}
+
+.see-more-btn:focus {
+  outline: none;
+  color: #ff6b35;
+}
+
+/* Date du post repositionnée - supprimé car maintenant dans le header */
+
+.action-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 8px 12px;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.action-button:hover {
+  color: #002739;
+}
+
+.like-button.liked {
+  color: #ff6b35;
+}
+
+.like-button.liked:hover {
+  color: #ff6b35;
+}
+
+.action-button svg {
+  font-size: 16px;
+}
+
+/* Container pour boutons avec compteur (commentaires, étapes) */
+.action-with-counter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Compteur pour les actions (commentaires, étapes) */
+.action-counter {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(142, 142, 142);
+}
+
+/* Bouton pour le nombre d'étapes - Style minimaliste (version simplifiée) */
+.steps-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 8px 12px;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  background: none;
+  border: none;
+}
+
+.steps-button:hover {
+  color: #002739;
+}
+
+.steps-button svg {
+  font-size: 16px;
+}
+
+.steps-count {
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+/* Métadonnées techniques */
+.post-metadata {
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: rgba(0, 39, 57, 0.03);
+  border-radius: var(--radius-md);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.metadata-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #002739;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metadata-item {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.metadata-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Actions dans le header (bouton follow) */
+.post-header-actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0; /* Évite que le bouton se compresse */
+}
+
+.post-header-actions .follow-button-container {
+  margin-top: 0;
+}
+
+.post-header-actions .follow-button {
+  padding: 4px 8px; /* Réduit de 6px 12px à 4px 8px */
+  font-size: 0.75rem; /* Réduit de 0.8rem à 0.75rem */
+  min-width: 70px; /* Réduit de 80px à 70px */
+  border-radius: 14px; /* Réduit de 16px à 14px */
+}
+
+.post-header-actions .followers-count {
+  display: none; /* Masquer le compteur dans le feed pour économiser l'espace */
+}
+
+/* =================================================================== */
+/* EDIT POST BUTTON IN CARD - USING DESIGN SYSTEM                   */
+/* =================================================================== */
+
+.edit-post-button-card {
+  /* Version encore plus compacte de btn-tertiary */
+  background: none;
+  color: var(--color-muted-text, #888888);
+  border: 1px solid var(--color-border-light, #f0f0f0);
+  padding: 3px var(--spacing-sm, 8px);
+  border-radius: var(--radius-sm, 4px);
+  font-size: var(--text-xs, 0.7rem);
+  font-weight: var(--font-normal, 400);
+  cursor: pointer;
+  transition: var(--transition-fast, 0.15s ease);
+  margin-left: var(--spacing-sm, 8px);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs, 4px);
+}
+
+.edit-post-button-card:hover {
+  color: var(--color-primary-text, #1a1a1a);
+  border-color: var(--color-border-medium, #e0e0e0);
+  background: var(--color-bg-tertiary, #f8f8f8);
+}
+.post-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm, 8px);
+}
+
+.post-title h3 {
+  flex: 1;
+  margin: 0;
+}
+
+/* Mobile responsive for card edit button */
+@media (max-width: 768px) {
+  .edit-post-button-card {
+    font-size: var(--text-xs, 0.7rem);
+    padding: 2px var(--spacing-xs, 4px);
+    border-radius: var(--radius-sm, 4px);
+    margin-left: var(--spacing-xs, 4px);
+  }
+  
+  .post-title {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .edit-post-button-card {
+    align-self: flex-end;
+    margin-left: 0;
+    margin-top: var(--spacing-xs, 4px);
+  }
+}
+
+/* Actions style Instagram */
+.post-actions-instagram {
+  padding: 18px;
+  padding-top: 0px;
+  padding-right: 18px;
+  padding-bottom: 0px;
+  padding-left: 18px;
+}

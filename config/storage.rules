@@ -1,0 +1,169 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Règle générale pour permettre à un utilisateur de supprimer tous ses fichiers
+    match /{allPaths=**} {
+      // Permettre la lecture, écriture et suppression des fichiers contenant l'UID de l'utilisateur
+      allow read, write, delete: if request.auth != null 
+        && (resource.name.matches('.*' + request.auth.uid + '.*') ||
+            request.resource.name.matches('.*' + request.auth.uid + '.*'));
+    }
+
+    // Règles spécifiques pour les dossiers utilisateur (pour la suppression de profil)
+    match /social-app/profile-pictures/{userId}/{allFiles=**} {
+      allow read, write, delete, list: if request.auth != null 
+        && request.auth.uid == userId;
+    }
+    
+    match /avatars/{userId}/{allFiles=**} {
+      allow read, write, delete, list: if request.auth != null 
+        && request.auth.uid == userId;
+    }
+    
+    match /temp/{userId}/{allFiles=**} {
+      allow read, write, delete, list: if request.auth != null 
+        && request.auth.uid == userId;
+    }
+
+    // Règles pour les miniatures vidéo (video-thumbnails)
+    match /video-thumbnails/{fileName} {
+      // Only authenticated users can upload their own thumbnails
+      allow write: if request.auth != null
+        && fileName.matches(request.auth.uid + '_.*')
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+      // Anyone can read thumbnails
+      allow read: if true;
+      // Only the user can delete their own thumbnail
+      allow delete: if request.auth != null
+        && fileName.matches(request.auth.uid + '_.*');
+    }
+
+    // Profile pictures (simple path for social app)
+    match /profile-pictures/{fileName} {
+      // Anyone can read profile pictures
+      allow read: if true;
+      
+      // Only authenticated users can upload their own profile pictures
+      // fileName format: profile_{userId}_{timestamp}.{ext}
+      allow write: if request.auth != null 
+        && fileName.matches('profile_' + request.auth.uid + '_.*')
+        && request.resource.size < 5 * 1024 * 1024  // 5MB max
+        && request.resource.contentType.matches('image/.*');
+        
+      // Only the user can delete their own profile picture
+      allow delete: if request.auth != null 
+        && (fileName.matches('profile_' + request.auth.uid + '_.*') || 
+            fileName.matches('.*_' + request.auth.uid + '_.*'));
+    }
+
+    // Règles pour les miniatures vidéo (video-thumbnails)
+    match /video-thumbnails/{fileName} {
+      // Only authenticated users can upload their own thumbnails
+      allow write: if request.auth != null
+        && fileName.matches(request.auth.uid + '_.*')
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+      // Anyone can read thumbnails
+      allow read: if true;
+      // Only the user can delete their own thumbnail
+      allow delete: if request.auth != null
+        && fileName.matches(request.auth.uid + '_.*');
+    }
+    
+    // Social app user profile pictures (alternative path)
+    match /social-app/profile-pictures/{userId} {
+      // Anyone can read profile pictures
+      allow read: if true;
+      
+      // Only the user can upload their own profile picture
+      allow write: if request.auth != null 
+        && request.auth.uid == userId
+        && request.resource.size < 5 * 1024 * 1024  // 5MB max
+        && request.resource.contentType.matches('image/.*');
+        
+      // Only the user can delete their own profile picture
+      allow delete: if request.auth != null 
+        && request.auth.uid == userId;
+    }
+    
+    // Social app post images and videos
+    match /social-app/posts/{userId}/{mediaId} {
+      // Anyone can read post media
+      allow read: if true;
+      
+      // Only authenticated users can upload media
+      allow write: if request.auth != null 
+        && request.auth.uid == userId
+        && request.resource.size < 50 * 1024 * 1024  // 50MB max for videos
+        && (request.resource.contentType.matches('image/.*') || 
+            request.resource.contentType.matches('video/.*'));
+      
+      // User can delete their own media
+      allow delete: if request.auth != null 
+        && request.auth.uid == userId;
+    }
+    
+    // Règles pour les avatars des utilisateurs
+    match /avatars/{userId} {
+      // Lecture publique des avatars
+      allow read: if true;
+      
+      // Écriture seulement par l'utilisateur propriétaire
+      allow write: if request.auth != null 
+        && request.auth.uid == userId
+        && resource.size < 2 * 1024 * 1024  // 2MB max pour les avatars
+        && resource.contentType.matches('image/.*')
+        && isValidImageFormat(resource.contentType);
+      
+      // Suppression par l'utilisateur propriétaire
+      allow delete: if request.auth != null 
+        && request.auth.uid == userId;
+    }
+    
+    // Règles pour les miniatures (thumbnails) générées automatiquement
+    match /thumbnails/{userId}/{imageId} {
+      // Lecture publique
+      allow read: if true;
+      
+      // Pas d'écriture directe par les utilisateurs (générées côté serveur)
+      allow write: if false;
+    }
+    
+    // Règles pour les images temporaires (pendant l'upload)
+    match /temp/{userId}/{sessionId}/{imageId} {
+      // Lecture et écriture par l'utilisateur propriétaire seulement
+      allow read, write: if request.auth != null 
+        && request.auth.uid == userId
+        && resource.size < 15 * 1024 * 1024;  // 15MB max pour les temporaires
+      
+      // Auto-suppression après 24h (géré côté serveur)
+    }
+    
+    // Helper functions for validation
+    function isValidImageFormat(contentType) {
+      return contentType in [
+        'image/jpeg',
+        'image/jpg', 
+        'image/png',
+        'image/webp',
+        'image/heic',
+        'image/heif'
+      ];
+    }
+    
+    function isValidVideoFormat(contentType) {
+      return contentType in [
+        'video/mp4',
+        'video/mov',
+        'video/avi',
+        'video/webm',
+        'video/quicktime'
+      ];
+    }
+    
+    function isValidMediaFormat(contentType) {
+      return isValidImageFormat(contentType) || isValidVideoFormat(contentType);
+    }
+  }
+}

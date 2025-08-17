@@ -1,0 +1,533 @@
+/* Import du design system centralisé */
+@import './design-system.css';
+
+/* EditProfile.css */
+.edit-profile-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* Plein écran léger: réserve la place du header et cache les menus globaux */
+.edit-profile-fullscreen {
+  padding-top: 60px !important; /* hauteur du header */
+  min-height: 100vh;
+}
+
+/* Header fixe, inspiré de CreatePost */
+.edit-profile-header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 60px !important;
+  background: var(--color-white, #fff) !important;
+  /* Au-dessus du TopMenu - priorité maximale */
+  z-index: 100000 !important;
+  box-shadow: var(--shadow-card, 0 2px 8px rgba(0,0,0,0.08)) !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 0 20px !important;
+}
+
+/* Cacher uniquement le TopMenu lorsqu'on édite le profil */
+body:has(.edit-profile-header) .top-menu {
+  display: none !important;
+}
+
+/* Fallback sans :has() */
+body.edit-profile-active .top-menu {
+  display: none !important;
+}
+
+.edit-profile-header h2 {
+  margin: 0 !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  color: #1f2937 !important;
+  text-align: center !important;
+  flex: 1 !important;
+}
+
+.close-edit-profile-btn {
+  background: none !important;
+  border: none !important;
+  font-size: 1.5rem !important;
+  color: #6b7280 !important;
+  cursor: pointer !important;
+  padding: 8px !important;
+  border-radius: 50% !important;
+  width: 40px !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+}
+
+.close-edit-profile-btn:hover {
+  background: #f3f4f6 !important;
+  color: #374151 !important;
+  transform: scale(1.05) !important;
+}
+
+.header-save-button {
+  background: var(--color-white, #fff) !important;
+  color: #ff6b35 !important;
+  border: 2px solid #ff6b35 !important;
+  padding: 8px 16px !important;
+  border-radius: var(--radius-md, 8px) !important;
+  font-size: 0.9rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  min-width: 110px !important;
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.2) !important;
+}
+
+.header-save-button:hover:not(:disabled) {
+  background: #ff6b35 !important;
+  color: #fff !important;
+  transform: translateY(-1px) scale(1.01) !important;
+}
+
+.header-save-button:disabled {
+  background: #f5f5f5 !important;
+  color: #ccc !important;
+  border-color: #ddd !important;
+  box-shadow: none !important;
+}
+
+/* --- Hero section to mirror Profile page --- */
+.edit-profile-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.edit-cover-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--cover-ratio, 3 / 1);
+  background: #f3f4f6;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.edit-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.edit-cover-placeholder {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: #9ca3af;
+  font-weight: 600;
+}
+
+.edit-cover-upload-btn {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: none;
+}
+
+.edit-cover-upload-btn:hover { background: rgba(0,0,0,0.7); }
+
+.edit-identity-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.edit-avatar {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+}
+
+.edit-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  display: block;
+}
+
+.edit-avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+
+.edit-avatar-upload-btn {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  background: #ff6b35;
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.edit-fields {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 600px) {
+  .edit-fields {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.form-group.compact label {
+  font-size: 0.85rem;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+
+.form-group.compact input,
+.form-group.compact textarea {
+  padding: 10px;
+}
+
+.edit-profile-card {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.edit-profile-card h2 {
+  color: var(--brand-dark);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+/* En mode plein écran, masquer le titre doublon dans la card */
+.edit-profile-fullscreen .edit-profile-card h2 {
+  display: none !important;
+}
+
+.edit-profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: var(--brand-dark);
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 0.75rem;
+  border: 1px solid var(--brand-gray);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: var(--transition);
+  background: var(--brand-light);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.bio-input {
+  min-height: 100px !important;
+}
+
+.bio-counter {
+  text-align: right;
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+.current-picture {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: var(--background);
+  border-radius: var(--border-radius);
+}
+
+.profile-preview {
+  width: 100px;
+  height: 100px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 3px solid var(--primary-blue);
+}
+
+.current-picture p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--light-text);
+}
+
+.file-selected {
+  color: var(--primary-blue);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.password-section {
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.5rem;
+  margin-top: 1rem;
+}
+
+.password-section h3 {
+  color: var(--text-color);
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 120px;
+}
+
+.btn-primary {
+  background: var(--primary-blue);
+  color: var(--brand-light);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--primary-blue-dark);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--secondary-button-bg);
+  color: var(--brand-light);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--secondary-button-hover);
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled,
+.btn-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.error-message {
+  background: var(--error-bg);
+  color: var(--error-text);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--error-border);
+  margin-bottom: 1rem;
+}
+
+.success-message {
+  background: var(--success-bg);
+  color: var(--success-text);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--success-border);
+  margin-bottom: 1rem;
+}
+
+/* Danger Zone */
+.danger-zone {
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+  border-radius: var(--border-radius);
+  padding: 0.75rem 1rem; /* plus compact */
+  margin-top: 1rem; /* réduit */
+  text-align: center;
+}
+
+.danger-zone h3 {
+  color: #dc3545;
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem; /* réduit */
+  font-weight: 700;
+}
+
+.danger-zone p {
+  color: var(--color-gray-600);
+  margin: 0 0 0.75rem 0; /* réduit */
+  line-height: 1.4;
+  font-size: 0.9rem;
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem; /* réduit */
+  border-radius: var(--border-radius);
+  font-size: 0.9rem; /* réduit */
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-base);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #c82333;
+  transform: translateY(-1px);
+}
+
+.btn-danger:disabled {
+  background: #f8d7da;
+  color: #721c24;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Username field styles */
+.username-help {
+  font-size: 0.8rem;
+  color: var(--brand-gray-dark);
+  font-weight: 400;
+  margin-left: 0.5rem;
+}
+
+.username-status {
+  font-size: 0.85rem;
+  padding: 0.5rem;
+  border-radius: var(--radius-xs);
+  margin-top: 0.25rem;
+}
+
+.username-status.checking {
+  background: #e3f2fd;
+  color: #1976d2;
+  border: 1px solid #bbdefb;
+}
+
+.username-status.error {
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+.username-status.success {
+  background: #e8f5e8;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+/* Input validation states */
+input[name="username"]:invalid {
+  border-color: #f44336;
+  box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.2);
+}
+
+input[name="username"]:valid {
+  border-color: #4caf50;
+}
+
+input[name="username"]:focus {
+  outline: none;
+  border-color: var(--brand-orange);
+  box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.2);
+}
+
+/* Pro Section */
+.pro-section {
+  border-top: 1px dashed var(--border-color);
+  padding-top: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.pro-section h3 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.1rem;
+  color: var(--text-color);
+}
+
+.toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.cover-preview {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+}
+

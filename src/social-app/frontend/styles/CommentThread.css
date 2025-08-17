@@ -1,0 +1,893 @@
+/* Import du design system centralisé */
+@import './design-system.css';
+
+/* CommentThread.css - Styles pour le système de commentaires imbriqués */
+
+/* =================================================================== */
+/* BASE STYLES - Commentaires hiérarchiques                          */
+/* =================================================================== */
+
+/* =================================================================== */
+/* CONTAINER AVEC DÉFILEMENT                                          */
+/* =================================================================== */
+
+.comments-container {
+  max-height: 70vh; /* Augmenté pour plus d'espace - était 600px */
+  min-height: 300px; /* Hauteur minimum pour éviter le tassement */
+  overflow-y: auto; /* Active le défilement vertical */
+  overflow-x: hidden; /* Éviter le défilement horizontal */
+  padding-right: 10px; /* Espace pour la barre de défilement */
+  scrollbar-width: thin; /* Pour Firefox */
+  /* Assurer un défilement fluide */
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  /* Éviter la compression du contenu */
+  flex-shrink: 0;
+}
+
+/* Style de la barre de défilement pour les navigateurs Webkit */
+.comments-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.comments-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.comments-container::-webkit-scrollbar-thumb {
+  background: #c2c8d5;
+  border-radius: 10px;
+}
+
+.comments-container::-webkit-scrollbar-thumb:hover {
+  background: #667eea;
+}
+
+.comment-item {
+  position: relative;
+  margin-bottom: 12px;
+  transition: all 0.2s ease;
+  /* Assurer l'expansion complète */
+  overflow: visible;
+  max-height: none;
+  height: auto;
+  /* Éviter la compression */
+  flex-shrink: 0;
+  /* Gestion du contenu long */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Classes de niveau pour l'indentation progressive */
+.comment-level-0 {
+  border-left: none;
+}
+
+.comment-level-1 {
+  border-left: 2px solid #e8f0fe;
+}
+
+.comment-level-2 {
+  border-left: 2px solid #d2e3fc;
+}
+
+.comment-level-3 {
+  border-left: 2px solid #aecbfa;
+}
+
+/* Distinction visuelle entre commentaires principaux et réponses */
+.comment-main {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.comment-reply {
+  background: #f8f9fb;
+  border-radius: var(--radius-md);
+  padding: 12px;
+  border: 1px solid #e8eaed;
+}
+
+/* =================================================================== */
+/* LIGNES DE CONNEXION - Visualisation hiérarchique                  */
+/* =================================================================== */
+
+.comment-thread-line {
+  position: absolute;
+  left: -25px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, #667eea 0%, transparent 100%);
+  opacity: 0.3;
+}
+
+.comment-level-1 .comment-thread-line {
+  background: linear-gradient(to bottom, #667eea 0%, transparent 100%);
+}
+
+.comment-level-2 .comment-thread-line {
+  background: linear-gradient(to bottom, #5a6fd8 0%, transparent 100%);
+}
+
+.comment-level-3 .comment-thread-line {
+  background: linear-gradient(to bottom, #4f46e5 0%, transparent 100%);
+}
+
+/* =================================================================== */
+/* CONTENU PRINCIPAL DU COMMENTAIRE                                   */
+/* =================================================================== */
+
+.comment-main-content {
+  position: relative;
+}
+
+.comment-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.comment-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+/* =================================================================== */
+/* AVATAR ET INFORMATIONS AUTEUR                                      */
+/* =================================================================== */
+
+.comment-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.comment-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.comment-avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #667eea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.comment-author-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.comment-author-link {
+  color: #000; /* Noir pour le nom d'utilisateur */
+  text-decoration: none;
+  font-weight: 700; /* bold pour hiérarchiser l'émetteur */
+  font-size: 0.95rem; /* ~15px pour le nom d'utilisateur */
+  transition: color 0.2s ease;
+}
+
+.comment-author-link:hover {
+  color: #333; /* Légèrement plus clair au hover mais reste lisible */
+  text-decoration: underline;
+}
+
+.comment-author-name {
+  color: #000; /* Noir pour le nom d'utilisateur */
+  font-weight: 700; /* bold pour hiérarchiser l'émetteur */
+  font-size: 0.95rem; /* ~15px pour le nom d'utilisateur */
+  margin-right: auto;
+}
+
+.comment-date {
+  color: var(--color-gray-600); /* Gris pour dé-emphase */
+  font-size: 0.75rem; /* 12px pour le temps */
+  font-weight: 500; /* semi-bold pour meilleure lisibilité */
+  font-style: normal; /* Suppression de l'italique */
+  display: inline-flex;
+  align-items: center;
+}
+
+/* =================================================================== */
+/* ACTIONS DU COMMENTAIRE                                             */
+/* =================================================================== */
+
+.comment-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.comment-delete-btn {
+  background: none;
+  border: none;
+  padding: 4px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.comment-delete-btn:hover {
+  opacity: 1;
+  background: #fee2e2;
+}
+
+/* =================================================================== */
+/* CONTENU ET ACTIONS INLINE                                         */
+/* =================================================================== */
+
+.comment-content {
+  margin: 8px 0 6px; /* Réduit la marge inférieure */
+  position: relative; /* Pour positionner le bouton de réponse */
+  border: none; /* Suppression explicite de toute bordure */
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.comment-text-container {
+  width: 100%;
+}
+
+.comment-text {
+  width: 100%;
+}
+
+.comment-content p {
+  margin: 0;
+  color: #000; /* Noir pour le texte du commentaire */
+  line-height: 1.5;
+  font-size: 0.875rem; /* 14px pour le texte du commentaire */
+  font-weight: 400; /* regular pour lecture fluide */
+  word-wrap: break-word;
+  border: none; /* Suppression explicite de toute bordure */
+}
+
+/* Container pour les actions en ligne dans le contenu */
+.comment-inline-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Aligner à droite */
+  gap: 8px; /* Espacement réduit entre les boutons */
+  opacity: 0.75; /* Légèrement transparent pour être plus discret */
+  transition: opacity 0.2s ease; /* Transition douce */
+  border: none !important; /* Suppression explicite de toute bordure avec !important */
+  padding-top: 4px; /* Espacement avec le texte au-dessus */
+  white-space: nowrap; /* Empêcher le retour à la ligne des boutons */
+  width: 100%;
+  margin-top: 2px; /* Léger espacement avec le texte */
+}
+
+.comment-content:hover .comment-inline-actions {
+  opacity: 1; /* Pleine opacité au survol pour meilleure visibilité */
+}
+
+/* Bouton de réponse intégré dans le contenu - ultra minimaliste */
+.comment-inline-reply-btn {
+  background: none !important;
+  border: none !important; /* Suppression explicite de toute bordure avec !important */
+  outline: none !important; /* Suppression du contour au focus */
+  color: var(--color-gray-500); /* Gris pour être discret */
+  font-size: 0.65rem; /* Texte plus petit pour minimalisme */
+  font-weight: 500;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 0; /* Suppression des coins arrondis */
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 18px;
+  text-decoration: none; /* Suppression du soulignement */
+  box-shadow: none !important; /* Suppression de toute ombre */
+}
+
+.comment-inline-reply-btn:hover {
+  color: var(--color-gray-800); /* Plus foncé au survol */
+  background: none !important;
+  border: none !important;
+}/* Le code du footer est supprimé car il n'est plus utilisé */
+
+/* =================================================================== */
+/* BOUTONS D'ACTION (RÉPONDRE, TOGGLE)                               */
+/* =================================================================== */
+
+.comment-reply-btn {
+  background: none;
+  border: none;
+  color: var(--color-gray-500); /* gris pour action discrète */
+  font-size: 0.7rem; /* Réduit à 11px pour être plus discret */
+  font-weight: 500; /* medium pour meilleure lisibilité */
+  cursor: pointer;
+  padding: 2px 6px; /* Padding réduit */
+  border-radius: 20px; /* Plus arrondi pour style moderne */
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 22px; /* Hauteur fixe pour uniformité */
+}
+
+.comment-reply-btn:hover {
+  background: #f0f2f5; /* Légèrement plus clair */
+  color: var(--color-gray-700); /* Plus foncé au hover */
+}
+
+.comment-toggle-replies {
+  background: none !important;
+  border: none !important; /* Suppression explicite de toute bordure avec !important */
+  outline: none !important; /* Suppression du contour au focus */
+  color: var(--color-gray-500); /* Gris pour être discret */
+  font-size: 0.65rem; /* Texte plus petit pour minimalisme */
+  font-weight: 500;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 0; /* Suppression des coins arrondis */
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 18px;
+  text-decoration: none; /* Suppression du soulignement */
+  box-shadow: none !important; /* Suppression de toute ombre */
+}
+
+.comment-toggle-replies:hover {
+  color: var(--color-gray-800); /* Plus foncé au survol */
+  background: none !important;
+  border: none !important;
+}
+
+/* =================================================================== */
+/* ADAPTATIONS MOBILES                                               */
+/* =================================================================== */
+
+@media (max-width: 480px) {
+  .comment-inline-actions {
+    gap: 6px;
+    margin-top: 3px;
+    max-width: 60%; /* Un peu plus large sur mobile */
+  }
+  
+  .comment-inline-reply-btn,
+  .comment-toggle-replies {
+    font-size: 0.6rem; /* Encore plus petit sur mobile */
+    padding: 1px 2px;
+    border: none; /* Réaffirmer l'absence de bordure sur mobile */
+  }
+  
+  /* Simplifier au maximum sur très petits écrans */
+  @media (max-width: 360px) {
+    .comment-inline-actions {
+      gap: 4px;
+      max-width: 70%; /* Encore plus large sur très petits écrans */
+    }
+    
+    .comment-inline-reply-btn,
+    .comment-toggle-replies {
+      padding: 1px;
+      font-size: 0.58rem;
+      border: none; /* Réaffirmer l'absence de bordure sur très petits écrans */
+    }
+  }
+}
+
+/* =================================================================== */
+/* ZONE DES RÉPONSES                                                  */
+/* =================================================================== */
+
+.comment-replies {
+  margin-top: 12px;
+  padding-left: 20px;
+  border-left: 1px solid #e5e7eb;
+  position: relative;
+  /* Assurer l'expansion complète des réponses imbriquées */
+  overflow: visible;
+  max-height: none;
+  height: auto;
+  /* Éviter la compression */
+  flex-shrink: 0;
+}
+
+.comment-replies::before {
+  content: '';
+  position: absolute;
+  left: -1px;
+  top: 0;
+  width: 1px;
+  height: 20px;
+  background: #667eea;
+  opacity: 0.5;
+}
+
+/* =================================================================== */
+/* FORMULAIRE DE RÉPONSE INLINE                                       */
+/* =================================================================== */
+
+.comment-reply-form {
+  margin-top: 12px;
+  padding: 12px;
+  background: #f8f9fb;
+  border-radius: var(--radius-md);
+  border: 1px solid #e5e7eb;
+}
+
+.reply-form {
+  width: 100%;
+}
+
+.reply-form-content {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.reply-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.reply-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.reply-avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #667eea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+.reply-input-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reply-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.85rem;
+  resize: vertical;
+  min-height: 60px;
+  max-height: 120px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.reply-input:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+.reply-input::placeholder {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.reply-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.reply-cancel-btn {
+  background: none;
+  border: 1px solid #d1d5db;
+  color: #6b7280;
+  padding: 6px 12px;
+  border-radius: var(--radius-xs);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reply-cancel-btn:hover:not(:disabled) {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.reply-submit-btn {
+  background: #667eea;
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  border-radius: var(--radius-xs);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reply-submit-btn:hover:not(:disabled) {
+  background: #5a6fd8;
+}
+
+.reply-submit-btn:disabled {
+  background: #d1d5db;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* =================================================================== */
+/* ANIMATIONS                                                          */
+/* =================================================================== */
+
+.comment-item {
+  animation: slideInComment 0.3s ease-out;
+}
+
+@keyframes slideInComment {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.comment-replies {
+  animation: expandReplies 0.3s ease-out;
+}
+
+@keyframes expandReplies {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scaleY(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+/* =================================================================== */
+/* RESPONSIVE MOBILE                                                  */
+/* =================================================================== */
+
+@media (max-width: 768px) {
+  /* Amélioration du conteneur principal pour mobile */
+  .comments-container {
+    max-height: 60vh; /* Hauteur adaptée pour mobile */
+    min-height: 250px; /* Hauteur minimum pour éviter le tassement */
+    padding-right: 8px; /* Moins d'espace sur mobile */
+  }
+  
+  .comments-container::-webkit-scrollbar {
+    width: 4px; /* Barre de défilement plus fine sur mobile */
+  }
+  
+  .comment-main {
+    padding: 12px;
+    border-radius: var(--radius-md);
+  }
+  
+  .comment-reply {
+    padding: 10px;
+    border-radius: var(--radius-sm);
+  }
+  
+  .comment-avatar {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .comment-author-info {
+    gap: 4px;
+  }
+  
+  .comment-author-link,
+  .comment-author-name {
+    font-size: 0.95rem; /* Maintenir ~15px sur mobile */
+    font-weight: 700; /* Conserver le bold */
+    color: #000; /* Maintenir le noir */
+  }
+  
+  .comment-date {
+    font-size: 0.75rem; /* Maintenir 12px sur mobile */
+    color: var(--color-gray-600); /* Maintenir le gris */
+    font-weight: 500; /* Maintenir semi-bold */
+  }
+  
+  .comment-content p {
+    font-size: 0.875rem; /* Maintenir 14px sur mobile */
+    line-height: 1.4;
+    color: #000; /* Maintenir le noir */
+    font-weight: 400; /* Maintenir regular */
+  }
+  
+  .comment-footer-actions {
+    gap: 12px;
+  }
+  
+  .comment-reply-btn,
+  .comment-toggle-replies {
+    font-size: 0.75rem; /* Maintenir 12px sur mobile */
+    padding: 3px 6px;
+    color: var(--color-gray-600); /* Maintenir le gris */
+    font-weight: 400; /* Maintenir regular */
+  }
+  
+  .comment-replies {
+    padding-left: 15px;
+    margin-top: 8px;
+    /* Assurer l'expansion complète sur mobile */
+    overflow: visible;
+    max-height: none;
+    height: auto;
+  }
+  
+  .reply-form-content {
+    gap: 8px;
+  }
+  
+  .reply-avatar {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .reply-input {
+    min-height: 50px;
+    font-size: 0.8rem;
+    padding: 6px 10px;
+  }
+  
+  .reply-actions {
+    gap: 6px;
+  }
+  
+  .reply-cancel-btn,
+  .reply-submit-btn {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+  }
+}
+
+/* =================================================================== */
+/* ÉTATS SPÉCIAUX                                                     */
+/* =================================================================== */
+
+/* Commentaire en cours de suppression */
+.comment-item.deleting {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Commentaire nouvellement ajouté */
+.comment-item.new {
+  background: rgba(102, 126, 234, 0.05);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+/* Focus pour l'accessibilité */
+.comment-reply-btn:focus,
+.comment-toggle-replies:focus,
+.comment-delete-btn:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+.reply-input:focus {
+  outline: none;
+}
+
+.reply-cancel-btn:focus,
+.reply-submit-btn:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* =================================================================== */
+/* CORRECTIONS POUR EXPANSION COMPLÈTE DES COMMENTAIRES IMBRIQUÉS    */
+/* =================================================================== */
+
+/* Assurer que tous les niveaux de commentaires s'affichent complètement */
+.comment-thread,
+.comment-item,
+.comment-reply,
+.comment-replies,
+.comment-content {
+  /* Supprimer toute contrainte de hauteur */
+  max-height: none !important;
+  height: auto !important;
+  min-height: auto !important;
+  /* Permettre l'expansion complète */
+  overflow: visible !important;
+  /* Éviter la compression */
+  flex-shrink: 0 !important;
+  /* Gestion du texte long */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* Conteneurs spécifiques pour les réponses imbriquées */
+.comment-replies-container,
+.nested-replies {
+  overflow: visible !important;
+  max-height: none !important;
+  height: auto !important;
+  display: block !important;
+}
+
+/* Assurer que les listes de commentaires s'étendent complètement */
+.comments-list,
+.comment-thread-list {
+  overflow: visible !important;
+  max-height: none !important;
+  height: auto !important;
+  /* Permettre l'expansion de tous les enfants */
+}
+
+.comments-list > *,
+.comment-thread-list > * {
+  overflow: visible !important;
+  max-height: none !important;
+  height: auto !important;
+  flex-shrink: 0 !important;
+}
+
+/* Corrections spécifiques pour les niveaux profonds d'imbrication */
+.comment-level-4,
+.comment-level-5,
+.comment-level-6 {
+  overflow: visible !important;
+  max-height: none !important;
+  height: auto !important;
+  /* Plus d'espacement pour les niveaux profonds */
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+/* S'assurer que le contenu textuel ne soit jamais tronqué */
+.comment-text,
+.comment-body,
+.comment-message {
+  overflow: visible !important;
+  max-height: none !important;
+  height: auto !important;
+  white-space: normal !important;
+  text-overflow: clip !important;
+  /* Permettre les retours à la ligne */
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Corrections pour les animations qui pourraient causer des problèmes */
+.comment-item.animating,
+.comment-reply.animating {
+  max-height: none !important;
+  height: auto !important;
+  overflow: visible !important;
+}
+
+/* S'assurer que les formulaires de réponse s'affichent correctement */
+.comment-reply-form,
+.inline-reply-form {
+  overflow: visible !important;
+  max-height: none !important;
+  height: auto !important;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+/* Débogage - classe utilitaire pour identifier les problèmes */
+.debug-expansion {
+  border: 2px dashed red !important;
+  background: rgba(255, 0, 0, 0.1) !important;
+}
+
+/* =================================================================== */
+/* MOBILE - CORRECTIONS SUPPLÉMENTAIRES                              */
+/* =================================================================== */
+
+@media (max-width: 768px) {
+  /* S'assurer que sur mobile aussi tout s'affiche correctement */
+  .comment-thread,
+  .comment-item,
+  .comment-reply,
+  .comment-replies {
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    /* Plus d'espacement sur mobile pour éviter le tassement */
+    margin-bottom: 10px;
+  }
+  
+  /* Réduire l'indentation sur mobile pour économiser l'espace */
+  .comment-replies {
+    padding-left: 12px;
+  }
+  
+  .comment-level-3 .comment-replies,
+  .comment-level-4 .comment-replies {
+    padding-left: 8px; /* Moins d'indentation pour les niveaux profonds */
+  }
+}
+
+/* =================================================================== */
+/* TYPOGRAPHIE SELON SPÉCIFICATIONS                                   */
+/* =================================================================== */
+
+/* Titre principal des commentaires */
+.comments-title,
+.comments-header h1,
+.comments-header h2,
+.comments-header h3,
+.comments-header h4 {
+  font-size: 1.25rem; /* ~20px - Titre principal */
+  font-weight: 600; /* semi-bold pour "Commentaires" */
+  color: #000; /* Noir pour le titre */
+  text-align: center;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.01em; /* Légère optimisation typographique */
+}
+
+/* Hiérarchie typographique des commentaires */
+.comment-thread .comment-author-name,
+.comment-thread .comment-author-link {
+  font-size: 0.95rem; /* ~15px pour le nom d'utilisateur */
+  font-weight: 700; /* bold pour hiérarchiser l'émetteur */
+  color: #000; /* Noir pour le nom d'utilisateur */
+}
+
+.comment-thread .comment-text,
+.comment-thread .comment-content p,
+.comment-thread .comment-body {
+  font-size: 0.875rem; /* 14px pour le texte du commentaire */
+  font-weight: 400; /* regular pour lecture fluide */
+  color: #000; /* Noir pour le texte */
+  line-height: 1.5;
+}
+
+.comment-thread .comment-date,
+.comment-thread .comment-time {
+  font-size: 0.75rem; /* 12px pour le temps */
+  color: var(--color-gray-600); /* Gris pour dé-emphase */
+  font-weight: 500; /* semi-bold pour meilleure lisibilité */
+  font-style: normal;
+}
+
+.comment-thread .comment-reply-btn,
+.comment-thread .comment-action-btn,
+.comment-thread .comment-toggle-replies {
+  font-size: 0.75rem; /* 12px pour les actions */
+  font-weight: 400; /* regular */
+  color: var(--color-gray-600); /* gris pour action discrète */
+}

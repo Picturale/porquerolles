@@ -1,0 +1,106 @@
+/* Styles pour le composant de prévisualisation de texte */
+
+.text-preview {
+  padding: 15px;
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: var(--radius-lg);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #333;
+  margin-top: 10px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.text-preview strong {
+  font-weight: 700;
+}
+
+.text-preview blockquote {
+  border-left: 3px solid #6366f1;
+  padding-left: 10px;
+  color: #555;
+  font-style: italic;
+  margin: 10px 0;
+}
+
+.text-preview a {
+  color: #4f46e5;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.text-preview a:hover {
+  color: #7c3aed;
+  text-decoration: underline;
+}
+
+.text-preview hr {
+  border: none;
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 15px 0;
+}
+
+.text-preview .preview-mention {
+  color: #4f46e5;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.text-preview .preview-mention:hover {
+  opacity: 0.8;
+}
+
+.text-preview .preview-hashtag {
+  color: #ff6b35;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.text-preview .preview-hashtag:hover {
+  opacity: 0.8;
+}
+
+/* Styles pour les différents alignements */
+.text-preview [style*="text-align: center"] {
+  text-align: center;
+  display: block;
+}
+
+.text-preview [style*="text-align: right"] {
+  text-align: right;
+  display: block;
+}
+
+.text-preview [style*="text-align: left"] {
+  text-align: left;
+  display: block;
+}
+
+/* Style pour la prévisualisation active */
+.text-preview.active {
+  border-color: #4f46e5;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.2);
+}
+
+/* Animation d'apparition */
+.text-preview {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
