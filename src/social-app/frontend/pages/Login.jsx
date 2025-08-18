@@ -31,7 +31,7 @@ function Login() {
     try {
       await login(user.email, user.password);
       setDevMessage(`✅ Connecté: ${user.name}`);
-      navigate('/home');
+      navigate('/welcome');
     } catch (error) {
       console.error('❌ Erreur de connexion:', error);
       console.error('Code d\'erreur:', error.code);
@@ -44,7 +44,7 @@ function Login() {
         try {
           const userCredential = await createUserWithEmailAndPassword(auth, user.email, user.password);
           setDevMessage(`✅ Utilisateur créé et connecté: ${user.name}`);
-          navigate('/home');
+          navigate('/welcome');
         } catch (createError) {
           console.error('❌ Erreur de création:', createError);
           if (createError.code === 'auth/email-already-in-use') {
@@ -108,7 +108,7 @@ function Login() {
 
     try {
       await login(email, password);
-      navigate('/home');
+      navigate('/welcome');
     } catch (error) {
       setError('Échec de connexion. Vérifiez vos identifiants.');
       console.error('Login error:', error.message);

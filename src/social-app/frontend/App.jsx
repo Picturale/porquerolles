@@ -89,14 +89,14 @@ function App() {
             {/** /invite route removed */}
             <Route
               path="/login"
-              element={currentUser ? <Navigate to="/home" replace /> : <Login />}
+              element={currentUser ? <Navigate to="/welcome" replace /> : <Login />}
             />
             <Route
               path="/register"
-              element={currentUser ? <Navigate to="/home" replace /> : <Register />}
+              element={currentUser ? <Navigate to="/welcome" replace /> : <Register />}
             />
             <Route path="/welcome" element={<Welcome />} />
-            <Route path="/home" element={<Home />} />
+            <Route path="/home" element={<Navigate to="/welcome" replace />} />
             <Route
               path="/edit-profile"
               element={

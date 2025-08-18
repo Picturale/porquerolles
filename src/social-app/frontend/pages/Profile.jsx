@@ -215,7 +215,7 @@ function Profile() {
       <div className="error-container">
         <h2>Erreur</h2>
         <p>{error}</p>
-        <Link to="/home">Retour à l'accueil</Link>
+        <Link to="/welcome">Retour à l'accueil</Link>
       </div>
     );
   }
@@ -231,7 +231,7 @@ function Profile() {
           </div>
         )}
         <div className="profile-not-found-actions">
-          <Link to="/home" className="back-button">
+          <Link to="/welcome" className="back-button">
             Retour à l'accueil
           </Link>
         </div>

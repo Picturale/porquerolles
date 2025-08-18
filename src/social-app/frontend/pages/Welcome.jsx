@@ -51,7 +51,7 @@ const Welcome = () => {
                 </p>
                 <button
                   className="feed-btn primary"
-                  onClick={() => navigate('/home')}
+                  onClick={() => navigate('/welcome')}
                 >
                   Accéder au feed
                 </button>

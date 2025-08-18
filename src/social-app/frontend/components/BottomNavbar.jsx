@@ -30,8 +30,8 @@ function BottomNavbar() {
   }, [currentUser]);
 
   const isActive = (path) => {
-    if (path === '/home') {
-      return location.pathname === '/' || location.pathname === '/home';
+    if (path === '/welcome') {
+      return location.pathname === '/' || location.pathname === '/welcome';
     }
     return location.pathname.startsWith(path);
   };
@@ -51,8 +51,8 @@ function BottomNavbar() {
     <nav className="bottom-navbar">
       <div className="bottom-nav-container">
         <Link 
-          to="/home" 
-          className={`bottom-nav-item ${isActive('/home') ? 'active' : ''}`}
+          to="/welcome" 
+          className={`bottom-nav-item ${isActive('/welcome') ? 'active' : ''}`}
         >
           <FaHome className="bottom-nav-icon" />
           <span className="bottom-nav-text">Accueil</span>

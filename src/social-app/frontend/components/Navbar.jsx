@@ -48,7 +48,7 @@ function Navbar() {
         </a>
 
         <div className="navbar-links">
-          <Link to="/home" className="nav-item">
+          <Link to="/welcome" className="nav-item">
             <FaHome className="nav-icon" />
             <span className="nav-text">Accueil</span>
           </Link>

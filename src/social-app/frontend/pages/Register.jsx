@@ -100,7 +100,7 @@ function Register() {
       
       await setDoc(doc(db, 'users', user.uid), userDoc);
 
-      navigate('/home');
+      navigate('/welcome');
     } catch (error) {
       console.error('❌ Registration error:', error);
       console.error('❌ Error code:', error.code);
