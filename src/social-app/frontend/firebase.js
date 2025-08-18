@@ -47,9 +47,9 @@ const app = initializeApp(firebaseConfig);
 // Initialize Firebase Authentication
 export const auth = getAuth(app);
 
-// Initialize Cloud Firestore (supports named database via env; default to 'porquerolles')
-const databaseId = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_FIREBASE_DATABASE_ID) || 'porquerolles';
-export const db = getFirestore(app, databaseId);
+// Initialize Cloud Firestore (supports named database via env; default to (default))
+const databaseId = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_FIREBASE_DATABASE_ID) || undefined;
+export const db = databaseId ? getFirestore(app, databaseId) : getFirestore(app);
 
 // Initialize Cloud Storage
 export const storage = getStorage(app);

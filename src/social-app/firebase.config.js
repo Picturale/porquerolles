@@ -47,7 +47,7 @@ const USE_EMULATORS = false; // Changez à true quand les émulateurs sont prêt
 
 // Export the appropriate configuration
 export const firebaseConfig = (isDev && USE_EMULATORS) ? emulatorConfig : prodConfig;
-export const databaseId = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_FIREBASE_DATABASE_ID) || 'porquerolles';
+export const databaseId = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_FIREBASE_DATABASE_ID) || undefined;
 
 // Export development status for debugging
 export const isDevEnvironment = isDev;
