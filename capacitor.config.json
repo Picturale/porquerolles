@@ -1,14 +1,26 @@
 {
-  "appId": "com.visionpicturale.community",
-  "appName": "Vision Picturale",
-  "webDir": "src",
+  "appId": "porquerolles.connect",
+  "appName": "Porquerolles Connect",
+  "webDir": "dist/social-app",
   "server": {
-    "androidScheme": "https"
+    "url": "https://porquerolles-16e8d.web.app/",
+    "androidScheme": "https",
+    "cleartext": false
   },
   "ios": {
-    "scheme": "Vision Picturale"
+    "scheme": "capacitor",
+    "contentInset": "automatic",
+    "scrollEnabled": true,
+    "backgroundColor": "#ffffff"
   },
   "android": {
     "allowMixedContent": true
+  },
+  "plugins": {
+    "StatusBar": {
+      "overlays": false,
+      "style": "DARK",
+      "backgroundColor": "#ffffff"
+    }
   }
 }

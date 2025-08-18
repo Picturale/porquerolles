@@ -74,17 +74,11 @@ service cloud.firestore {
       allow create: if request.auth != null 
         && request.auth.uid == request.resource.data.userId;
       
-      // Mise à jour par l'auteur OU mises à jour limitées par des membres invités
+      // Mise à jour par l'auteur
       // Interdiction explicite de modifier le sous-objet "agg" côté client (CF only)
       allow update: if request.auth != null 
         && !isTouchingAgg()
-        && (
-          request.auth.uid == resource.data.userId 
-          || (onlyUpdatingLikes() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.invited == true)
-          || (onlyUpdatingRatingStats() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.invited == true)
-            || (onlyUpdatingEchoesStats() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.invited == true)
-            || (onlyUpdatingVisualResponsesCount() && request.auth != null)
-        );
+        && (request.auth.uid == resource.data.userId || onlyUpdatingVisualResponsesCount());
       
       // Suppression seulement par l'auteur
       allow delete: if request.auth != null 
@@ -125,11 +119,9 @@ service cloud.firestore {
       // Lecture publique
       allow read: if true;
       
-      // Création seulement par l'utilisateur authentifié
-      // et disposant d'une invitation (profil.invited == true)
+  // Création seulement par l'utilisateur authentifié
       allow create: if request.auth != null 
         && request.auth.uid == request.resource.data.userId
-        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.invited == true
         && request.resource.data.keys().hasAll(['userId', 'postId', 'createdAt']);
       
       // Suppression par l'auteur du like OU par l'auteur du post
@@ -144,10 +136,8 @@ service cloud.firestore {
       allow read: if true;
       
   // Création/Mise à jour seulement par l'utilisateur authentifié pour sa propre note
-  // et disposant d'une invitation (profil.invited == true)
       allow create, update: if request.auth != null 
         && request.auth.uid == request.resource.data.userId
-        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.invited == true
         && request.resource.data.rating >= 0 
         && request.resource.data.rating <= 5
         && request.resource.data.postId is string
@@ -248,11 +238,9 @@ service cloud.firestore {
              exists(/databases/$(database)/documents/conversations/$(resource.data.conversationId)) &&
              request.auth.uid in get(/databases/$(database)/documents/conversations/$(resource.data.conversationId)).data.participants));
       
-      // Création par utilisateur authentifié avec validation
-      // et disposant d'une invitation (profil.invited == true)
+  // Création par utilisateur authentifié avec validation
       allow create: if request.auth != null 
         && request.auth.uid == request.resource.data.senderId
-        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.invited == true
         && request.resource.data.keys().hasAll(['senderId', 'receiverId', 'content', 'createdAt', 'read'])
         && request.resource.data.senderId is string
         && request.resource.data.receiverId is string
@@ -283,11 +271,9 @@ service cloud.firestore {
       allow read: if request.auth != null 
         && request.auth.uid in resource.data.participants;
       
-      // Création par utilisateur authentifié
-      // et disposant d'une invitation (profil.invited == true)
+  // Création par utilisateur authentifié
       allow create: if request.auth != null 
         && request.auth.uid in request.resource.data.participants
-        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.invited == true
         && request.resource.data.keys().hasAll(['participants', 'lastMessage', 'lastMessageAt', 'createdAt'])
         && request.resource.data.participants is list
         && request.resource.data.participants.size() == 2;
@@ -306,11 +292,9 @@ service cloud.firestore {
       // Lecture publique pour calculer les statistiques
       allow read: if true;
       
-      // Création/Mise à jour seulement par l'utilisateur authentifié pour sa propre notation
-      // et disposant d'une invitation (profil.invited == true)
+  // Création/Mise à jour seulement par l'utilisateur authentifié pour sa propre notation
       allow create, update: if request.auth != null 
         && request.auth.uid == request.resource.data.userId
-        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.invited == true
         && request.resource.data.postId is string
         && request.resource.data.userId == request.auth.uid
         && request.resource.data.rating is map
@@ -431,10 +415,8 @@ service cloud.firestore {
       // Lecture publique pour calculer les statistiques
       allow read: if true;
       
-      // Création/Mise à jour seulement par l'auteur du post original (qui a créé le défi)
-      // L'utilisateur doit être authentifié et avoir une invitation
+  // Création/Mise à jour seulement par l'auteur du post original (qui a créé le défi)
       allow create, update: if request.auth != null 
-        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.invited == true
         && request.resource.data.postId is string
         && request.resource.data.visualResponseId is string
         && request.resource.data.userId == request.auth.uid

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getInvitesUser, moderationDecide } from '../../services/adminApi';
+import { moderationDecide } from '../../services/adminApi';
 import { listModeration } from '../../services/moderationApi';
 
 export default function Moderation() {
@@ -29,33 +29,22 @@ export default function Moderation() {
 
   const userSearch = async () => {
     if (mode !== 'users') return;
-    setUserError(null);
+    setUserLoading(false);
     setUserResult(null);
-    const q = (query || '').trim();
-    if (!q) return;
-    setUserLoading(true);
-    try {
-      const byEmail = q.includes('@');
-      const res = await getInvitesUser(byEmail ? { email: q } : { uid: q });
-      setUserResult(res.user || null);
-    } catch (e) {
-      setUserError('Utilisateur introuvable ou accès refusé');
-    } finally {
-      setUserLoading(false);
-    }
+    setUserError('Recherche utilisateur désactivée (invites supprimés).');
   };
 
   const act = async (id: string, action: string) => {
     try {
       await moderationDecide(id, action, 'admin_action');
-    } catch (e) {}
+    } catch {}
   };
 
   return (
     <div style={{ padding: 16 }}>
       <h2>Modération</h2>
       <div style={{ margin: '8px 0', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-        <select value={mode} onChange={(e) => setMode(e.target.value as any)} style={{ padding: '6px 8px' }}>
+  <select value={mode} onChange={(e) => setMode((e.target.value as 'posts' | 'users'))} style={{ padding: '6px 8px' }}>
           <option value="posts">Post</option>
           <option value="users">Utilisateur</option>
         </select>
@@ -99,7 +88,7 @@ export default function Moderation() {
               <div style={{ fontSize: 12, color: '#6b7280', marginTop: 6, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                 <span>Badge: {userResult.badge || '-'}</span>
                 <span>T: {userResult?.trust?.T ?? '-'}</span>
-                <span>Invites: {userResult?.invites?.balance ?? 0}</span>
+                {/* Invites removed */}
               </div>
             </div>
           )}

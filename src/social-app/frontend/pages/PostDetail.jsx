@@ -1,3 +1,4 @@
+import { Capacitor } from '@capacitor/core';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
@@ -48,6 +49,31 @@ function PostDetail() {
 
   // States pour la modal d'image
   const [selectedImage, setSelectedImage] = useState(null);
+
+  // Fonction pour normaliser les URLs
+  const normalizeUrl = (url) => {
+    const u = String(url || '').trim();
+    if (!u) return '';
+    return /^(https?:)?\/\//i.test(u) ? u : `https://${u}`;
+  };
+
+  // Fonction pour ouvrir les liens dans un navigateur intégré (mobile) ou nouvel onglet (web)
+  const openInApp = async (url) => {
+    const normalized = normalizeUrl(url);
+    if (!normalized) return;
+    try {
+      if (Capacitor?.isNativePlatform?.()) {
+        // Try dynamic import to avoid hard dependency
+        const mod = await import('@capacitor/browser');
+        await mod.Browser.open({ url: normalized });
+        return;
+      }
+    } catch (_) {
+      // fallback to external below
+    }
+    // Web or plugin unavailable: open external tab (web-only fallback)
+    window.open(normalized, '_blank', 'noopener');
+  };
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
 
   // États pour les contrôles vidéo (gérés par VideoPlayer)
@@ -556,45 +582,80 @@ function PostDetail() {
       {/* Ressources affiliées (en bas de page) */}
       {Array.isArray(post.affiliateResources) && post.affiliateResources.length > 0 && (
         <div className="post-ingredients-section" style={{ marginTop: 16 }}>
-          <h3>Ressources affiliées</h3>
+          <h3>Ressources recommandées</h3>
           <div className="post-ingredients" style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
             {post.affiliateResources.map((r, idx) => (
-              <a
+              <button
                 key={`${r.kind}:${r.id}:${idx}`}
-                href={r.linkUrl || (r.domain ? `https://${r.domain}` : '#')}
-                target="_blank"
-                rel="noopener noreferrer"
+                onClick={() => openInApp(r.linkUrl || (r.domain ? `https://${r.domain}` : ''))}
                 className="ingredient-item"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: 6,
+                  gap: 8,
                   border: '1px solid #e5e7eb',
-                  borderRadius: 999,
-                  padding: '4px 8px',
+                  borderRadius: 12,
+                  padding: '6px 10px',
                   textDecoration: 'none',
                   color: 'inherit',
+                  maxWidth: '100%',
+                  background: 'transparent',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = '#f8fafc';
+                  e.target.style.borderColor = '#cbd5e1';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = 'transparent';
+                  e.target.style.borderColor = '#e5e7eb';
                 }}
               >
-                {r.logoUrl ? (
+                {r.imageUrl || r.logoUrl ? (
                   <img
-                    src={r.logoUrl}
+                    src={r.imageUrl || r.logoUrl}
                     alt=""
-                    style={{ width: 16, height: 16, borderRadius: 4, objectFit: 'cover' }}
+                    style={{ width: 32, height: 32, borderRadius: 6, objectFit: 'cover' }}
                   />
                 ) : (
                   <span
                     style={{
-                      width: 16,
-                      height: 16,
-                      borderRadius: 4,
+                      width: 32,
+                      height: 32,
+                      borderRadius: 6,
                       background: '#e5e7eb',
                       display: 'inline-block',
                     }}
                   />
                 )}
-                <span>{r.name}</span>
-              </a>
+                <span
+                  style={{
+                    fontSize: 14,
+                    color: '#0f172a',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    maxWidth: 220,
+                  }}
+                >
+                  {r.name}
+                </span>
+                {r.description && (
+                  <span
+                    style={{
+                      fontSize: 12,
+                      color: '#64748b',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      maxWidth: 280,
+                    }}
+                  >
+                    {r.description}
+                  </span>
+                )}
+              </button>
             ))}
           </div>
         </div>
@@ -668,7 +729,7 @@ function PostDetail() {
         ref={bottomMenuRef}
         post={post}
         commentCount={post?.commentsCount || 0}
-        onCommentClick={() => {}}
+        onCommentClick={() => { }}
         onVisualResponseClick={(result) => {
           // Optionnel: rafraîchir les réponses visuelles après création
           if (result && result.success) {
@@ -678,8 +739,8 @@ function PostDetail() {
             );
           }
         }}
-        onEchoClick={() => {}}
-        onShareClick={() => {}}
+        onEchoClick={() => { }}
+        onShareClick={() => { }}
         className={`${isBottomMenuVisible ? 'visible' : 'hidden'}`}
         style={{
           transform: `translateY(${bottomMenuOffset}px)`,

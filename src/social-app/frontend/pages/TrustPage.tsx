@@ -11,7 +11,7 @@ export default function TrustPage() {
         <ul>
           {cfg.badges.map((b) => (
             <li key={b.name}>
-              <strong>{b.name}</strong> — T ≥ {b.minT} — Invitations/mois: {b.invitesPerMonth}
+              <strong>{b.name}</strong> — T ≥ {b.minT}
             </li>
           ))}
         </ul>

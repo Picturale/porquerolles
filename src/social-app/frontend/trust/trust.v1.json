@@ -2,15 +2,14 @@
   "version": "1.0.0",
   "weights": { "T_from_Q": 15, "T_from_B": 1.5, "T_from_P": 0.8, "T_from_J": 0.6, "T_bias": 10 },
   "badges": [
-    { "name": "Seedling", "minT": 0,  "invitesPerMonth": 0 },
-    { "name": "Artisan",  "minT": 40, "invitesPerMonth": 1 },
-    { "name": "Mentor",   "minT": 70, "invitesPerMonth": 2 },
-    { "name": "Curator",  "minT": 85, "invitesPerMonth": 3 }
+    { "name": "Seedling", "minT": 0 },
+    { "name": "Artisan",  "minT": 40 },
+    { "name": "Mentor",   "minT": 70 },
+    { "name": "Curator",  "minT": 85 }
   ],
   "stability": { "minRatings": 7, "minTrusted": 3, "maxClusterShare": 0.4 },
   "moderation": { "maskWFS": 2.5, "queueWFS": 6, "voteBase": 0.2 },
-  "cooldowns": { "reRateSameAuthorHours": 72, "inviteBondDays": 30, "mentorBonusDays": 45 },
-  "invites": { "bondB": 5, "penaltyOnBanT": 5 },
+  "cooldowns": { "reRateSameAuthorHours": 72, "mentorBonusDays": 45 },
   "copy": {
     "public": {
       "trustLabel": "Indice confiance",

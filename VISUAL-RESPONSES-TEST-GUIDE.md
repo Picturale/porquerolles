@@ -136,7 +136,7 @@
    - ✅ Tentative directe bloquée par les règles Firebase
 
 3. **Utilisateurs non Invités**
-   - ✅ Utilisateur sans `invited: true` ne peut pas créer de réponses
+   - ✅ Les réponses visuelles peuvent être créées par tout utilisateur authentifié
    - ✅ Règles Firebase appliquées correctement
 
 ## 📱 Test Mobile (Capacitor)

@@ -22,17 +22,18 @@
 }
 
 /* Empêcher le zoom automatique sur tous les éléments de saisie */
-input, 
-textarea, 
-select, 
+input,
+textarea,
+select,
 button,
 .create-post-fullscreen input,
 .create-post-fullscreen textarea,
 .create-post-fullscreen select {
-  font-size: 16px !important; /* Taille minimale pour empêcher le zoom sur iOS */
+  font-size: 16px !important;
+  /* Taille minimale pour empêcher le zoom sur iOS */
   transform-origin: left top;
   zoom: 1;
-      border: 1px solid #e0e0e0 !important;
+  border: 1px solid #e0e0e0 !important;
 }
 
 /* Version plein écran - Cache les menus et occupe tout l'écran */
@@ -45,10 +46,13 @@ button,
   max-width: none !important;
   margin: 0 !important;
   padding: 0 !important;
-  padding-top: 60px !important; /* Espace pour le header fixe */
-  padding-bottom: max(140px, env(safe-area-inset-bottom, 140px)) !important; /* Espace garanti pour le bouton publier */
+  padding-top: calc(60px + env(safe-area-inset-top, 0)) !important;
+  /* Espace pour le header fixe + zone de sécurité iOS */
+  padding-bottom: max(140px, env(safe-area-inset-bottom, 140px)) !important;
+  /* Espace garanti pour le bouton publier */
   background: var(--color-white) !important;
-  z-index: 9999 !important; /* Au-dessus de tous les autres éléments */
+  z-index: 9999 !important;
+  /* Au-dessus de tous les autres éléments */
   overflow-y: auto !important;
   display: flex !important;
   flex-direction: column !important;
@@ -179,7 +183,8 @@ body.create-post-active .bottom-navbar {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  padding-bottom: 100px; /* Espace supplémentaire en bas */
+  padding-bottom: 100px;
+  /* Espace supplémentaire en bas */
   min-height: calc(100vh - 150px);
   background: var(--color-white);
 }
@@ -277,7 +282,8 @@ body.create-post-active .bottom-navbar {
 .title-input {
   width: 100%;
   padding: 12px 16px;
-  border: 2px solid #3b82f6; /* Bordure bleue par défaut */
+  border: 2px solid #3b82f6;
+  /* Bordure bleue par défaut */
   border-radius: var(--create-post-border-radius);
   font-family: inherit;
   font-size: 1rem;
@@ -288,7 +294,8 @@ body.create-post-active .bottom-navbar {
 
 .title-input:focus {
   outline: none;
-  border-color: #ff6b35; /* Bordure orange au focus */
+  border-color: #ff6b35;
+  /* Bordure orange au focus */
   background: #f8fafc;
   box-shadow: 0 0 0 1px rgba(255, 107, 53, 0.2);
 }
@@ -301,13 +308,14 @@ body.create-post-active .bottom-navbar {
 }
 
 @keyframes fadeIn {
-  from { 
-    opacity: 0; 
-    transform: translateY(-10px); 
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
   }
-  to { 
-    opacity: 1; 
-    transform: translateY(0); 
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -372,7 +380,8 @@ body.create-post-active .bottom-navbar {
 .crop-container {
   position: relative;
   width: 100%;
-  height: 400px; /* Hauteur fixe cruciale pour éviter le plein écran */
+  height: 400px;
+  /* Hauteur fixe cruciale pour éviter le plein écran */
   background: #000;
   border-radius: var(--create-post-border-radius);
   overflow: hidden;
@@ -402,7 +411,8 @@ body.create-post-active .bottom-navbar {
   border-radius: var(--create-post-border-radius);
   box-shadow: var(--create-post-shadow);
   position: relative;
-  z-index: 10; /* S'assurer que les contrôles restent au-dessus */
+  z-index: 10;
+  /* S'assurer que les contrôles restent au-dessus */
 }
 
 .zoom-control {
@@ -458,8 +468,15 @@ body.create-post-active .bottom-navbar {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .image-preview {
@@ -690,16 +707,17 @@ body.create-post-active .bottom-navbar {
 
 /* Responsive pour petits écrans */
 @media (max-width: 768px) {
+
   .video-container,
   .image-preview {
     padding: 0 16px;
   }
-  
+
   .video-player-container {
     max-width: 100%;
     border-radius: var(--radius-md);
   }
-  
+
   .preview-video,
   .video-player-video {
     max-width: 100%;
@@ -709,27 +727,29 @@ body.create-post-active .bottom-navbar {
 
 @media (max-width: 480px) {
   .create-post-container {
-    padding-bottom: 150px; /* Encore plus d'espace en bas sur mobile */
+    padding-bottom: 150px;
+    /* Encore plus d'espace en bas sur mobile */
   }
-  
+
   .create-post-fullscreen {
-    padding-bottom: 180px !important; /* Espace supplémentaire pour mobile en fullscreen */
+    padding-bottom: 180px !important;
+    /* Espace supplémentaire pour mobile en fullscreen */
   }
-  
+
   .video-container,
   .image-preview {
     padding: 0 8px;
   }
-  
+
   .video-player-container {
     border-radius: var(--radius-sm);
     box-shadow: var(--shadow-card);
   }
-  
+
   .video-preview-section {
     padding: 16px 12px;
   }
-  
+
   .video-preview-section h3 {
     font-size: 1.1rem;
     text-align: center;
@@ -765,20 +785,21 @@ body.create-post-active .bottom-navbar {
 
 /* Adaptation mobile pour les vidéos d'étapes */
 @media (max-width: 480px) {
+
   .step-video-player,
   .step-video-preview-player {
     max-width: 100%;
     margin: 0;
   }
-  
+
   .step-video-section {
     padding: 0 8px;
   }
-  
+
   .step-video-container {
     padding: 0;
   }
-  
+
   .step-image-preview .video-player-container {
     max-width: 280px;
   }
@@ -840,7 +861,8 @@ body.create-post-active .bottom-navbar {
 .method-input {
   width: 100%;
   padding: 12px;
-  border: 2px solid #3b82f6; /* Bordure bleue par défaut */
+  border: 2px solid #3b82f6;
+  /* Bordure bleue par défaut */
   border-radius: var(--create-post-border-radius);
   font-family: inherit;
   font-size: 0.9rem;
@@ -853,7 +875,8 @@ body.create-post-active .bottom-navbar {
 .ingredients-textarea {
   width: 100%;
   padding: 12px;
-  border: 2px solid #3b82f6; /* Bordure bleue par défaut */
+  border: 2px solid #3b82f6;
+  /* Bordure bleue par défaut */
   border-radius: var(--create-post-border-radius);
   font-family: inherit;
   font-size: 0.9rem;
@@ -878,7 +901,8 @@ body.create-post-active .bottom-navbar {
 .description-textarea:focus,
 .ingredients-textarea:focus {
   outline: none;
-  border-color: #ff6b35; /* Bordure orange au focus */
+  border-color: #ff6b35;
+  /* Bordure orange au focus */
   box-shadow: 0 0 0 1px rgba(255, 107, 53, 0.2);
 }
 
@@ -914,7 +938,7 @@ body.create-post-active .bottom-navbar {
   margin-top: 20px;
 }
 
-.method-image-section > label {
+.method-image-section>label {
   display: block;
   margin-bottom: 12px;
   font-weight: 500;
@@ -960,7 +984,7 @@ body.create-post-active .bottom-navbar {
   margin-top: 16px;
 }
 
-.method-steps-section > label {
+.method-steps-section>label {
   display: block;
   margin-bottom: 16px;
   font-weight: 600;
@@ -1190,7 +1214,8 @@ body.create-post-active .bottom-navbar {
 .step-textarea {
   width: 100%;
   padding: 12px;
-  border: 2px solid #3b82f6; /* Bordure bleue par défaut */
+  border: 2px solid #3b82f6;
+  /* Bordure bleue par défaut */
   border-radius: var(--radius-md);
   font-size: 0.9rem;
   line-height: 1.5;
@@ -1203,7 +1228,8 @@ body.create-post-active .bottom-navbar {
 .step-textarea:focus {
   outline: none;
   background: #f8fafc;
-  border-color: #ff6b35; /* Bordure orange au focus */
+  border-color: #ff6b35;
+  /* Bordure orange au focus */
   box-shadow: 0 0 0 1px rgba(255, 107, 53, 0.2);
 }
 
@@ -1422,7 +1448,9 @@ body.create-post-active .bottom-navbar {
   transition: var(--create-post-transition);
 }
 
-input, textarea, button {
+input,
+textarea,
+button {
   transition: var(--create-post-transition);
 }
 
@@ -1835,8 +1863,13 @@ input, textarea, button {
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Styles pour la barre de progression d'upload */
@@ -2187,41 +2220,41 @@ input, textarea, button {
   .create-post-card {
     padding: 16px;
   }
-  
+
   .step-image-actions {
     position: static;
     opacity: 1;
     margin-top: 8px;
     justify-content: center;
   }
-  
+
   .edit-image-btn {
     position: static;
     margin-top: 8px;
   }
-  
+
   .publish-button-container {
     justify-content: center;
     margin-top: 24px;
     padding-top: 16px;
   }
-  
+
   .publish-button {
     padding: 12px 16px;
     min-width: 100px;
     font-size: 0.8rem;
   }
-  
+
   .publish-text {
     font-size: 0.75rem;
   }
-  
+
   .publish-icon {
     width: 18px;
     height: 18px;
     stroke-width: 2.5;
   }
-  
+
   .btn-primary,
   .btn-secondary {
     padding: 10px 16px;
@@ -2315,18 +2348,18 @@ input, textarea, button {
     gap: 12px;
     align-items: stretch;
   }
-  
+
   .location-toggle-btn {
     width: 100%;
     justify-content: center;
   }
-  
+
   .current-location {
     flex-direction: column;
     gap: 8px;
     align-items: stretch;
   }
-  
+
   .remove-location-btn {
     align-self: flex-end;
   }
@@ -2364,8 +2397,15 @@ input, textarea, button {
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
 }
 
 .location-details {
@@ -2488,23 +2528,23 @@ input, textarea, button {
   .visual-responses-settings {
     padding: 16px;
   }
-  
+
   .setting-title {
     font-size: 15px;
   }
-  
+
   .setting-subtitle {
     font-size: 13px;
   }
-  
+
   .setting-option {
     padding: 10px;
   }
-  
+
   .setting-label {
     font-size: 14px;
   }
-  
+
   .setting-help {
     font-size: 12px;
     margin-left: 20px;
@@ -2594,7 +2634,7 @@ input, textarea, button {
     gap: 12px;
     align-items: stretch;
   }
-  
+
   .edit-location-btn {
     justify-content: center;
   }
@@ -2685,16 +2725,21 @@ input, textarea, button {
   align-items: center;
   justify-content: center;
   z-index: 2000;
-  padding: 0; /* Supprimé le padding pour plein écran */
+  padding: 0;
+  /* Supprimé le padding pour plein écran */
 }
 
 .popup-content {
   background: var(--color-white);
-  border-radius: 0; /* Supprimé le border-radius pour plein écran */
-  width: 100vw; /* Largeur plein écran */
-  height: 100vh; /* Hauteur plein écran */
+  border-radius: 0;
+  /* Supprimé le border-radius pour plein écran */
+  width: 100vw;
+  /* Largeur plein écran */
+  height: 100vh;
+  /* Hauteur plein écran */
   overflow-y: auto;
-  box-shadow: none; /* Supprimé l'ombre pour plein écran */
+  box-shadow: none;
+  /* Supprimé l'ombre pour plein écran */
   display: flex;
   flex-direction: column;
   /* Ajout des zones de sécurité pour mobile */
@@ -2707,7 +2752,8 @@ input, textarea, button {
   justify-content: space-between;
   padding: 20px 24px;
   border-bottom: 1px solid #e5e7eb;
-  flex-shrink: 0; /* Empêche le header de se rétrécir */
+  flex-shrink: 0;
+  /* Empêche le header de se rétrécir */
 }
 
 .popup-header h3 {
@@ -2734,8 +2780,10 @@ input, textarea, button {
 
 .popup-body {
   padding: 24px;
-  flex: 1; /* Prend tout l'espace disponible */
-  overflow-y: auto; /* Permet le scroll si nécessaire */
+  flex: 1;
+  /* Prend tout l'espace disponible */
+  overflow-y: auto;
+  /* Permet le scroll si nécessaire */
 }
 
 .popup-body label {
@@ -2748,7 +2796,8 @@ input, textarea, button {
 .popup-body .description-textarea,
 .popup-body .ingredients-textarea {
   width: 100%;
-  min-height: 200px; /* Augmenté pour plein écran */
+  min-height: 200px;
+  /* Augmenté pour plein écran */
   border: 1px solid #d1d5db;
   border-radius: var(--radius-md);
   padding: 12px;
@@ -2771,7 +2820,8 @@ input, textarea, button {
   padding: 20px 24px;
   border-top: 1px solid #e5e7eb;
   background: #f9fafb;
-  flex-shrink: 0; /* Empêche le footer de se rétrécir */
+  flex-shrink: 0;
+  /* Empêche le footer de se rétrécir */
 }
 
 .btn-secondary {
@@ -2827,6 +2877,7 @@ body.create-post-active .top-nav {
 
 /* Responsive pour les popups plein écran */
 @media (min-width: 1300px) {
+
   /* Sur les très grands écrans, on limite la largeur du contenu à 1200px */
   .create-post-fullscreen .create-post-card {
     max-width: 1200px !important;
@@ -2835,7 +2886,7 @@ body.create-post-active .top-nav {
     padding-left: 32px !important;
     padding-right: 32px !important;
   }
-  
+
   /* Ajouter un padding au conteneur principal sur les grands écrans */
   .create-post-fullscreen {
     padding-left: 20px !important;
@@ -2844,35 +2895,40 @@ body.create-post-active .top-nav {
 }
 
 @media (max-width: 768px) {
+
   .popup-header,
   .popup-body,
   .popup-footer {
     padding: 16px;
   }
-  
+
   .popup-footer {
     flex-direction: column;
-    padding-bottom: max(80px, env(safe-area-inset-bottom, 80px)) !important; /* Marge garantie pour éviter le menu du navigateur */
+    padding-bottom: max(80px, env(safe-area-inset-bottom, 80px)) !important;
+    /* Marge garantie pour éviter le menu du navigateur */
     margin-bottom: 0;
     position: sticky;
     bottom: 0;
     background: #f9fafb;
     z-index: 1000;
   }
-  
+
   .btn-secondary,
   .btn-primary {
     width: 100%;
     justify-content: center;
-    padding: 14px 20px; /* Padding plus confortable sur mobile */
-    font-size: 16px; /* Empêche le zoom automatique sur iOS */
+    padding: 14px 20px;
+    /* Padding plus confortable sur mobile */
+    font-size: 16px;
+    /* Empêche le zoom automatique sur iOS */
   }
 }
 
 /* Media query spécifique pour les écrans courts ou en mode paysage mobile */
 @media (max-height: 600px) and (max-width: 768px) {
   .popup-footer {
-    padding-bottom: max(100px, env(safe-area-inset-bottom, 100px)) !important; /* Marge encore plus importante sur écrans courts */
+    padding-bottom: max(100px, env(safe-area-inset-bottom, 100px)) !important;
+    /* Marge encore plus importante sur écrans courts */
     position: fixed !important;
     bottom: 0 !important;
     left: 0 !important;
@@ -2881,7 +2937,7 @@ body.create-post-active .top-nav {
     background: #f9fafb !important;
     box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15) !important;
   }
-  
+
   /* Ajuster le padding du body du popup pour compenser le footer fixe */
   .popup-body {
     padding-bottom: 160px !important;
@@ -2891,7 +2947,8 @@ body.create-post-active .top-nav {
 /* Support pour les interfaces utilisateur qui peuvent masquer les boutons */
 @media (max-width: 768px) and (display-mode: standalone) {
   .popup-footer {
-    padding-bottom: max(120px, env(safe-area-inset-bottom, 120px)) !important; /* Marge maximale pour les PWA */
+    padding-bottom: max(120px, env(safe-area-inset-bottom, 120px)) !important;
+    /* Marge maximale pour les PWA */
   }
 }
 
@@ -2922,7 +2979,8 @@ body.create-post-active .top-nav {
 
 /* Adaptation pour le mode édition */
 [data-edit-mode="true"] .upload-section {
-  display: none; /* Cacher la section d'upload en mode édition */
+  display: none;
+  /* Cacher la section d'upload en mode édition */
 }
 
 [data-edit-mode="true"] .create-post-title-inline {
@@ -2960,7 +3018,8 @@ body.create-post-active .top-nav {
 .ingredients-textarea {
   width: 100%;
   padding: 16px;
-  border: none; /* Pas de bordure car la section a déjà une bordure */
+  border: none;
+  /* Pas de bordure car la section a déjà une bordure */
   border-radius: var(--create-post-border-radius);
   font-family: inherit;
   font-size: 1rem;
@@ -3077,6 +3136,7 @@ body.create-post-active .top-nav {
 
 /* Responsive pour la nouvelle organisation sans labels */
 @media (max-width: 768px) {
+
   .main-upload-section,
   .title-section,
   .description-section,
@@ -3085,15 +3145,15 @@ body.create-post-active .top-nav {
     padding: 12px;
     margin-bottom: 12px;
   }
-  
+
   .upload-area {
     padding: 25px 15px;
   }
-  
+
   .upload-icon {
     font-size: 1.25rem;
   }
-  
+
   .title-input,
   .description-textarea,
   .ingredients-textarea {
@@ -3136,4 +3196,10 @@ body.create-post-active .top-nav {
 
 .btn-delete-step:active {
   transform: translateY(0);
+}
+
+/* Styles spécifiques pour l'application native iOS (Capacitor) */
+.capacitor-ios .create-post-fullscreen {
+  padding-top: calc(60px + 44px) !important;
+  /* Fallback pour iOS natif */
 }

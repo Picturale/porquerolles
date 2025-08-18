@@ -148,21 +148,7 @@ export function AuthProvider({ children }) {
       setCurrentUser(user);
       
       if (user) {
-        const profile = await loadUserProfile(user);
-        try {
-          // If local invite approval exists and not yet persisted, mark profile as invited
-          const raw = typeof window !== 'undefined' ? localStorage.getItem('inviteApproved') : null;
-          if (raw) {
-            const parsed = JSON.parse(raw);
-            const fresh = !parsed.ts || Date.now() - parsed.ts < 24 * 60 * 60 * 1000;
-            if (fresh && profile && profile.invited !== true) {
-              await updateDoc(doc(db, 'users', user.uid), { invited: true });
-              setUserProfile((prev) => ({ ...prev, invited: true }));
-            }
-          }
-        } catch (_) {
-          // ignore
-        }
+        await loadUserProfile(user);
       } else {
         setUserProfile(null);
       }

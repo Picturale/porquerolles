@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { searchResources } from '../services/resourcesApi';
 
 /**
  * Suggestion item shape
- * { id, kind: 'merchant'|'product', name, domain?, logoUrl? }
+ * { id, kind: 'merchant'|'product', name, domain?, logoUrl?, imageUrl?, description?, source?, deeplinkTemplate?, searchTerm? }
  */
 
 export default function AffiliateResourcePicker({ value, onChange, maxItems = 8 }) {
@@ -13,16 +14,25 @@ export default function AffiliateResourcePicker({ value, onChange, maxItems = 8 
   const abortRef = useRef(null);
 
   // Local mock fallback for dev when API is unavailable
-  const DEV_MOCK_SUGGESTIONS = useMemo(() => ([
-    { id: 'amazon', kind: 'merchant', name: 'Amazon', domain: 'amazon.fr', logoUrl: 'https://logo.clearbit.com/amazon.com' },
-    { id: 'etsy', kind: 'merchant', name: 'Etsy', domain: 'etsy.com', logoUrl: 'https://logo.clearbit.com/etsy.com' },
-    { id: 'adobe', kind: 'merchant', name: 'Adobe', domain: 'adobe.com', logoUrl: 'https://logo.clearbit.com/adobe.com' },
-    { id: 'figma', kind: 'merchant', name: 'Figma', domain: 'figma.com', logoUrl: 'https://logo.clearbit.com/figma.com' },
-    { id: 'canon-eos-r', kind: 'product', name: 'Canon EOS R', domain: 'canon.fr', logoUrl: 'https://logo.clearbit.com/canon.fr' },
-    { id: 'sony-a7-iv', kind: 'product', name: 'Sony A7 IV', domain: 'sony.com', logoUrl: 'https://logo.clearbit.com/sony.com' },
-  ]), []);
+  const DEV_MOCK_SUGGESTIONS = useMemo(
+    () => [
+      {
+        id: 'internal-demo-1',
+        kind: 'product',
+        name: 'Produit interne démo',
+        domain: 'shop.local',
+        logoUrl: '',
+        imageUrl: '',
+        description: 'Exemple de produit de Boutique',
+        source: 'internal',
+      },
+    ],
+    []
+  );
 
   const canAddMore = (value?.length || 0) < maxItems;
+
+  // External URL add disabled (affiliates dropped)
 
   useEffect(() => {
     if (!q.trim()) {
@@ -39,23 +49,35 @@ export default function AffiliateResourcePicker({ value, onChange, maxItems = 8 
 
     const t = setTimeout(async () => {
       try {
-        const res = await fetch(`/api/affiliates/search?q=${encodeURIComponent(q)}`, { signal: ac.signal });
-        if (!res.ok) throw new Error('search_failed');
-        const data = await res.json();
-        const arr = Array.isArray(data) ? data : [];
-        if (arr.length === 0) {
-          // Fallback to local mock if API returns no results
+        // Utiliser la nouvelle API locale au lieu de Firebase Functions
+        const resources = await searchResources(q, 20);
+
+        if (resources.length === 0) {
+          // Fallback to local mock if no resources found
           const ql = q.toLowerCase();
-          const mock = DEV_MOCK_SUGGESTIONS.filter((s) => s.name.toLowerCase().includes(ql) || (s.domain && s.domain.toLowerCase().includes(ql)));
+          const mock = DEV_MOCK_SUGGESTIONS.filter(
+            (s) =>
+              s.name.toLowerCase().includes(ql) || (s.domain && s.domain.toLowerCase().includes(ql))
+          );
           setSuggestions(mock);
         } else {
-          setSuggestions(arr);
+          // Normaliser les ressources pour l'affichage
+          const normalized = resources.map((resource) => ({
+            ...resource,
+            source: 'internal',
+            imageUrl: resource.imageUrl || resource.logoUrl || '',
+          }));
+          setSuggestions(normalized);
         }
-      } catch (_e) {
+      } catch (error) {
+        console.error('Erreur recherche ressources:', error);
         if (!ac.signal.aborted) {
-          // Fallback to local mock if API fails
+          // Fallback to local mock if search fails
           const ql = q.toLowerCase();
-          const mock = DEV_MOCK_SUGGESTIONS.filter((s) => s.name.toLowerCase().includes(ql) || (s.domain && s.domain.toLowerCase().includes(ql)));
+          const mock = DEV_MOCK_SUGGESTIONS.filter(
+            (s) =>
+              s.name.toLowerCase().includes(ql) || (s.domain && s.domain.toLowerCase().includes(ql))
+          );
           setSuggestions(mock);
         }
       } finally {
@@ -73,16 +95,24 @@ export default function AffiliateResourcePicker({ value, onChange, maxItems = 8 
     if (!canAddMore) return;
     const exists = (value || []).some((v) => v.id === s.id && v.kind === s.kind);
     if (exists) return;
+    const src = 'internal';
     const next = [
       ...(value || []),
       {
-        source: 'skimlinks',
+        source: src,
         kind: s.kind,
         id: s.id,
         name: s.name,
         domain: s.domain,
         logoUrl: s.logoUrl,
         deeplinkTemplate: s.deeplinkTemplate,
+        searchTerm: s.searchTerm,
+        description: s.description,
+        imageUrl: s.imageUrl,
+        linkUrl: s.linkUrl,
+        price: s.price,
+        ownerUsername: s.ownerUsername,
+        ownerId: s.ownerId,
       },
     ];
     onChange(next);
@@ -101,12 +131,12 @@ export default function AffiliateResourcePicker({ value, onChange, maxItems = 8 
 
   return (
     <div className="affiliate-picker">
-      <label className="field-label">Ressources affiliées</label>
+      <label className="field-label">Ressources recommandées</label>
       <div className="relative">
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder={canAddMore ? 'Rechercher un marchand ou produit…' : 'Limite atteinte'}
+          placeholder={canAddMore ? 'Rechercher des produits à recommander…' : 'Limite atteinte'}
           disabled={!canAddMore}
           className="title-input"
           onFocus={() => q && setOpen(true)}
@@ -115,10 +145,23 @@ export default function AffiliateResourcePicker({ value, onChange, maxItems = 8 
         {open && (
           <div
             className="suggestions-popover"
-            style={{ position: 'absolute', zIndex: 20, marginTop: 6, width: '100%', border: '1px solid #e5e7eb', background: '#fff', borderRadius: 12, boxShadow: '0 8px 24px rgba(0,0,0,0.08)', maxHeight: 260, overflow: 'auto' }}
+            style={{
+              position: 'absolute',
+              zIndex: 20,
+              marginTop: 6,
+              width: '100%',
+              border: '1px solid #e5e7eb',
+              background: '#fff',
+              borderRadius: 12,
+              boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
+              maxHeight: 260,
+              overflow: 'auto',
+            }}
           >
             {loading ? (
-              <div className="p-3 text-sm" style={{ padding: 12, fontSize: 13, color: '#64748b' }}>Recherche…</div>
+              <div className="p-3 text-sm" style={{ padding: 12, fontSize: 13, color: '#64748b' }}>
+                Recherche…
+              </div>
             ) : filtered.length ? (
               filtered.map((s) => (
                 <button
@@ -126,25 +169,102 @@ export default function AffiliateResourcePicker({ value, onChange, maxItems = 8 
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => addItem(s)}
                   className="suggestion-item"
-                  style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', padding: '10px 12px', background: 'transparent', border: 'none', textAlign: 'left', cursor: 'pointer' }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 12,
+                    width: '100%',
+                    padding: '12px 14px',
+                    background: 'transparent',
+                    border: 'none',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    borderRadius: '8px',
+                    transition: 'background-color 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => e.target.style.backgroundColor = '#f8fafc'}
+                  onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
                 >
-                  {s.logoUrl ? (
-                    <img src={s.logoUrl} alt="" style={{ width: 20, height: 20, borderRadius: 4, objectFit: 'cover' }} />
+                  {s.imageUrl || s.logoUrl ? (
+                    <img
+                      src={s.imageUrl || s.logoUrl}
+                      alt=""
+                      style={{
+                        width: 48,
+                        height: 48,
+                        borderRadius: 8,
+                        objectFit: 'cover',
+                        border: '1px solid #e5e7eb',
+                        flexShrink: 0
+                      }}
+                    />
                   ) : (
-                    <div style={{ width: 20, height: 20, borderRadius: 4, background: '#e5e7eb' }} />
+                    <div
+                      style={{
+                        width: 48,
+                        height: 48,
+                        borderRadius: 8,
+                        background: '#f1f5f9',
+                        border: '1px solid #e5e7eb',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: 20,
+                        color: '#94a3b8',
+                        flexShrink: 0
+                      }}
+                    >
+                      📦
+                    </div>
                   )}
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <span style={{ fontSize: 14, color: '#0f172a' }}>{s.name}</span>
+                  <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                    <span style={{ fontSize: 14, color: '#0f172a', fontWeight: '500' }}>{s.name}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 1 }}>
+                      {s.price && (
+                        <span style={{ fontSize: 13, color: '#059669', fontWeight: '600' }}>
+                          {typeof s.price === 'number' ? `${s.price}€` : s.price}
+                        </span>
+                      )}
+                      {s.ownerUsername && (
+                        <span style={{
+                          fontSize: 12,
+                          color: '#6366f1',
+                          backgroundColor: '#f0f9ff',
+                          padding: '2px 6px',
+                          borderRadius: '4px',
+                          fontWeight: '500'
+                        }}>
+                          par {s.ownerUsername}
+                        </span>
+                      )}
+                    </div>
                     {s.domain && <span style={{ fontSize: 12, color: '#64748b' }}>{s.domain}</span>}
+                    {s.description && (
+                      <span
+                        style={{
+                          fontSize: 12,
+                          color: '#475569',
+                          marginTop: 2,
+                          display: 'block',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          maxWidth: '300px'
+                        }}
+                      >
+                        {s.description}
+                      </span>
+                    )}
                   </div>
                 </button>
               ))
             ) : (
-              <div className="p-3 text-sm" style={{ padding: 12, fontSize: 13 }}>
-                Aucun résultat.{' '}
-                <button className="underline" onMouseDown={(e) => e.preventDefault()} style={{ color: '#1d4ed8' }}>
-                  Suggérer un ajout
-                </button>
+              <div className="p-3 text-sm" style={{ padding: 16, fontSize: 13, textAlign: 'center', color: '#64748b' }}>
+                <div style={{ marginBottom: 8, fontSize: 24 }}>🔍</div>
+                Aucun produit trouvé pour "{q}"
+                <div style={{ fontSize: 12, marginTop: 4, color: '#94a3b8' }}>
+                  Essayez avec d'autres mots-clés
+                </div>
               </div>
             )}
           </div>
@@ -152,16 +272,30 @@ export default function AffiliateResourcePicker({ value, onChange, maxItems = 8 
       </div>
 
       {/* Pills */}
-      <div className="affiliate-pills" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 8 }}>
+      <div
+        className="affiliate-pills"
+        style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 8 }}
+      >
         {(value || []).map((r, i) => (
           <div
             key={`${r.kind}:${r.id}`}
             className="affiliate-pill"
             title={r.domain || r.name}
-            style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #e5e7eb', borderRadius: 999, padding: '4px 8px' }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              border: '1px solid #e5e7eb',
+              borderRadius: 999,
+              padding: '4px 8px',
+            }}
           >
             {r.logoUrl ? (
-              <img src={r.logoUrl} alt="" style={{ width: 16, height: 16, borderRadius: 4, objectFit: 'cover' }} />
+              <img
+                src={r.logoUrl}
+                alt=""
+                style={{ width: 16, height: 16, borderRadius: 4, objectFit: 'cover' }}
+              />
             ) : (
               <div style={{ width: 16, height: 16, borderRadius: 4, background: '#e5e7eb' }} />
             )}

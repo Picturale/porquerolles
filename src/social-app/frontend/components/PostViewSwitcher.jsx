@@ -20,7 +20,7 @@ function PostViewSwitcher({ posts, profiles = [], showDeleteButton = false, shop
     }
   }, [initialView, shopEnabled, isProProfile]);
 
-  // If boutique becomes unavailable (pro off or shop disabled), leave shop view gracefully
+  // If resources become unavailable (pro off or shop disabled), leave shop view gracefully
   useEffect(() => {
     if (viewMode === 'shop' && !(shopEnabled && isProProfile)) {
       setViewMode('grid');
@@ -60,14 +60,14 @@ function PostViewSwitcher({ posts, profiles = [], showDeleteButton = false, shop
             <button
               className={`view-toggle-btn ${viewMode === 'shop' ? 'active' : ''}`}
               onClick={() => setViewMode('shop')}
-              title="Boutique"
+              title="Ressources"
             >
               <FaShoppingBag />
-              <span>Boutique</span>
+              <span>Ressources</span>
             </button>
           )}
         </div>
-        
+
         <div className="posts-count">
           {posts.length} publication{posts.length > 1 ? 's' : ''}
         </div>

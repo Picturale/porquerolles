@@ -152,7 +152,7 @@ function Home() {
                     className="btn-primary-minimal" 
                     onClick={() => navigate('/register')}
                   >
-                    Demander une invitation
+                    Créer un compte
                   </button>
                   <button 
                     className="btn-secondary-minimal"

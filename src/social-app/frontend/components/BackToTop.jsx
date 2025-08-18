@@ -17,7 +17,7 @@ function BackToTop({
   className = '',
   icon,
   hideOnScrollUp = true,
-  deadZone = 10
+  deadZone = 10,
 }) {
   const [visible, setVisible] = useState(false);
   const [dynamicTop, setDynamicTop] = useState(undefined);
@@ -114,8 +114,10 @@ function BackToTop({
 
   const handleClick = () => {
     try {
+      // Toujours scroller vers le top - avec StatusBar non-overlay, cela devrait fonctionner correctement
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch {
+      // Fallback pour les anciens navigateurs
       window.scrollTo(0, 0);
     }
   };

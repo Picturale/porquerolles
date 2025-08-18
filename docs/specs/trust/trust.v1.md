@@ -7,7 +7,7 @@
 > - Page Transparence publique `/trust` (lecture de la config et affichage des seuils/badges).
 > - UI « Indice confiance » (TrustLabel) sur l’en-tête Profil: affiche T si présent (ex: `profile.trustScore`), sinon « — », et badge courant/next via `trust/logic/badges.ts`.
 > - UI pastille « Provisoire » (ProvisionalPill) sur PostDetail, alimentée par `computeStabilityNeeded` (cf. `trust/logic/stability.ts`) et les seuils `stability` du JSON; s’appuie aujourd’hui sur des compteurs placeholder au niveau du post (`ratingsCount`, `trustedRatersCount`, `maxClusterShare`).
-> - Porte d'entrée par invitation: `InviteGate` + page `/invite` + function `invitesRedeem` (rewrite + mock dev dans Vite).
+> - Système d'invitations: supprimé (refs obsolètes).
 >
 > Partiellement en place:
 > - Helpers frontend: `computeStabilityNeeded` (OK), badges helpers (`getBadgeForT`, `getNextBadgeInfo`) (OK). Enforcement backend minimal en cours (voir v1.1 ci-dessous).
@@ -15,7 +15,7 @@
 >
 > À faire (non encore branché/activé):
 > - Formules: `computeT`, `voteWeight`, `isStable` côté backend (enforcement temps réel).
-> - Application systématique des règles `stability`, `moderation`, badges, crédits d'invitations.
+- Application systématique des règles `stability`, `moderation`, badges.
 > - Règles anti-abus: diversité, cooldown, collusion.
 > - Affichages: pastilles entièrement branchées sur les agrégats réels; hints privés owner.
 > - Backend/events: WFS temps réel, batch quotidien (T, badges, crédits), snapshots.
@@ -123,7 +123,7 @@ v1.1 (enforcement minimal) — hooks Cloud Functions:
   - trust: {
     - T: number (0–100)
     - badge: string (Seedling|Artisan|Mentor|Curator)
-    - invites: { balance: number, issuedThisMonth: number, redeemedThisMonth: number }
+  <!-- invites supprimé -->
     - lastComputedAt: timestamp
     - partial: boolean (si computeT a utilisé des valeurs par défaut)
   }
@@ -141,8 +141,7 @@ v1.1 (enforcement minimal) — hooks Cloud Functions:
   - { postId: string, userId: string, severity: 1|2|3, createdAt: timestamp }
 - moderation_queue/{postId}
   - { postId: string, wfs: number, updatedAt: timestamp }
-- invitesRedeemLogs/{autoId}
-  - code: string, result: "accepted"|"rejected", uid?: string, at: timestamp, ipHash?: string
+<!-- invitesRedeemLogs supprimé avec le système d'invitations -->
 
 Notes:
 - Cluster v1: clusterKey = inviterRootUid si disponible, sinon raterUid (approximation prudente)
@@ -158,7 +157,7 @@ Notes:
   - Applique mask si WFS≥maskWFS; enfile en modération si ≥queueWFS
 - scheduleDaily():
   - Recalcule T pour tous les users actifs (rolling 30–90j de données)
-  - Assigne badges; met à jour invites.balance selon badge
+  - Assigne badges
   - Écrit un snapshot agrégé (optionnel) pour métriques
 
 ### D. UX placements & copy (v1)
@@ -174,8 +173,8 @@ Notes:
 - v1.1 (enforcement minimal):
   - onRatingWrite + compute isStable en temps réel
   - WFS masquage auto (maskWFS)
-- v1.2 (daily T + badges + invites):
-  - scheduleDaily computeT + attribution badge + crédits d’invites
+- v1.2 (daily T + badges):
+  - scheduleDaily computeT + attribution badge
   - TrustLabel affiche T réel, ProvisionalPill utilise vrais compteurs
 - v1.3 (anti-abus + monitoring):
   - clusterKey robuste (invitation graph), collusion heuristics
@@ -184,7 +183,7 @@ Notes:
 ### F. Cas limites & sécurité
 - Nouvel utilisateur: T absent ⇒ afficher « — », poids de vote minimal, pas d’invites
 - Burst d’évaluations coordonnées: maxClusterShare bloque la stabilisation
-- Collisions d’invites: bondB et penaltyOnBanT réduisent incitations au spam
+<!-- Références invites retirées -->
 - Données manquantes: flags partial pour éviter sur-confiance
 
 ## 8. Changelog
@@ -201,4 +200,4 @@ Notes:
   - Provider `TrustProvider` et hook `useTrust`.
   - Page `/trust` (publique). La vue `/admin/trust` est désactivée côté routes pour l’instant.
   - UI: TrustLabel (badges/next badge) + ProvisionalPill (via `computeStabilityNeeded`).
-  - Porte d'entrée par invitation: `InviteGate`, page `/invite`, function `invitesRedeem` (+ rewrite + mock dev).
+  <!-- Porte d'entrée par invitation retirée -->

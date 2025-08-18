@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="color-scheme" content="light only" />
-  <title>Vision Picturale - Communauté</title>
-  <meta name="description" content="Communauté et réseau social de Vision Picturale" />
+  <title>Porquerolles Connect</title>
+  <meta name="description" content="Communauté Porquerolles Connect" />
   <meta name="theme-color" content="#667eea" />
-  
+
   <!-- Cache Control Meta Tags -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
@@ -15,20 +17,20 @@
   <meta name="cache-control" content="no-cache" />
   <meta name="expires" content="0" />
   <meta name="pragma" content="no-cache" />
-  
-  <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="/favicon.svg">
+
+  <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./favicon.svg">
   <style>
     /* Force mode clair uniquement */
     :root {
       color-scheme: light only !important;
     }
-    
+
     * {
       color-scheme: light only !important;
     }
-    
+
     /* Base styles - Variables core-app */
     :root {
       --brand-primary: #ff6b35;
@@ -37,20 +39,20 @@
       --brand-light: #ffffff;
       --brand-gray: #c7c7c7;
       --background: #f5f5f5;
-      
+
       /* Compatibilité anciennes variables */
       --primary-color: #667eea;
       --primary-dark: #764ba2;
       --secondary-color: #ff6b35;
       --bg-color: #f9f9f9;
     }
-    
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background-color: var(--bg-color);
@@ -91,8 +93,13 @@
     }
 
     @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
 
     .loader-text {
@@ -100,13 +107,14 @@
       color: var(--brand-blue);
       font-weight: 500;
     }
-    
+
     .hidden {
       opacity: 0;
       pointer-events: none;
     }
   </style>
 </head>
+
 <body>
   <!-- Loading screen -->
   <div id="app-loader" class="app-loader">
@@ -115,42 +123,19 @@
   </div>
 
   <div id="root"></div>
-  
-  <!-- Firebase SDKs -->
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-    import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-    import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-    import { getStorage } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
-    import { firebaseConfig } from './firebase.config.js';
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const storage = getStorage(app);
-
-    // Make Firebase services available globally
-    window.firebaseApp = app;
-    window.firebaseAuth = auth;
-    window.firebaseDb = db;
-    window.firebaseStorage = storage;
-    
-    console.log('Firebase initialized successfully');
-  </script>
-  
   <!-- Application Entry -->
   <script type="module" src="./main.js"></script>
-  
+
   <!-- Hide loader when app is loaded -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       // Set a timeout to ensure the app has some time to initialize
       setTimeout(() => {
         const loader = document.getElementById('app-loader');
         if (loader) {
           loader.classList.add('hidden');
-          
+
           // Remove the loader from DOM after transition completes
           setTimeout(() => {
             if (loader.parentNode) {
@@ -160,7 +145,7 @@
         }
       }, 1500); // Show loader for at least 1.5 seconds
     });
-    
+
     // Fallback to hide loader if it's still visible after 5 seconds
     setTimeout(() => {
       const loader = document.getElementById('app-loader');
@@ -169,8 +154,6 @@
       }
     }, 5000);
   </script>
-  
-  <!-- Skimlinks Script for Brand Monetization -->
-  <script type="text/javascript" src="https://s.skimresources.com/js/289184X1776102.skimlinks.js"></script>
 </body>
+
 </html>

@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/camera.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
-  <title>Vision Picturale - Communauté</title>
-  <meta name="description" content="Communauté sociale de Vision Picturale - Partagez vos photos et connectez-vous avec d'autres photographes" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+  <title>noeme - Plateforme créative connectée</title>
+  <meta name="description"
+    content="Rejoignez noeme, la plateforme créative nouvelle génération. Partagez vos créations, collaborez avec des artistes et développez votre audience dans une communauté inspirante." />
   <meta name="theme-color" content="#667eea" />
   <style>
     /* Initial loading styles */
@@ -13,7 +16,7 @@
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
-    
+
     .app-loader {
       position: fixed;
       top: 0;
@@ -28,12 +31,12 @@
       color: #333;
       z-index: 1000;
     }
-    
+
     .loader-logo {
       font-size: 48px;
       margin-bottom: 20px;
     }
-    
+
     .loader-spinner {
       width: 40px;
       height: 40px;
@@ -43,25 +46,32 @@
       animation: spin 1s linear infinite;
       margin-bottom: 10px;
     }
-    
+
     @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
   </style>
 </head>
+
 <body>
   <!-- Initial loading screen -->
   <div id="app-loader" class="app-loader">
     <div class="loader-logo">📸</div>
     <div class="loader-spinner"></div>
-    <div>Chargement de la communauté...</div>
+    <div>Chargement de noeme...</div>
   </div>
-  
+
   <!-- React app root -->
   <div id="root"></div>
-  
+
   <!-- Entry point script -->
   <script type="module" src="./index.jsx"></script>
 </body>
+
 </html>

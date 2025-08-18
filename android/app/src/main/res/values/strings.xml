@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Vision Picturale</string>
-    <string name="title_activity_main">Vision Picturale</string>
+    <string name="app_name">Porquerolles Connect</string>
+    <string name="title_activity_main">Porquerolles Connect</string>
     <string name="package_name">com.visionpicturale.monapp</string>
     <string name="custom_url_scheme">com.visionpicturale.monapp</string>
 </resources>

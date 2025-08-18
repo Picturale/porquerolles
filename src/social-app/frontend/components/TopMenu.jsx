@@ -46,8 +46,12 @@ function TopMenu() {
       const currentScrollY = window.scrollY;
       const scrollDifference = currentScrollY - lastScrollY;
       
+      // Calculer la hauteur totale du menu (60px + safe area)
+      const safeAreaTop = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--safe-area-inset-top') || '0');
+      const totalMenuHeight = 60 + safeAreaTop;
+      
       // En haut de page, toujours visible
-      if (currentScrollY <= 60) {
+      if (currentScrollY <= totalMenuHeight) {
         setIsVisible(true);
         setScrollOffset(0);
         setLastScrollY(currentScrollY);
@@ -59,7 +63,7 @@ function TopMenu() {
       
       // Scroll vers le bas : déplacer le menu vers le haut
       if (scrollDifference > 0) {
-        newOffset = Math.min(newOffset + scrollDifference, 60); // Max 60px (hauteur du menu)
+        newOffset = Math.min(newOffset + scrollDifference, totalMenuHeight); // Max hauteur totale du menu
       }
       // Scroll vers le haut : ramener le menu vers le bas
       else if (scrollDifference < 0) {
@@ -69,7 +73,7 @@ function TopMenu() {
       setScrollOffset(newOffset);
       
       // Mettre à jour la visibilité basée sur l'offset
-      setIsVisible(newOffset < 30); // Considéré comme visible si moins de la moitié caché
+      setIsVisible(newOffset < totalMenuHeight / 2); // Considéré comme visible si moins de la moitié caché
       
       setLastScrollY(currentScrollY);
       ticking = false;

@@ -7,19 +7,12 @@
   top: 0;
   left: 0;
   right: 0;
+  z-index: 1000;
   background: var(--color-white);
-  border-bottom: 1px solid #dbdbdb;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 12px 20px;
   height: 60px;
-  z-index: var(--z-header);
-  display: flex;
-  align-items: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  /* Animation ultra-fluide et rapide comme Instagram */
-  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: transform;
-  /* Optimisation pour les performances */
-  backface-visibility: hidden;
-  perspective: 1000px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 /* Si un header d'édition est présent, le top-menu passe en dessous */
@@ -197,8 +190,15 @@ body.edit-profile-active .top-menu {
 }
 
 @keyframes badge-pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
 }
 
 /* Animation pour le bouton chat avec activité */
@@ -207,12 +207,15 @@ body.edit-profile-active .top-menu {
 }
 
 @keyframes chat-pulse {
-  0%, 100% { 
-    transform: scale(1); 
+
+  0%,
+  100% {
+    transform: scale(1);
     box-shadow: 0 0 0 0 rgba(0, 149, 246, 0.4);
   }
-  50% { 
-    transform: scale(1.05); 
+
+  50% {
+    transform: scale(1.05);
     box-shadow: 0 0 0 8px rgba(0, 149, 246, 0);
   }
 }
@@ -232,9 +235,22 @@ body.edit-profile-active .top-menu {
 }
 
 @keyframes chat-bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-3px); }
-  60% { transform: translateY(-2px); }
+
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(-3px);
+  }
+
+  60% {
+    transform: translateY(-2px);
+  }
 }
 
 /* Responsive mobile */
@@ -259,6 +275,7 @@ body.edit-profile-active .top-menu {
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -267,7 +284,12 @@ body.edit-profile-active .top-menu {
 
 /* Ajustement pour éviter le conflit avec la navbar existante */
 .app-container {
-  padding-top: 60px; /* Pour compenser la hauteur du top menu fixe */
+  padding-top: 60px; /* Hauteur du top menu uniquement */
+}
+
+/* Safe area pour iOS - seulement quand on n'est PAS dans Capacitor */
+body:not(.capacitor-ios) .app-container {
+  padding-top: calc(60px + env(safe-area-inset-top, 0px));
 }
 
 /* Safe area pour iOS */
@@ -276,6 +298,46 @@ body.edit-profile-active .top-menu {
     padding-left: max(env(safe-area-inset-left), 0);
     padding-right: max(env(safe-area-inset-right), 0);
   }
+
+  /* Seulement pour le web, pas pour l'app native Capacitor */
+  body:not(.capacitor-ios) .app-container {
+    padding-top: calc(60px + env(safe-area-inset-top, 0));
+  }
+
+  /* Pour l'app native Capacitor iOS - StatusBar n'est pas en overlay */
+  .capacitor-ios .app-container,
+  .statusbar-no-overlay .app-container {
+    padding-top: 60px !important; /* Seulement la hauteur du menu */
+  }
+  
+  .capacitor-ios .top-menu,
+  .statusbar-no-overlay .top-menu {
+    top: 0 !important; /* Pas de padding top supplémentaire */
+    padding-top: 0 !important;
+    height: 60px !important;
+  }
+}
+
+/* Styles spécifiques pour l'application native iOS (Capacitor) */
+/* Ces règles ne s'appliquent que si la StatusBar est en overlay (ce qui n'est plus le cas) */
+.capacitor-ios.statusbar-overlay .top-menu {
+  padding-top: 44px !important;
+  height: calc(60px + 44px) !important;
+}
+
+.capacitor-ios.statusbar-overlay .app-container {
+  padding-top: calc(60px + 44px) !important;
+}
+
+/* Pour Capacitor iOS avec StatusBar NOT overlay (configuration actuelle) */
+.capacitor-ios:not(.statusbar-overlay) .top-menu {
+  padding-top: 0 !important;
+  height: 60px !important;
+  top: 0 !important;
+}
+
+.capacitor-ios:not(.statusbar-overlay) .app-container {
+  padding-top: 60px !important;
 }
 
 /* Animation pour le badge quand on marque comme lu */
@@ -284,17 +346,19 @@ body.edit-profile-active .top-menu {
 }
 
 @keyframes badge-fade-out {
-  0% { 
-    opacity: 1; 
-    transform: scale(1); 
+  0% {
+    opacity: 1;
+    transform: scale(1);
   }
-  50% { 
-    opacity: 0.5; 
-    transform: scale(0.8); 
+
+  50% {
+    opacity: 0.5;
+    transform: scale(0.8);
   }
-  100% { 
-    opacity: 0; 
-    transform: scale(0.5); 
+
+  100% {
+    opacity: 0;
+    transform: scale(0.5);
   }
 }
 
@@ -314,12 +378,15 @@ body.edit-profile-active .top-menu {
 }
 
 @keyframes chat-pulse-optimized {
-  0%, 100% { 
-    transform: scale(1); 
+
+  0%,
+  100% {
+    transform: scale(1);
     box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.4);
   }
-  50% { 
-    transform: scale(1.02); 
+
+  50% {
+    transform: scale(1.02);
     box-shadow: 0 0 0 6px rgba(255, 107, 53, 0);
   }
 }
@@ -335,8 +402,15 @@ body.edit-profile-active .top-menu {
 }
 
 @keyframes pulse-loading {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 /* Force l'affichage du chat dropdown */

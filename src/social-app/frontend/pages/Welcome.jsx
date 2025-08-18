@@ -5,6 +5,7 @@ import './Home.css';
 const Welcome = () => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
+  console.log('[ios] Welcome mounted. user:', !!currentUser, 'hash:', window.location.hash);
 
   return (
     <div className="home-container">
@@ -16,25 +17,25 @@ const Welcome = () => {
           <p className="brand-description">
             Impression d'art photographique de qualité exceptionnelle
           </p>
-          
+
           {/* Boutons d'action principaux */}
           <div className="hero-actions">
-            <button 
+            <button
               className="explore-btn primary"
               onClick={() => navigate('/search')}
             >
               Explorer les créations
             </button>
-            
+
             {!currentUser && (
               <div className="auth-buttons">
-                <button 
+                <button
                   className="login-btn secondary"
                   onClick={() => navigate('/login')}
                 >
                   Connexion
                 </button>
-                <button 
+                <button
                   className="register-btn secondary"
                   onClick={() => navigate('/register')}
                 >
@@ -42,13 +43,13 @@ const Welcome = () => {
                 </button>
               </div>
             )}
-            
+
             {currentUser && (
               <div className="connected-actions">
                 <p className="welcome-message">
                   Bienvenue, {currentUser.displayName || currentUser.email} !
                 </p>
-                <button 
+                <button
                   className="feed-btn primary"
                   onClick={() => navigate('/home')}
                 >

@@ -146,7 +146,7 @@ button {
 
 .main-content {
   flex: 1;
-  padding: 65px 0 80px; /* Ajusté pour TopMenu (60px) + marge (5px) + marge élargie pour bottom menu (80px) */
+  padding: 125px 0 80px; /* FORCE: 125px top padding pour TOUS les appareils */
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;

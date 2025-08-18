@@ -51,29 +51,7 @@ export async function moderationDecide(itemId: string, action: string, reason = 
   return res.json();
 }
 
-export async function getInvitesUser(params: { uid?: string; email?: string }) {
-  const url = new URL('/api/admin/invites/user', window.location.origin);
-  if (params.uid) url.searchParams.set('uid', params.uid);
-  if (params.email) url.searchParams.set('email', params.email);
-  const res = await authFetch(url.toString());
-  if (!res.ok) throw new Error('invites_user_failed');
-  return res.json();
-}
-
-export async function creditInvites(uid: string, delta: number, reason = '') {
-  const res = await authFetch('/api/admin/invites/credit', {
-    method: 'POST',
-    body: JSON.stringify({ uid, delta, reason }),
-  });
-  if (!res.ok) throw new Error('invites_credit_failed');
-  return res.json();
-}
-
-export async function listRecentRedemptions(limit = 50) {
-  const res = await authFetch(`/api/admin/invites/recent?limit=${encodeURIComponent(String(limit))}`);
-  if (!res.ok) throw new Error('invites_recent_failed');
-  return res.json();
-}
+// Invitation APIs removed
 
 export async function ownerGrant() {
   const res = await authFetch('/api/admin/owner/grant', {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { getInvitesUser, getOverview, moderationDecide } from '../services/adminApi';
+import { getOverview, moderationDecide } from '../services/adminApi';
 import { listModeration } from '../services/moderationApi';
 import '../styles/Admin.css';
 
@@ -22,9 +22,9 @@ function Admin() {
 
   // User search
   const [uQuery, setUQuery] = useState('');
-  const [uLoading, setULoading] = useState(false);
+  const [uLoading] = useState(false);
   const [uError, setUError] = useState(null);
-  const [uResult, setUResult] = useState(null);
+  const [uResult] = useState(null);
   const { currentUser } = useAuth();
 
   useEffect(() => {
@@ -82,20 +82,8 @@ function Admin() {
   };
 
   const searchUser = async () => {
-    const q = (uQuery || '').trim();
-    if (!q) return;
-    setULoading(true);
-    setUError(null);
-    setUResult(null);
-    try {
-      const byEmail = q.includes('@');
-      const res = await getInvitesUser(byEmail ? { email: q } : { uid: q });
-      setUResult(res?.user || null);
-    } catch (e) {
-      setUError('Utilisateur introuvable ou accès refusé');
-    } finally {
-      setULoading(false);
-    }
+    // Invites API removed — disable search for now
+    setUError('Recherche utilisateur désactivée (invites supprimés).');
   };
 
   // OwnerRoute/PrivateRoute enforce auth; here we wait for claims refresh
@@ -221,7 +209,6 @@ function Admin() {
                 <div style={{ fontSize: 12, color: '#6b7280', marginTop: 6, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                   <span>Badge: {uResult.badge || '-'}</span>
                   <span>T: {uResult?.trust?.T ?? '-'}</span>
-                  <span>Invites: {uResult?.invites?.balance ?? 0}</span>
                 </div>
               </div>
             )}

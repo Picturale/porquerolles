@@ -122,14 +122,14 @@ function ShopView({ ownerUserId }) {
   const handleDelete = async (productId) => {
     setMenuOpenFor(null);
     if (!isOwner) return;
-    const confirm = window.confirm('Supprimer cet article de votre Boutique ?');
+    const confirm = window.confirm('Supprimer cette ressource ?');
     if (!confirm) return;
     try {
       await deleteDoc(doc(db, 'products', productId));
       setItems((prev) => prev.filter((it) => it.id !== productId));
     } catch (e) {
       console.error('Erreur suppression produit:', e);
-      alert('Impossible de supprimer l\'article. Réessayez.');
+      alert('Impossible de supprimer la ressource. Réessayez.');
     }
   };
 
@@ -197,11 +197,11 @@ function ShopView({ ownerUserId }) {
     }
   };
 
-  if (loading) return <div className="shop-loading">Chargement de la boutique…</div>;
+  if (loading) return <div className="shop-loading">Chargement des ressources…</div>;
   if (error) return <div className="shop-error">{error}</div>;
 
   if (!items.length) {
-    return <div className="shop-empty">Aucun produit pour le moment.</div>;
+    return <div className="shop-empty">Aucune ressource pour le moment.</div>;
   }
 
   return (

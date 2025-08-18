@@ -6,13 +6,12 @@ import { connectStorageEmulator, getStorage } from 'firebase/storage';
 
 // Direct Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyDrTJ8k4rfjEKx_nJeeSqJuswQtNPqvquo',
-  authDomain: 'vision-picturale-community.firebaseapp.com',
-  databaseURL: 'https://vision-picturale-community-default-rtdb.firebaseio.com',
-  projectId: 'vision-picturale-community',
-  storageBucket: 'vision-picturale-community.firebasestorage.app',
-  messagingSenderId: '304352209471',
-  appId: '1:304352209471:web:56a0ff752ced120c14e68a'
+  apiKey: 'AIzaSyBeASZgEZe67kSNMYI1bqmNN0ETrdqjrNA',
+  authDomain: 'porquerolles-16e8d.firebaseapp.com',
+  databaseURL: 'https://porquerolles-16e8d-default-rtdb.firebaseio.com',
+  projectId: 'porquerolles-16e8d',
+  storageBucket: 'porquerolles-16e8d.appspot.com',
+  messagingSenderId: '265696641553'
 };
 
 const isDevEnvironment = window.location.hostname === 'localhost' || 
@@ -26,7 +25,7 @@ if (isDevEnvironment) {
     // Only modify Firebase requests
     if (input && typeof input === 'string' && 
         (input.includes('firestore.googleapis.com') || 
-         input.includes('vision-picturale-community'))) {
+         input.includes('porquerolles-16e8d'))) {
       init = init || {};
       init.credentials = 'include';
       init.mode = 'cors';

@@ -1,14 +1,12 @@
-# Invites Overview
+# Invites Overview (Deprecated)
 
-Minimal invite gate for guest access:
+Le système d'invitations a été entièrement supprimé de l'application. Ce document est conservé à titre d'historique mais n'est plus d'actualité.
 
-- Frontend gate (`InviteGate.jsx`) protects `/login` and `/register` for guests; redirects to `/invite` when no local approval flag.
-- Invite page (`pages/Invite.jsx`) accepts a code and calls `/api/invites/redeem`.
-- Functions endpoint (`invitesRedeem`) validates code (mock rule) and returns `{ ok: true }` when accepted.
-- Hosting rewrite maps `/api/invites/redeem` to the function; Vite dev middleware mocks it when no Functions base is configured.
+Points clés:
+- Plus de page `/invite` ni de passerelle InviteGate.
+- Aucun endpoint `/api/invites/*` n'est exposé.
+- Les règles Firestore ne conditionnent plus l'accès à un statut "invited".
 
-Next steps:
-
-- Replace mock with Firestore-backed invites collection (`invites`) with fields: `code`, `createdBy`, `usesLeft`, `expiresAt`, `status`.
-- Add admin UI for generating and tracking invites.
-- When a user completes signup, decrement `usesLeft` and link inviter/target in `invite_edges`.
+```diff
+- Cette fonctionnalité n'existe plus.
+```

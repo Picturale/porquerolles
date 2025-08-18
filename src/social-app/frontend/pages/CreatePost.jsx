@@ -805,20 +805,15 @@ function CreatePost() {
         methodStepsData = stepsWithImages;
       }
 
-      // Validate affiliate resources server-side before persisting
+      // Validate affiliate resources before persisting
       let validatedAffiliates = [];
       try {
         if (affiliateResources && affiliateResources.length) {
-          const resp = await fetch('/api/affiliates/validate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ items: affiliateResources }),
-          });
-          if (resp.ok) {
-            validatedAffiliates = await resp.json();
-          }
+          const { validateResources } = await import('../services/resourcesApi');
+          validatedAffiliates = await validateResources(affiliateResources);
         }
-      } catch (_e) {
+      } catch (error) {
+        console.error('Erreur validation ressources:', error);
         // ignore validation errors, fallback to empty list
       }
 
@@ -998,15 +993,15 @@ function CreatePost() {
             prevSteps.map((step) =>
               step.id === stepId
                 ? {
-                    ...step,
-                    imageSrc: reader.result,
-                    imageStep: 'crop',
-                    crop: { x: 0, y: 0 },
-                    zoom: 1,
-                    croppedAreaPixels: null,
-                    croppedImage: null,
-                    fileType: 'image',
-                  }
+                  ...step,
+                  imageSrc: reader.result,
+                  imageStep: 'crop',
+                  crop: { x: 0, y: 0 },
+                  zoom: 1,
+                  croppedAreaPixels: null,
+                  croppedImage: null,
+                  fileType: 'image',
+                }
                 : step
             )
           );
@@ -1045,12 +1040,12 @@ function CreatePost() {
                 prevSteps.map((step) =>
                   step.id === stepId
                     ? {
-                        ...step,
-                        imageSrc: reader.result,
-                        imageStep: 'video-preview',
-                        selectedFile: processedVideo,
-                        fileType: 'video',
-                      }
+                      ...step,
+                      imageSrc: reader.result,
+                      imageStep: 'video-preview',
+                      selectedFile: processedVideo,
+                      fileType: 'video',
+                    }
                     : step
                 )
               );
@@ -1086,10 +1081,10 @@ function CreatePost() {
         prevSteps.map((step) =>
           step.id === stepId
             ? {
-                ...step,
-                croppedImage: { blob: croppedImageBlob, url: croppedImageUrl },
-                imageStep: 'preview',
-              }
+              ...step,
+              croppedImage: { blob: croppedImageBlob, url: croppedImageUrl },
+              imageStep: 'preview',
+            }
             : step
         )
       );
@@ -1104,11 +1099,11 @@ function CreatePost() {
       prevSteps.map((step) =>
         step.id === stepId
           ? {
-              ...step,
-              imageStep: 'preview',
-              // Pour les vidéos, on crée un objet croppedImage avec l'URL et le fichier
-              croppedImage: { url: step.imageSrc, blob: step.selectedFile },
-            }
+            ...step,
+            imageStep: 'preview',
+            // Pour les vidéos, on crée un objet croppedImage avec l'URL et le fichier
+            croppedImage: { url: step.imageSrc, blob: step.selectedFile },
+          }
           : step
       )
     );
@@ -1123,14 +1118,14 @@ function CreatePost() {
       prevSteps.map((step) =>
         step.id === stepId
           ? {
-              ...step,
-              imageSrc: null,
-              crop: { x: 0, y: 0 },
-              zoom: 1,
-              croppedAreaPixels: null,
-              croppedImage: null,
-              imageStep: 'none',
-            }
+            ...step,
+            imageSrc: null,
+            crop: { x: 0, y: 0 },
+            zoom: 1,
+            croppedAreaPixels: null,
+            croppedImage: null,
+            imageStep: 'none',
+          }
           : step
       )
     );
@@ -1145,10 +1140,10 @@ function CreatePost() {
       prevSteps.map((step) =>
         step.id === stepId
           ? {
-              ...step,
-              croppedImage: null,
-              imageStep: step.fileType === 'video' ? 'video-preview' : 'crop',
-            }
+            ...step,
+            croppedImage: null,
+            imageStep: step.fileType === 'video' ? 'video-preview' : 'crop',
+          }
           : step
       )
     );
@@ -1163,16 +1158,16 @@ function CreatePost() {
       prevSteps.map((step) =>
         step.id === stepId
           ? {
-              ...step,
-              imageSrc: null,
-              crop: { x: 0, y: 0 },
-              zoom: 1,
-              croppedAreaPixels: null,
-              croppedImage: null,
-              imageStep: 'none',
-              selectedFile: null,
-              fileType: null,
-            }
+            ...step,
+            imageSrc: null,
+            crop: { x: 0, y: 0 },
+            zoom: 1,
+            croppedAreaPixels: null,
+            croppedImage: null,
+            imageStep: 'none',
+            selectedFile: null,
+            fileType: null,
+          }
           : step
       )
     );
@@ -1818,7 +1813,7 @@ function CreatePost() {
                       onClick={() => setShowResourcesSection(true)}
                       className="add-description-btn"
                     >
-                      + Ajouter des ressources affiliées
+                      + Ajouter des ressources recommandées
                     </button>
                   )}
                 </div>
@@ -2309,7 +2304,7 @@ function CreatePost() {
                       onClick={() => setShowResourcesSection(true)}
                       className="add-description-btn"
                     >
-                      + Ajouter des ressources affiliées
+                      + Ajouter des ressources recommandées
                     </button>
                   )}
                 </div>

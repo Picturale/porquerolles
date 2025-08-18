@@ -1,7 +1,7 @@
-import { copyFileSync, cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'fs';
+import { copyFileSync, existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'fs';
 import { extname, join } from 'path';
 
-const distPath = './dist';
+const distPath = './dist/social-app';
 
 function getFileSize(filePath) {
   const stats = statSync(filePath);
@@ -11,12 +11,12 @@ function getFileSize(filePath) {
 function scanDirectory(dir, basePath = '') {
   const items = [];
   const files = readdirSync(dir);
-  
+
   for (const file of files) {
     const filePath = join(dir, file);
     const relativePath = join(basePath, file);
     const stats = statSync(filePath);
-    
+
     if (stats.isDirectory()) {
       items.push({
         type: 'directory',
@@ -34,102 +34,18 @@ function scanDirectory(dir, basePath = '') {
       });
     }
   }
-  
+
   return items;
 }
 
 function copyHomePage() {
-  const sourceHomePage = join(distPath, 'src', 'index.html');
-  const targetHomePage = join(distPath, 'index.html');
-  
-  if (existsSync(sourceHomePage)) {
-    copyFileSync(sourceHomePage, targetHomePage);
-    console.log('📱 Page d\'accueil copiée vers dist/index.html pour Capacitor');
-  }
+  // Plus de copie: la social-app est buildée directement dans dist/social-app
 }
 
-function copyCoreApp() {
-  // Copy core-app directly from source into dist so validators find it
-  const sourceCoreApp = join('src', 'core-app');
-  const targetCoreApp = join(distPath, 'core-app');
-  
-  if (existsSync(sourceCoreApp)) {
-    // Copie récursive du dossier core-app
-    cpSync(sourceCoreApp, targetCoreApp, { recursive: true });
-    console.log('🛠️ Core-app copiée vers dist/core-app/ pour Firebase');
-    
-    // S'assurer que les assets sont copiés depuis le dossier source original
-    const sourceAssets = './src/core-app/assets';
-    if (existsSync(sourceAssets)) {
-      // Copier vers les deux emplacements
-      cpSync(sourceAssets, join(targetCoreApp, 'assets'), { recursive: true });
-      // keep source assets as-is; no need to recopy to sourceCoreApp
-      console.log('📂 Assets copiés dans core-app');
-    }
-  }
-}
+
 
 function copySocialApp() {
-  // Vite génère directement dans dist/, donc on vérifie que les fichiers sont présents
-  const distIndexHtml = join(distPath, 'index.html');
-  const distAssets = join(distPath, 'assets');
-  
-  if (existsSync(distIndexHtml) && existsSync(distAssets)) {
-    console.log('📱 Social-app build détecté dans dist/');
-    
-    // Créer le dossier social-app pour Firebase routing
-    const targetSocialApp = join(distPath, 'social-app');
-    
-    // Supprimer le dossier target s'il existe pour éviter les conflits
-    if (existsSync(targetSocialApp)) {
-      rmSync(targetSocialApp, { recursive: true, force: true });
-    }
-    
-    // Copier tous les fichiers individuellement pour éviter la boucle
-    const filesToCopy = ['index.html', 'manifest.json', 'camera.svg', 'favicon.svg'];
-    
-    // Créer le dossier target
-    mkdirSync(targetSocialApp, { recursive: true });
-    
-    for (const file of filesToCopy) {
-      const sourcePath = join(distPath, file);
-      if (existsSync(sourcePath)) {
-        copyFileSync(sourcePath, join(targetSocialApp, file));
-      }
-    }
-    
-    // Copier le dossier assets
-    const sourceAssets = join(distPath, 'assets');
-    const targetAssets = join(targetSocialApp, 'assets');
-    if (existsSync(sourceAssets)) {
-      cpSync(sourceAssets, targetAssets, { recursive: true });
-    }
-    
-    console.log('📱 Social-app copiée vers dist/social-app/ pour Firebase');
-    
-    // Vérifier que les fichiers critiques sont présents
-    const criticalFiles = ['index.html'];
-    for (const file of criticalFiles) {
-      const filePath = join(targetSocialApp, file);
-      if (!existsSync(filePath)) {
-        console.error(`❌ Fichier critique manquant: ${file}`);
-        process.exit(1);
-      }
-    }
-    
-    // Vérifier que les scripts sont injectés dans le HTML
-    const htmlContent = readFileSync(join(targetSocialApp, 'index.html'), 'utf8');
-    if (!htmlContent.includes('assets/') || !htmlContent.includes('.js')) {
-      console.error('❌ Les scripts JS ne sont pas injectés dans social-app/index.html');
-      process.exit(1);
-    }
-    
-    console.log('✅ Social-app validation réussie');
-  } else {
-    console.error('❌ Build Vite non trouvé dans dist/');
-    console.error('   Vérifiez que "npm run build" s\'est exécuté correctement');
-    process.exit(1);
-  }
+  // Plus de copie: la social-app est déjà dans dist/social-app
 }
 
 // Ensure a minimum number of CSS assets exist to satisfy validation script
@@ -158,35 +74,52 @@ function ensureMinimumCssAssets() {
 
 function createAppRedirects() {
   console.log('📱 Navigation directe activée : pas de redirections créées');
-  
+
   // Anciennes redirections supprimées pour éviter les problèmes de navigation sur iOS
   // Les liens directs vers /src/core-app/ et /src/social-app/ sont maintenant utilisés
   // dans index.html, ce qui élimine le besoin de fichiers de redirection intermédiaires
 }
 
+// Sanitize built index.html for iOS WKWebView (remove crossorigin, force relative icons)
+function sanitizeIndexHtml() {
+  try {
+    const indexPath = join(distPath, 'index.html');
+    if (!existsSync(indexPath)) return;
+    let html = readFileSync(indexPath, 'utf8');
+    // Remove crossorigin attributes that can mask errors in WKWebView
+    html = html.replace(/\s+crossorigin(\s*=\s*"[^"]*"|\s*=\s*'[^']*')?/g, '');
+    // Ensure favicon/icon links are relative
+    html = html.replace(/href="\/favicon\.svg"/g, 'href="./favicon.svg"');
+    writeFileSync(indexPath, html);
+    console.log('🧼 index.html sanitisé pour iOS (crossorigin retiré, icônes relatives)');
+  } catch (e) {
+    console.warn('⚠️ Impossible de sanitiser index.html:', e?.message || e);
+  }
+}
+
 function generateReport() {
   // Copier la page d'accueil en premier
   copyHomePage();
-  
-  // Copier la core-app vers la racine pour Firebase
-  copyCoreApp();
-  
+
   // Copier la social-app vers la racine pour Firebase
   copySocialApp();
 
   // S'assurer qu'il y a au moins 2 fichiers CSS dans dist/assets
   ensureMinimumCssAssets();
-  
+
   // Créer les redirections pour les apps
   createAppRedirects();
-  
-  console.log('\n🚀 BUILD COMPLETE - Vision Picturale Community');
-  console.log('================================================');
-  
+
+  // Sanitize built index for iOS
+  sanitizeIndexHtml();
+
+  console.log('\n🚀 BUILD COMPLETE - Noeme Social App');
+  console.log('=====================================');
+
   const structure = scanDirectory(distPath);
   let totalSize = 0;
   let fileCount = 0;
-  
+
   function printStructure(items, indent = '') {
     for (const item of items) {
       if (item.type === 'directory') {
@@ -201,27 +134,25 @@ function generateReport() {
       }
     }
   }
-  
+
   console.log('📦 Structure du build:');
   printStructure(structure);
-  
+
   console.log('\n📊 Statistiques:');
   console.log(`   • Nombre de fichiers: ${fileCount}`);
   console.log(`   • Taille totale: ${totalSize.toFixed(2)} KB`);
-  
+
   console.log('\n🌐 URLs disponibles:');
-  console.log('   • Accueil: http://localhost:8002/');
-  console.log('   • Calibrateur: http://localhost:8002/src/core-app/');
-  console.log('   • Communauté: http://localhost:8002/src/social-app/');
-  
+  console.log('   • Social App: http://localhost:8002/');
+
   console.log('\n📱 Applications mobiles:');
   console.log('   • npm run mobile:ios - Build et ouverture iOS');
   console.log('   • npm run mobile:android - Build et ouverture Android');
-  
+
   console.log('\n🚀 Déploiement:');
   console.log('   • npm run deploy - Déployer sur Firebase');
   console.log('   • npm run serve:firebase - Test local Firebase');
-  
+
   // Générer un rapport markdown
   const markdownReport = `# Build Report - Vision Picturale Community
 

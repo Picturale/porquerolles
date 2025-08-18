@@ -1,5 +1,5 @@
-const {onRequest} = require("firebase-functions/v2/https");
-const {defineSecret} = require("firebase-functions/params");
+const { onRequest } = require("firebase-functions/v2/https");
+const { defineSecret } = require("firebase-functions/params");
 const admin = require("firebase-admin");
 try {
   admin.app();
@@ -9,6 +9,7 @@ try {
 const logger = require("firebase-functions/logger");
 const REGION = "europe-west1";
 const ADMIN_SECRET = defineSecret("ADMIN_BOOTSTRAP_CODE");
+
 
 async function verifyAuth(req) {
   try {
@@ -36,130 +37,195 @@ async function requireAdmin(req) {
 
 async function logAudit(entry) {
   try {
-    await admin.firestore().collection("trust_audit").add({...entry, ts: admin.firestore.FieldValue.serverTimestamp()});
+    await admin.firestore().collection("trust_audit").add({ ...entry, ts: admin.firestore.FieldValue.serverTimestamp() });
   } catch (e) {
     logger.warn("audit_log_failed", String(e));
   }
 }
 
-exports.adminBootstrap = onRequest({cors: true, maxInstances: 1, region: REGION, secrets: [ADMIN_SECRET]}, async (req, res) => {
+exports.adminBootstrap = onRequest({ cors: true, maxInstances: 1, region: REGION, secrets: [ADMIN_SECRET] }, async (req, res) => {
   try {
-    if (req.method !== "POST") return res.status(405).json({ok: false, error: "method_not_allowed"});
+    if (req.method !== "POST") return res.status(405).json({ ok: false, error: "method_not_allowed" });
     const decoded = await verifyAuth(req);
-    if (!decoded) return res.status(401).json({ok: false, error: "unauthenticated"});
-    const {code} = req.body || {};
+    if (!decoded) return res.status(401).json({ ok: false, error: "unauthenticated" });
+    const { code } = req.body || {};
     const expected = ADMIN_SECRET.value();
-    if (!expected || String(code || "").trim() !== expected) return res.status(403).json({ok: false, error: "invalid_code"});
+    if (!expected || String(code || "").trim() !== expected) return res.status(403).json({ ok: false, error: "invalid_code" });
     const user = await admin.auth().getUser(decoded.uid);
     const prior = user.customClaims || {};
-    const roles = Object.assign({}, prior.roles || {}, {owner: true, admin: true});
-    await admin.auth().setCustomUserClaims(user.uid, {...prior, roles});
-    await logAudit({actorUid: decoded.uid, action: "bootstrap_admin", target: {uid: user.uid}});
-    return res.status(200).json({ok: true, uid: user.uid, roles});
+    const roles = Object.assign({}, prior.roles || {}, { owner: true, admin: true });
+    await admin.auth().setCustomUserClaims(user.uid, { ...prior, roles });
+    await logAudit({ actorUid: decoded.uid, action: "bootstrap_admin", target: { uid: user.uid } });
+    return res.status(200).json({ ok: true, uid: user.uid, roles });
   } catch (err) {
-    logger.error("adminBootstrap error", {err: String(err)});
-    return res.status(500).json({ok: false, error: "internal_error"});
+    logger.error("adminBootstrap error", { err: String(err) });
+    return res.status(500).json({ ok: false, error: "internal_error" });
   }
 });
 
-exports.adminApi = onRequest({cors: true, maxInstances: 10, region: REGION}, async (req, res) => {
+// Public: search internal products created by users (pro shops)
+exports.productsSearch = onRequest({ cors: true, maxInstances: 10, region: REGION }, async (req, res) => {
+  try {
+    const q = String((req.query?.q || req.query?.Q || "")).trim().toLowerCase();
+    const limit = Math.min(30, Math.max(1, Number(req.query?.limit || 20)));
+    const db = admin.firestore();
+    let snap;
+    try {
+      snap = await db.collection("products").orderBy("updatedAt", "desc").limit(120).get();
+    } catch (_) {
+      try {
+        snap = await db.collection("products").orderBy("createdAt", "desc").limit(120).get();
+      } catch (e) {
+        snap = await db.collection("products").limit(120).get();
+      }
+    }
+    const items = [];
+    const ownerIds = new Set();
+    const rawItems = [];
+
+    // First pass: collect all items and owner IDs
+    snap.forEach((doc) => {
+      const r = doc.data() || {};
+      const name = r.title || r.name || "";
+      const hay = `${name}\n${r.description || ""}`.toLowerCase();
+      if (q && !hay.includes(q)) return;
+
+      rawItems.push({ id: doc.id, data: r });
+      if (r.ownerId) ownerIds.add(r.ownerId);
+    });
+
+    // Second pass: fetch owner usernames
+    const ownerMap = {};
+    if (ownerIds.size > 0) {
+      try {
+        const ownerPromises = Array.from(ownerIds).map(async (ownerId) => {
+          try {
+            const userDoc = await db.collection("users").doc(ownerId).get();
+            if (userDoc.exists) {
+              const userData = userDoc.data();
+              return { ownerId, username: userData.username || userData.displayName || "Utilisateur" };
+            }
+          } catch (_) {
+            // ignore individual user fetch errors
+          }
+          return { ownerId, username: "Utilisateur" };
+        });
+        const ownerResults = await Promise.all(ownerPromises);
+        ownerResults.forEach(({ ownerId, username }) => {
+          ownerMap[ownerId] = username;
+        });
+      } catch (_) {
+        // ignore owner fetching errors, proceed without owner info
+      }
+    }
+
+    // Third pass: build final items with owner info
+    rawItems.forEach(({ id, data: r }) => {
+      const image = r.imageUrl || (Array.isArray(r.images) && r.images.length ? r.images[0] : null) || null;
+      const seller = r.sellerUsername || r.seller || r.shopSlug || ownerMap[r.ownerId] || null;
+      const linkUrl = r.linkUrl || (seller ? `/shop/${seller}/p/${id}` : `/product/${id}`);
+      items.push({
+        source: "internal",
+        kind: "product",
+        id,
+        name: r.title || r.name || "",
+        domain: "",
+        logoUrl: "",
+        imageUrl: image,
+        description: r.description || "",
+        linkUrl,
+        price: r.price || null,
+        ownerUsername: ownerMap[r.ownerId] || null,
+        ownerId: r.ownerId || null,
+      });
+    });
+
+    return res.status(200).json(items.slice(0, limit));
+  } catch (err) {
+    return res.status(500).json({ ok: false, error: "internal_error", message: String(err) });
+  }
+});
+
+// Public: validate internal products (normalize)
+exports.productsValidate = onRequest({ cors: true, maxInstances: 10, region: REGION }, async (req, res) => {
+  try {
+    if (req.method !== "POST") return res.status(405).json({ ok: false, error: "method_not_allowed" });
+    const { items } = req.body || {};
+    const arr = Array.isArray(items) ? items : [];
+    const out = arr.map((i) => {
+      const id = String(i.id || "");
+      const name = String(i.name || "");
+      const imageUrl = i.imageUrl || i.logoUrl || "";
+      const description = i.description || "";
+      const seller = i.sellerUsername || i.shopSlug || null;
+      const linkUrl = i.linkUrl || (seller ? `/shop/${seller}/p/${id}` : `/product/${id}`);
+      return {
+        source: "internal",
+        kind: "product",
+        id,
+        name,
+        domain: "",
+        logoUrl: "",
+        imageUrl,
+        description,
+        linkUrl,
+      };
+    }).filter((x) => x.id && x.name);
+    return res.status(200).json(out);
+  } catch (err) {
+    return res.status(500).json({ ok: false, error: "internal_error", message: String(err) });
+  }
+});
+
+
+
+
+
+exports.adminApi = onRequest({ cors: true, maxInstances: 10, region: REGION }, async (req, res) => {
   try {
     const p = (req.path || req.url || "").toLowerCase();
     const db = admin.firestore();
-    // Public route: affiliates search (mock fallback)
-    if (p.includes("/affiliates/search")) {
-      const q = String((req.query?.q || req.query?.Q || "")).toLowerCase();
-      const base = [
-        {id: "amazon", kind: "merchant", name: "Amazon", domain: "amazon.fr", logoUrl: "https://logo.clearbit.com/amazon.com"},
-        {id: "etsy", kind: "merchant", name: "Etsy", domain: "etsy.com", logoUrl: "https://logo.clearbit.com/etsy.com"},
-        {id: "adobe", kind: "merchant", name: "Adobe", domain: "adobe.com", logoUrl: "https://logo.clearbit.com/adobe.com"},
-        {id: "figma", kind: "merchant", name: "Figma", domain: "figma.com", logoUrl: "https://logo.clearbit.com/figma.com"},
-        {id: "canon-eos-r", kind: "product", name: "Canon EOS R", domain: "canon.fr", logoUrl: "https://logo.clearbit.com/canon.fr"},
-        {id: "sony-a7-iv", kind: "product", name: "Sony A7 IV", domain: "sony.com", logoUrl: "https://logo.clearbit.com/sony.com"},
-      ];
-      const filtered = q ? base.filter((s) => s.name.toLowerCase().includes(q) || (s.domain && s.domain.toLowerCase().includes(q))) : base.slice(0, 5);
-      return res.status(200).json(filtered);
-    }
 
-    // Public route: affiliates validate (echo back with basic normalization)
-    if (p.includes("/affiliates/validate")) {
-      if (req.method !== "POST") return res.status(405).json({ok: false, error: "method_not_allowed"});
-      const {items} = req.body || {};
-      const arr = Array.isArray(items) ? items : [];
-      const normalized = arr.map((x) => ({
-        source: "skimlinks",
-        kind: x.kind || "merchant",
-        id: String(x.id || "").trim() || "unknown",
-        name: x.name || "",
-        domain: x.domain || "",
-        logoUrl: x.logoUrl || "",
-        deeplinkTemplate: x.deeplinkTemplate || "",
-      }));
-      return res.status(200).json(normalized);
-    }
 
-    // Public route: invite redemption (kept lightweight for MVP)
-    if (p.includes("/invites/redeem")) {
-      if (req.method !== "POST") return res.status(405).json({ok: false, error: "method_not_allowed"});
-      const {code} = req.body || {};
-      const inviteCode = String(code || "").trim().toUpperCase();
-      if (!inviteCode) return res.status(400).json({ok: false, error: "missing_code"});
-      const ref = db.collection("invites").doc(inviteCode);
-      const snap = await ref.get();
-      if (!snap.exists) return res.status(400).json({ok: false, error: "invalid"});
-      const data = snap.data() || {};
-      if (data.redeemed || data.active === false) return res.status(400).json({ok: false, error: "invalid"});
-      // Optional: attribute redemption to authenticated user when available
-      const who = await verifyAuth(req);
-      await Promise.all([
-        ref.set({redeemed: true, redeemedAt: admin.firestore.FieldValue.serverTimestamp(), redeemedBy: who ? {uid: who.uid, email: who.email || null} : null}, {merge: true}),
-        db.collection("invite_redemptions").add({
-          code: inviteCode,
-          ts: admin.firestore.FieldValue.serverTimestamp(),
-          ua: String(req.headers["user-agent"] || ""),
-          ip: String((req.headers["x-forwarded-for"] || "").toString().split(",")[0] || req.ip || ""),
-        }),
-      ]);
-      return res.status(200).json({ok: true});
-    }
+  // Invite endpoints removed
 
     // Admin-only routes below
     const decoded = await requireAdmin(req);
-    if (!decoded) return res.status(401).json({ok: false, error: "unauthorized"});
+    if (!decoded) return res.status(401).json({ ok: false, error: "unauthorized" });
 
     if (p.includes("/users/roles")) {
-      if (req.method !== "POST") return res.status(405).json({ok: false, error: "method_not_allowed"});
-      const {uid, add, remove, reason} = req.body || {};
-      if (!uid) return res.status(400).json({ok: false, error: "missing_uid"});
+      if (req.method !== "POST") return res.status(405).json({ ok: false, error: "method_not_allowed" });
+      const { uid, add, remove, reason } = req.body || {};
+      if (!uid) return res.status(400).json({ ok: false, error: "missing_uid" });
       const user = await admin.auth().getUser(uid);
       const prior = user.customClaims || {};
       const roles = Object.assign({}, prior.roles || {});
       if (Array.isArray(add)) add.forEach((r) => (roles[r] = true));
       if (Array.isArray(remove)) remove.forEach((r) => delete roles[r]);
-      await admin.auth().setCustomUserClaims(uid, {...prior, roles});
-      await logAudit({actorUid: decoded.uid, action: "users_roles_update", target: {uid}, before: {roles: prior.roles || {}}, after: {roles}, reason: reason || ""});
-      return res.status(200).json({ok: true, roles});
+      await admin.auth().setCustomUserClaims(uid, { ...prior, roles });
+      await logAudit({ actorUid: decoded.uid, action: "users_roles_update", target: { uid }, before: { roles: prior.roles || {} }, after: { roles }, reason: reason || "" });
+      return res.status(200).json({ ok: true, roles });
     }
 
     if (p.includes("/users/ban")) {
-      if (req.method !== "POST") return res.status(405).json({ok: false, error: "method_not_allowed"});
-      const {uid, durationDays, reason} = req.body || {};
-      if (!uid) return res.status(400).json({ok: false, error: "missing_uid"});
+      if (req.method !== "POST") return res.status(405).json({ ok: false, error: "method_not_allowed" });
+      const { uid, durationDays, reason } = req.body || {};
+      if (!uid) return res.status(400).json({ ok: false, error: "missing_uid" });
       const until = durationDays ? Date.now() + Number(durationDays) * 86400000 : null;
-      await admin.auth().updateUser(uid, {disabled: true});
-      await db.collection("users").doc(uid).set({banned: true, bannedUntil: until ? new Date(until) : null}, {merge: true});
-      await logAudit({actorUid: decoded.uid, action: "users_ban", target: {uid}, reason: reason || "", until});
-      return res.status(200).json({ok: true});
+      await admin.auth().updateUser(uid, { disabled: true });
+      await db.collection("users").doc(uid).set({ banned: true, bannedUntil: until ? new Date(until) : null }, { merge: true });
+      await logAudit({ actorUid: decoded.uid, action: "users_ban", target: { uid }, reason: reason || "", until });
+      return res.status(200).json({ ok: true });
     }
 
     if (p.includes("/moderation/decide")) {
-      if (req.method !== "POST") return res.status(405).json({ok: false, error: "method_not_allowed"});
-      const {itemId, action, reason} = req.body || {};
-      if (!itemId || !action) return res.status(400).json({ok: false, error: "missing_params"});
+      if (req.method !== "POST") return res.status(405).json({ ok: false, error: "method_not_allowed" });
+      const { itemId, action, reason } = req.body || {};
+      if (!itemId || !action) return res.status(400).json({ ok: false, error: "missing_params" });
       const allowed = new Set(["mask", "remove", "restore", "validate"]);
-      if (!allowed.has(String(action))) return res.status(400).json({ok: false, error: "invalid_action"});
+      if (!allowed.has(String(action))) return res.status(400).json({ ok: false, error: "invalid_action" });
       const ref = db.collection("posts").doc(String(itemId));
-      const updates = {updatedAt: admin.firestore.FieldValue.serverTimestamp()};
+      const updates = { updatedAt: admin.firestore.FieldValue.serverTimestamp() };
       if (action === "mask") {
         updates.status = "masked";
         updates.maskedAt = admin.firestore.FieldValue.serverTimestamp();
@@ -171,9 +237,9 @@ exports.adminApi = onRequest({cors: true, maxInstances: 10, region: REGION}, asy
         updates.maskedAt = null;
         updates.removedAt = null;
       }
-      await ref.set(updates, {merge: true});
-      await logAudit({actorUid: decoded.uid, action: "moderation_decide", target: {itemId}, details: {action}, reason: reason || ""});
-      return res.status(200).json({ok: true});
+      await ref.set(updates, { merge: true });
+      await logAudit({ actorUid: decoded.uid, action: "moderation_decide", target: { itemId }, details: { action }, reason: reason || "" });
+      return res.status(200).json({ ok: true });
     }
 
     if (p.includes("/moderation/list")) {
@@ -193,8 +259,8 @@ exports.adminApi = onRequest({cors: true, maxInstances: 10, region: REGION}, asy
           userId: data.userId || "",
           title: data.title || "",
           createdAt: data.createdAt ? data.createdAt.toDate?.()?.toISOString?.() || null : null,
-          agg: {ratingsCount: agg.ratingsCount || 0, trustedCount: agg.trustedCount || 0, maxClusterShare: agg.maxClusterShare || 0, wfs: agg.wfs || 0, stable: !!agg.stable},
-          echoes: echoesStats ? {averages: echoesStats.averages || null, totalAverage: echoesStats.totalAverage || null, ratingsCount: echoesStats.ratingsCount || 0} : null,
+          agg: { ratingsCount: agg.ratingsCount || 0, trustedCount: agg.trustedCount || 0, maxClusterShare: agg.maxClusterShare || 0, wfs: agg.wfs || 0, stable: !!agg.stable },
+          echoes: echoesStats ? { averages: echoesStats.averages || null, totalAverage: echoesStats.totalAverage || null, ratingsCount: echoesStats.ratingsCount || 0 } : null,
           status,
         };
         let ok = true;
@@ -211,54 +277,14 @@ exports.adminApi = onRequest({cors: true, maxInstances: 10, region: REGION}, asy
         if (dr !== 0) return dr;
         return (b.agg.wfs || 0) - (a.agg.wfs || 0);
       });
-      return res.status(200).json({ok: true, items});
+      return res.status(200).json({ ok: true, items });
     }
 
-    if (p.includes("/invites/user")) {
-      const uidQ = (req.query.uid || "").toString().trim();
-      const emailQ = (req.query.email || "").toString().trim().toLowerCase();
-      let uid = uidQ;
-      if (!uid && emailQ) {
-        try {
-          const u = await admin.auth().getUserByEmail(emailQ);
-          uid = u.uid;
-        } catch (_) {}
-      }
-      if (!uid) return res.status(400).json({ok: false, error: "missing_uid_or_email"});
-      const userDoc = await db.collection("users").doc(uid).get();
-      const data = userDoc.exists ? userDoc.data() : {};
-      const out = {uid, username: data?.username || "", email: data?.email || emailQ || "", badge: data?.trust?.badge || "", invites: Object.assign({balance: 0, issuedThisMonth: 0, redeemedThisMonth: 0}, data?.trust?.invites || {}), trust: {T: data?.trust?.T || null}};
-      return res.status(200).json({ok: true, user: out});
-    }
+  // /invites/user removed
 
-    if (p.includes("/invites/credit")) {
-      if (req.method !== "POST") return res.status(405).json({ok: false, error: "method_not_allowed"});
-      const {uid, delta, reason} = req.body || {};
-      if (!uid || typeof delta !== "number") return res.status(400).json({ok: false, error: "bad_request"});
-      const ref = db.collection("users").doc(uid);
-      await db.runTransaction(async (tx) => {
-        const snap = await tx.get(ref);
-        const data = snap.exists ? snap.data() : {};
-        const invites = Object.assign({balance: 0, issuedThisMonth: 0, redeemedThisMonth: 0}, data?.trust?.invites || {});
-        invites.balance = Math.max(0, (invites.balance || 0) + delta);
-        const trust = Object.assign({}, data?.trust || {}, {invites});
-        tx.set(ref, {trust}, {merge: true});
-      });
-      await logAudit({actorUid: decoded.uid, action: "invites_credit", target: {uid}, details: {delta}, reason: reason || ""});
-      return res.status(200).json({ok: true});
-    }
+  // /invites/credit removed
 
-    if (p.includes("/invites/recent")) {
-      const lim = Math.min(200, Math.max(1, Number(req.query.limit || 50)));
-      const snap = await db.collection("invite_redemptions").orderBy("ts", "desc").limit(lim).get();
-      const items = [];
-      snap.forEach((d) => {
-        const x = d.data() || {};
-        const ipHash = x.ip ? require("crypto").createHash("sha256").update(String(x.ip)).digest("hex") : undefined;
-        items.push({code: x.code || "", ts: x.ts?.toDate?.()?.toISOString?.() || null, ua: x.ua || "", ipHash});
-      });
-      return res.status(200).json({ok: true, items});
-    }
+  // /invites/recent removed
 
     if (p.includes("/metrics/overview")) {
       const [usersSnap, postsSnap] = await Promise.all([
@@ -276,12 +302,12 @@ exports.adminApi = onRequest({cors: true, maxInstances: 10, region: REGION}, asy
         else provisional++;
         if (typeof agg.wfs === "number" && agg.wfs >= 2.5) masked++;
       });
-      return res.status(200).json({ok: true, data: {users, posts, masked, provisional, stable}});
+      return res.status(200).json({ ok: true, data: { users, posts, masked, provisional, stable } });
     }
 
-    return res.status(404).json({ok: false, error: "unknown_route", path: p});
+    return res.status(404).json({ ok: false, error: "unknown_route", path: p });
   } catch (err) {
-    logger.error("adminApi error", {err: String(err)});
-    return res.status(500).json({ok: false, error: "internal_error"});
+    logger.error("adminApi error", { err: String(err) });
+    return res.status(500).json({ ok: false, error: "internal_error" });
   }
 });

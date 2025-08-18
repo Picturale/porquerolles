@@ -357,6 +357,13 @@
 				"--project",
 				"vision-picturale-community"
 			]
+		},
+		{
+			"label": "Capacitor iOS Sync",
+			"type": "shell",
+			"command": "npx cap copy ios && npx cap sync ios",
+			"isBackground": false,
+			"group": "build"
 		}
 	]
 }

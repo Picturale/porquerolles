@@ -1,0 +1,58 @@
+/* Solution finale pour iOS - Safe Areas */
+
+/* Configuration propre pour l'app iOS native */
+.capacitor-ios .top-menu {
+  /* StatusBar de 54px + padding normal de 12px */
+  padding-top: 66px !important;
+  /* Hauteur totale : menu (60px) + StatusBar (54px) */
+  height: 114px !important;
+  /* Fond normal du menu */
+  background: var(--color-white) !important;
+  box-sizing: border-box !important;
+}
+
+.capacitor-ios .app-container {
+  /* Compenser la hauteur totale du menu (114px) */
+  padding-top: 114px !important;
+  /* S'assurer que le contenu est visible */
+  min-height: calc(100vh - 114px) !important;
+}
+
+/* Debug : afficher les safe areas avec des bordures colorées sur iOS */
+.capacitor-ios .top-menu {
+  border-top: 5px solid red !important;
+  border-left: 3px solid blue !important;
+  border-right: 3px solid blue !important;
+  background: rgba(255, 0, 0, 0.1) !important; /* Fond rouge translucide pour voir le menu */
+}
+
+.capacitor-ios .app-container {
+  border-left: 3px solid green !important;
+  border-right: 3px solid green !important;
+  border-top: 5px solid orange !important; /* Bordure orange pour voir le contenu */
+}
+
+/* Forcer les safe areas sur iOS - VERSION SIMPLIFIEE */
+.capacitor-ios .top-menu {
+  /* Force un padding-top de 44px minimum pour le status bar iOS */
+  padding-top: 56px !important; /* 44px status bar + 12px padding normal */
+  height: 104px !important; /* 60px menu + 44px status bar */
+  box-sizing: border-box !important;
+}
+
+.capacitor-ios .app-container {
+  /* Force le padding pour compenser la hauteur totale du menu */
+  padding-top: 104px !important; /* Hauteur totale du menu avec status bar */
+}
+
+/* Alternative : Si les env() ne fonctionnent pas, utiliser une valeur fixe pour iPhone */
+@supports not (padding: env(safe-area-inset-top)) {
+  .capacitor-ios .top-menu {
+    padding-top: 56px !important; /* 44px status bar + 12px padding */
+    height: 104px !important; /* 60px menu + 44px status bar */
+  }
+  
+  .capacitor-ios .app-container {
+    padding-top: 104px !important; /* Hauteur totale du menu avec status bar */
+  }
+}

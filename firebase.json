@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist",
+    "public": "dist/social-app",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -76,32 +76,37 @@
     "rewrites": [
       {
         "source": "/api/admin/bootstrap",
-        "function": { "functionId": "adminBootstrap", "region": "europe-west1" }
+        "function": {
+          "functionId": "adminBootstrap",
+          "region": "europe-west1"
+        }
       },
       {
-        "source": "/api/invites/redeem",
-        "function": { "functionId": "adminApi", "region": "europe-west1" }
+        "source": "/api/products/search",
+        "function": {
+          "functionId": "productsSearch",
+          "region": "europe-west1"
+        }
       },
       {
-        "source": "/api/affiliates/**",
-        "function": { "functionId": "adminApi", "region": "europe-west1" }
+        "source": "/api/products/validate",
+        "function": {
+          "functionId": "productsValidate",
+          "region": "europe-west1"
+        }
       },
       {
         "source": "/api/admin/**",
-        "function": { "functionId": "adminApi", "region": "europe-west1" }
+        "function": {
+          "functionId": "adminApi",
+          "region": "europe-west1"
+        }
       },
       {
         "source": "/",
         "destination": "/index.html"
       },
-      {
-        "source": "/core-app/**",
-        "destination": "/core-app/index.html"
-      },
-      {
-        "source": "/social-app/**",
-        "destination": "/social-app/index.html"
-      },
+      
       {
         "source": "/home",
         "destination": "/index.html"
@@ -113,11 +118,7 @@
       {
         "source": "/register",
         "destination": "/index.html"
-      },
-      {
-        "source": "/invite",
-        "destination": "/index.html"
-      },
+  },
       {
         "source": "/profile/**",
         "destination": "/index.html"
@@ -145,8 +146,8 @@
     ]
   },
   "firestore": {
-  "rules": "config/firestore.rules",
-  "indexes": "config/firestore.indexes.json"
+    "rules": "config/firestore.rules",
+    "indexes": "config/firestore.indexes.json"
   },
   "database": {
     "rules": "database.rules.json"
@@ -155,9 +156,9 @@
     "rules": "config/storage.rules"
   },
   "functions": {
-  "source": "functions",
-  "runtime": "nodejs22",
-  "region": "europe-west1"
+    "source": "functions",
+    "runtime": "nodejs22",
+    "region": "europe-west1"
   },
   "emulators": {
     "functions": {
