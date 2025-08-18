@@ -1,6 +1,6 @@
 const { onRequest } = require("firebase-functions/v2/https");
-const { defineSecret } = require("firebase-functions/params");
 const admin = require("firebase-admin");
+const { getFirestore, FieldValue } = require("firebase-admin/firestore");
 try {
   admin.app();
 } catch (_) {
@@ -8,7 +8,11 @@ try {
 }
 const logger = require("firebase-functions/logger");
 const REGION = "europe-west1";
-const ADMIN_SECRET = defineSecret("ADMIN_BOOTSTRAP_CODE");
+const ADMIN_SECRET_VALUE = process.env.ADMIN_BOOTSTRAP_CODE || "";
+const DATABASE_ID = process.env.FIREBASE_DATABASE_ID || "porquerolles";
+
+// Global Firestore instance targeting named database
+const db = getFirestore(admin.app(), DATABASE_ID);
 
 
 async function verifyAuth(req) {
@@ -37,19 +41,20 @@ async function requireAdmin(req) {
 
 async function logAudit(entry) {
   try {
-    await admin.firestore().collection("trust_audit").add({ ...entry, ts: admin.firestore.FieldValue.serverTimestamp() });
+    await db.collection("trust_audit").add({ ...entry, ts: FieldValue.serverTimestamp() });
   } catch (e) {
     logger.warn("audit_log_failed", String(e));
   }
 }
 
-exports.adminBootstrap = onRequest({ cors: true, maxInstances: 1, region: REGION, secrets: [ADMIN_SECRET] }, async (req, res) => {
+exports.adminBootstrap = onRequest({ cors: true, maxInstances: 1, region: REGION }, async (req, res) => {
   try {
     if (req.method !== "POST") return res.status(405).json({ ok: false, error: "method_not_allowed" });
     const decoded = await verifyAuth(req);
     if (!decoded) return res.status(401).json({ ok: false, error: "unauthenticated" });
     const { code } = req.body || {};
-    const expected = ADMIN_SECRET.value();
+    const expected = ADMIN_SECRET_VALUE;
+    if (!expected) return res.status(503).json({ ok: false, error: "secret_not_configured" });
     if (!expected || String(code || "").trim() !== expected) return res.status(403).json({ ok: false, error: "invalid_code" });
     const user = await admin.auth().getUser(decoded.uid);
     const prior = user.customClaims || {};
@@ -68,7 +73,7 @@ exports.productsSearch = onRequest({ cors: true, maxInstances: 10, region: REGIO
   try {
     const q = String((req.query?.q || req.query?.Q || "")).trim().toLowerCase();
     const limit = Math.min(30, Math.max(1, Number(req.query?.limit || 20)));
-    const db = admin.firestore();
+    // use global db for named database
     let snap;
     try {
       snap = await db.collection("products").orderBy("updatedAt", "desc").limit(120).get();
@@ -225,13 +230,13 @@ exports.adminApi = onRequest({ cors: true, maxInstances: 10, region: REGION }, a
       const allowed = new Set(["mask", "remove", "restore", "validate"]);
       if (!allowed.has(String(action))) return res.status(400).json({ ok: false, error: "invalid_action" });
       const ref = db.collection("posts").doc(String(itemId));
-      const updates = { updatedAt: admin.firestore.FieldValue.serverTimestamp() };
+      const updates = { updatedAt: FieldValue.serverTimestamp() };
       if (action === "mask") {
         updates.status = "masked";
-        updates.maskedAt = admin.firestore.FieldValue.serverTimestamp();
+        updates.maskedAt = FieldValue.serverTimestamp();
       } else if (action === "remove") {
         updates.status = "removed";
-        updates.removedAt = admin.firestore.FieldValue.serverTimestamp();
+        updates.removedAt = FieldValue.serverTimestamp();
       } else if (action === "restore" || action === "validate") {
         updates.status = "active";
         updates.maskedAt = null;
@@ -288,8 +293,8 @@ exports.adminApi = onRequest({ cors: true, maxInstances: 10, region: REGION }, a
 
     if (p.includes("/metrics/overview")) {
       const [usersSnap, postsSnap] = await Promise.all([
-        admin.firestore().collection("users").get(),
-        admin.firestore().collection("posts").get(),
+        db.collection("users").get(),
+        db.collection("posts").get(),
       ]);
       const users = usersSnap.size;
       const posts = postsSnap.size;
