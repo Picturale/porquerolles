@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "porquerolles-16e8d",
     "public": "dist/social-app",
     "ignore": [
       "firebase.json",
