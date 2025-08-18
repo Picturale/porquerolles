@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
 import { useAuth } from '../hooks/useAuth';
 import '../styles/Auth.css';
+import { signInWithGoogle } from '../services/socialAuthService';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -114,6 +115,19 @@ function Login() {
       console.error('Login error:', error.message);
     } finally {
       setLoading(false);
+    }
+  };
+  
+  const handleGoogle = async () => {
+    try {
+      const res = await signInWithGoogle();
+      if (res?.success) {
+        navigate('/welcome');
+      } else {
+        setError(res?.error || 'Connexion Google indisponible');
+      }
+    } catch (err) {
+      setError('Erreur Google: ' + (err?.message || 'inconnue'));
     }
   };
   
@@ -245,7 +259,11 @@ function Login() {
           </button>
         </form>
         
-        {/* Options Google/Apple et inscription désactivées */}
+        <div className="social-auth">
+          <button type="button" className="google-button" onClick={handleGoogle}>
+            Continuer avec Google
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ try {
 }
 const logger = require("firebase-functions/logger");
 const REGION = "europe-west1";
-const ADMIN_SECRET_VALUE = process.env.ADMIN_BOOTSTRAP_CODE || "";
+const ADMIN_SECRET_VALUE = process.env.ADMIN_BOOTSTRAP_CODE || (process.env.FIREBASE_CONFIG && JSON.parse(process.env.FIREBASE_CONFIG)?.admin?.bootstrap_code) || (process.env.K_REVISION && process.env.FUNCTIONS_EMULATOR ? process.env.ADMIN_BOOTSTRAP_CODE : (require('firebase-functions').config()?.admin?.bootstrap_code || ""));
 const DATABASE_ID = process.env.FIREBASE_DATABASE_ID || "porquerolles";
 
 // Global Firestore instance targeting named database
