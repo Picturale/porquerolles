@@ -18,10 +18,11 @@
 const prodConfig = {
   apiKey: 'AIzaSyBeASZgEZe67kSNMYI1bqmNN0ETrdqjrNA',
   authDomain: 'porquerolles-16e8d.firebaseapp.com',
-  databaseURL: 'https://porquerolles-16e8d-default-rtdb.firebaseio.com',
   projectId: 'porquerolles-16e8d',
-  storageBucket: 'porquerolles-16e8d.appspot.com',
-  messagingSenderId: '265696641553'
+  storageBucket: 'porquerolles-16e8d.firebasestorage.app',
+  messagingSenderId: '265696641553',
+  appId: '1:265696641553:web:2b7d6d25d109f678f3a7b0',
+  measurementId: 'G-C5ZTKGG4GV'
 };
 
 // Emulator configuration for local development
@@ -46,6 +47,7 @@ const USE_EMULATORS = false; // Changez à true quand les émulateurs sont prêt
 
 // Export the appropriate configuration
 export const firebaseConfig = (isDev && USE_EMULATORS) ? emulatorConfig : prodConfig;
+export const databaseId = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_FIREBASE_DATABASE_ID) || 'porquerolles';
 
 // Export development status for debugging
 export const isDevEnvironment = isDev;

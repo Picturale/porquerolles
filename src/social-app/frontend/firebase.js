@@ -8,10 +8,11 @@ import { connectStorageEmulator, getStorage } from 'firebase/storage';
 const firebaseConfig = {
   apiKey: 'AIzaSyBeASZgEZe67kSNMYI1bqmNN0ETrdqjrNA',
   authDomain: 'porquerolles-16e8d.firebaseapp.com',
-  databaseURL: 'https://porquerolles-16e8d-default-rtdb.firebaseio.com',
   projectId: 'porquerolles-16e8d',
-  storageBucket: 'porquerolles-16e8d.appspot.com',
-  messagingSenderId: '265696641553'
+  storageBucket: 'porquerolles-16e8d.firebasestorage.app',
+  messagingSenderId: '265696641553',
+  appId: '1:265696641553:web:2b7d6d25d109f678f3a7b0',
+  measurementId: 'G-C5ZTKGG4GV'
 };
 
 const isDevEnvironment = window.location.hostname === 'localhost' || 
@@ -46,8 +47,9 @@ const app = initializeApp(firebaseConfig);
 // Initialize Firebase Authentication
 export const auth = getAuth(app);
 
-// Initialize Cloud Firestore
-export const db = getFirestore(app);
+// Initialize Cloud Firestore (supports named database via env; default to 'porquerolles')
+const databaseId = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_FIREBASE_DATABASE_ID) || 'porquerolles';
+export const db = getFirestore(app, databaseId);
 
 // Initialize Cloud Storage
 export const storage = getStorage(app);
