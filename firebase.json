@@ -145,10 +145,18 @@
       }
     ]
   },
-  "firestore": {
-    "rules": "config/firestore.rules",
-    "indexes": "config/firestore.indexes.json"
-  },
+  "firestore": [
+    {
+      "database": "(default)",
+      "rules": "config/firestore.rules",
+      "indexes": "config/firestore.indexes.json"
+    },
+    {
+      "database": "porquerolles",
+      "rules": "config/firestore.rules",
+      "indexes": "config/firestore.indexes.json"
+    }
+  ],
   "database": {
     "rules": "database.rules.json"
   },
