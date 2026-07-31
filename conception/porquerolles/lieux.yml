@@ -1,0 +1,269 @@
+# Les lieux de Porquerolles.
+#
+# TROIS NOTES PAR LIEU, de 0 à 5 :
+#   eau          la baignade    (pilotée par la houle)
+#   sable        le confort     (piloté par le vent)
+#   tranquillite l'affluence    (connaissance locale, aucune donnée)
+#
+# La note du jour est LA PLUS BASSE DES TROIS, jamais leur moyenne.
+# Une plage magnifique invivable à 15h est invivable, pas "moyenne".
+# Et l'axe qui a produit le minimum devient la raison affichée : l'explication
+# est gratuite, il n'y a rien à rédiger.
+#
+# ---------------------------------------------------------------------------
+# RÈGLE : LE CALCUL PROPOSE, LE TERRAIN TRANCHE
+#
+# `orientation` seule ne suffit pas à déduire l'abri — mais orientation +
+# relief + fetch, si. Voir conception/moteur/calculs.md : ces notes ont
+# vocation à être PRÉCALCULÉES, puis corrigées à la main.
+#
+# Les trois échecs constatés sont des échecs de DONNÉES, pas de méthode :
+#   - Le Lequin : orienté ouest-nord-ouest, donc nominalement face au mistral.
+#     Il en est totalement protégé, parce que la crête de l'île (142 m) est au
+#     nord-ouest et le met sous le vent. Il manquait un modèle de terrain.
+#   - La Courtade : par mistral l'eau est plate et le sable décape. Il manquait
+#     le fetch (1,7 km au plus étroit) et la séparation des deux axes.
+#   - Notre-Dame : les guides de mouillage disent "à éviter par mistral".
+#     Vrai pour un bateau à l'ancre, faux pour un baigneur. Ce n'est pas un
+#     problème de calcul, c'est une erreur de source.
+#
+# Ce qui NE se calcule pas, et ne se calculera jamais : que le mistral vide
+# Notre-Dame de ses bateaux. C'est du comportement, aucune carte ne le porte.
+# C'est là qu'est le fossé, pas dans la géométrie.
+#
+# Toute valeur `terrain` l'emporte sur toute valeur calculée, sans discussion,
+# et porte sa date.
+#
+# ---------------------------------------------------------------------------
+# confiance:
+#   terrain   confirmé par observation directe sur place
+#   deduit    tiré de la littérature nautique ou de la géométrie — À VÉRIFIER
+#   a_verifier  non établi
+
+# ===========================================================================
+# LE DÉCOUPAGE DES GRANDES BAIES
+#
+# Argent, la Courtade et Notre-Dame sont trois baies en croissant ouvertes au
+# nord. Dans un croissant l'orientation tourne d'un bout à l'autre, toujours
+# dans le même sens :
+#
+#   corne ouest  -> regarde au nord-est -> DOS au mistral, FACE au vent d'est
+#   fond de baie -> regarde au nord     -> intermédiaire
+#   corne est    -> regarde à l'ouest-nord-ouest -> FACE au mistral, dos à l'est
+#
+# Trois vérifications indépendantes concordent : Notre-Dame exposée sur sa
+# moitié est (terrain) ; meilleur abri du vent d'est à la Courtade tout à l'est
+# derrière la pointe du Lequin (guides de mouillage) ; plage d'Argent refuge de
+# mistral, protégée par la pointe du Bon Renaud à son ouest.
+#
+# Le même découpage sert à l'ombre. Un seul travail de terrain, deux critères.
+# ===========================================================================
+
+lieux:
+
+  # -------------------------------------------------------------- plage d'Argent
+  - id: argent-ouest
+    nom: Plage d'Argent — côté Bon Renaud
+    type: plage
+    orientation: 77
+    confiance: deduit
+    notes:
+      mistral_fort: { eau: 5, sable: 4, tranquillite: 2 }
+      est_fort:     { eau: 3, sable: 2, tranquillite: 3 }
+      calme:        { eau: 5, sable: 5, tranquillite: 1 }
+    dit:
+      mistral_fort: "Le refuge de mistral de l'île, protégé par la pointe."
+      calme: "Saturée en juillet-août."
+    remarque: >-
+      Seule plage surveillée de l'île. Restaurant, terrasse ombragée,
+      toilettes. Décrite par les guides de mouillage comme l'un des rares
+      abris de l'île contre tous les vents.
+
+  - id: argent-centre
+    nom: Plage d'Argent — centre
+    type: plage
+    orientation: 21
+    confiance: deduit
+    notes:
+      mistral_fort: { eau: 5, sable: 3, tranquillite: 2 }
+      est_fort:     { eau: 3, sable: 3, tranquillite: 3 }
+      calme:        { eau: 5, sable: 5, tranquillite: 1 }
+
+  - id: argent-est
+    nom: Plage d'Argent — côté est
+    type: plage
+    orientation: 309
+    confiance: deduit
+    notes:
+      mistral_fort: { eau: 4, sable: 1, tranquillite: 3 }
+      est_fort:     { eau: 3, sable: 4, tranquillite: 3 }
+      calme:        { eau: 5, sable: 5, tranquillite: 2 }
+
+  # ---------------------------------------------------------------- la Courtade
+  - id: courtade-ouest
+    nom: La Courtade — côté port
+    type: plage
+    orientation: 60
+    confiance: deduit
+    notes:
+      mistral_fort: { eau: 4, sable: 3, tranquillite: 2 }
+      est_fort:     { eau: 1, sable: 2, tranquillite: 3 }
+      calme:        { eau: 5, sable: 5, tranquillite: 2 }
+
+  - id: courtade-centre
+    nom: La Courtade — centre
+    type: plage
+    orientation: 329
+    confiance: deduit
+    notes:
+      mistral_fort: { eau: 4, sable: 1, tranquillite: 3 }
+      est_fort:     { eau: 2, sable: 3, tranquillite: 3 }
+      calme:        { eau: 5, sable: 5, tranquillite: 2 }
+    dit:
+      mistral_fort: "Eau plate, mais ça décape. Bonne pour nager, pas pour s'installer."
+    remarque: >-
+      La plus grande plage de sable de l'île, environ 1 km, à 1 km du port.
+      Arrière-plage de pins parasols et d'eucalyptus. Base nautique.
+      Non surveillée.
+
+  - id: courtade-est
+    nom: La Courtade — pointe du Lequin
+    type: plage
+    orientation: 276
+    confiance: deduit
+    notes:
+      mistral_fort: { eau: 4, sable: 1, tranquillite: 4 }
+      est_fort:     { eau: 3, sable: 4, tranquillite: 4 }
+      calme:        { eau: 5, sable: 5, tranquillite: 3 }
+    dit:
+      est_fort: "Le meilleur abri de vent d'est de l'île, derrière la pointe."
+
+  # ---------------------------------------------------------------- Notre-Dame
+  - id: notre-dame-ouest
+    nom: Notre-Dame — côté Alycastre
+    type: plage
+    orientation: 65
+    confiance: terrain
+    notes:
+      mistral_fort: { eau: 4, sable: 4, tranquillite: 5 }
+      est_fort:     { eau: 1, sable: 2, tranquillite: 4 }
+      calme:        { eau: 5, sable: 5, tranquillite: 1 }
+    dit:
+      mistral_fort: "Petites vagues, et les bateaux sont partis."
+      calme: "Tout le monde y va."
+    remarque: >-
+      TERRAIN : la moitié ouest est abritée du mistral. Les guides de mouillage
+      la déconseillent par mistral — c'est un verdict de bateau à l'ancre, pas
+      de baigneur. Par mistral les bateaux quittent la baie : le vent ne
+      dégrade pas la plage, il la vide.
+
+  - id: notre-dame-centre
+    nom: Notre-Dame — centre
+    type: plage
+    orientation: 331
+    confiance: terrain
+    notes:
+      mistral_fort: { eau: 4, sable: 2, tranquillite: 5 }
+      est_fort:     { eau: 1, sable: 3, tranquillite: 4 }
+      calme:        { eau: 5, sable: 5, tranquillite: 1 }
+
+  - id: notre-dame-est
+    nom: Notre-Dame — côté est
+    type: plage
+    orientation: 297
+    confiance: terrain
+    notes:
+      mistral_fort: { eau: 3, sable: 0, tranquillite: 5 }
+      est_fort:     { eau: 2, sable: 4, tranquillite: 4 }
+      calme:        { eau: 5, sable: 5, tranquillite: 1 }
+    remarque: "TERRAIN : c'est cette moitié qui est exposée au mistral."
+
+  # ------------------------------------------------------------------- Lequin
+  - id: lequin
+    nom: Plage du Lequin
+    type: plage
+    orientation: 289
+    confiance: terrain
+    ombre: bonne
+    notes:
+      mistral_fort: { eau: 5, sable: 5, tranquillite: 5 }
+      est_fort:     { eau: 2, sable: 3, tranquillite: 5 }
+      calme:        { eau: 5, sable: 5, tranquillite: 4 }
+    dit:
+      mistral_fort: "Totalement protégée du mistral, et ombragée."
+    remarque: >-
+      TERRAIN : totalement protégée du mistral, alors que son orientation
+      mesurée (ouest-nord-ouest) la placerait nominalement face à lui.
+      NE JAMAIS RECALCULER CETTE VALEUR. C'est le repli sable par mistral.
+      Étroite, ombragée, très peu fréquentée même en août.
+
+  # -------------------------------------------------------------- Langoustier
+  - id: langoustier-blanche
+    nom: Plage Blanche du Langoustier
+    type: plage
+    orientation: ~200
+    confiance: terrain
+    ombre: aucune
+    notes:
+      mistral_fort: { eau: 1, sable: 0, tranquillite: 4 }
+      est_fort:     { eau: 4, sable: 4, tranquillite: 4 }
+      calme:        { eau: 5, sable: 4, tranquillite: 3 }
+    remarque: >-
+      TERRAIN : abritée de l'est, aucune ombre — confirmé.
+      Exposée au sud, donc le rideau d'arbres (s'il y en avait) porterait son
+      ombre vers l'intérieur des terres : aucune ombre de midi, jamais.
+      Sable clair, faible profondeur. Orientation exacte à mesurer.
+
+  - id: langoustier-noire
+    nom: Plage Noire du Langoustier
+    type: plage
+    confiance: deduit
+    ombre: bonne
+    notes:
+      mistral_fort: { eau: 2, sable: 2, tranquillite: 4 }
+      est_fort:     { eau: 4, sable: 4, tranquillite: 4 }
+      calme:        { eau: 5, sable: 5, tranquillite: 3 }
+    remarque: >-
+      Versant opposé de l'isthme. Sable sombre (scories de l'ancienne usine
+      de soude). Pins en bordure, ombre réelle.
+
+  # ------------------------------------------------------ replis hors baignade
+  # Quand tous les scores de plage tombent, ces lieux remontent naturellement
+  # et le service répond "aujourd'hui, pas la plage" sans qu'on l'ait codé.
+
+  - id: village
+    nom: Le village et le port
+    type: village
+    confiance: terrain
+    notes:
+      mistral_fort: { eau: 0, sable: 0, tranquillite: 2 }
+      calme:        { eau: 0, sable: 0, tranquillite: 1 }
+    toujours_accessible: true
+    remarque: >-
+      Reste accessible quel que soit le niveau de risque incendie.
+      C'est la seule affirmation de périmètre que le service se permet.
+
+  - id: fort-sainte-agathe
+    nom: Fort Sainte-Agathe
+    type: site
+    confiance: a_verifier
+
+  - id: phare
+    nom: Le phare
+    type: site
+    confiance: a_verifier
+    remarque: "Trajet montant. À déconseiller par forte chaleur."
+
+# ===========================================================================
+# RESTE À ÉTABLIR
+#
+#  - orientation mesurée de la plage Blanche du Langoustier
+#  - la côte sud : calanques de l'Indienne, du Brégançonnet, cap d'Arme.
+#    Exposées au large, "sportives" dès qu'il y a du mistral ou de la houle.
+#    Aucune n'est décrite ici faute de données de terrain.
+#  - l'anse de la Galère : bon abri d'ouest, aucune protection au sud-est
+#  - les notes pour les états `mistral`, `est` et `brise_sud_est` : seuls les
+#    états francs sont renseignés. Le moteur doit interpoler ou refuser.
+#  - paramètres d'ombre par tronçon : hauteur du rideau, recul, largeur de
+#    sable, porosité du houppier (pin d'Alep ~0.55, houppier ajouré)
+# ===========================================================================

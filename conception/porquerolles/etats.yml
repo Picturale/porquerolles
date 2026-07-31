@@ -1,0 +1,105 @@
+# Les états nommés de Porquerolles.
+#
+# Le moteur calcule un état à partir des mesures du jour, puis lit la note de
+# chaque lieu pour cet état dans lieux.yml. La matrice n'est jamais indexée par
+# une mesure brute : toujours par un état nommé. On peut donc enrichir la
+# définition d'un état (ajouter la houle, la saison, l'heure) sans réécrire
+# une seule ligne de la matrice.
+#
+# Premier état qui correspond gagne. Du plus spécifique au plus général.
+
+principe_des_seuils: |
+  Un seuil se déclenche sur l'exception, jamais sur la normale.
+  En été, la brise de mer atteint 12 à 20 noeuds presque tous les après-midi.
+  Un seuil qui se déclencherait là rendrait le service faux tous les jours
+  de juillet à 15h. Tous les seuils ci-dessous sont calés au-dessus de ce
+  bruit de fond.
+
+unites:
+  vent: noeuds        # jamais des km/h : c'est la convention lue en bord de mer
+  houle: metres       # hauteur significative
+
+etats:
+
+  - id: mistral_fort
+    nom: Mistral établi
+    quand:
+      direction: [270, 320]   # localement ouest à nord-ouest, PAS nord franc
+      moyen_min: 25
+    constat: >-
+      Mistral établi. L'eau reste plate au nord — le fetch est trop court pour
+      lever de la mer. Mais ça décape sur le sable.
+
+  - id: mistral
+    nom: Mistral
+    quand:
+      direction: [270, 320]
+      moyen_min: 12
+
+  - id: est_fort
+    nom: Vent d'est
+    quand:
+      direction: [60, 120]
+      moyen_min: 20
+    constat: >-
+      Vent d'est. La houle arrive avant le vent et déferle sur la côte
+      nord-est. L'eau peut rester mauvaise le lendemain, vent tombé.
+
+  - id: est
+    nom: Vent d'est modéré
+    quand:
+      direction: [60, 120]
+      moyen_min: 10
+
+  - id: brise_sud_est
+    nom: Brise de mer
+    quand:
+      direction: [90, 160]
+      moyen_min: 12
+      heure: [14, 19]
+    constat: >-
+      Brise de mer d'après-midi. Quasi quotidienne en été. Ce n'est pas un
+      événement — la réponse du matin reste valable pour l'essentiel.
+
+  - id: calme
+    nom: Calme
+    defaut: true
+
+# ---------------------------------------------------------------------------
+# LE SABLE se juge au VENT.
+# Le sable sec commence à voler vers 12-15 noeuds. En dessous, non-sujet.
+# Ces paliers décrivent le vent, pas une plage : ce qu'une plage en subit
+# dépend de son abri, qui est écrit à la main dans lieux.yml.
+
+paliers_vent:
+  - { max: 15, note: 5, dit: "rien à signaler" }
+  - { max: 22, note: 3, dit: "ça commence à voler sur les parties exposées" }
+  - { max: 30, note: 2, dit: "désagréable, chercher l'abri" }
+  - { max: null, note: 0, dit: "invivable à découvert" }
+
+# ---------------------------------------------------------------------------
+# L'EAU se juge à la HOULE, pas au vent.
+#
+# C'est la particularité de Porquerolles et le coeur du produit. Un mistral à
+# 30 noeuds laisse l'eau baignable au nord : 1,7 km de fetch au plus étroit de
+# la Grande Passe, il n'a pas la place de lever de mer. Un vent d'est bien plus
+# faible rend l'eau mauvaise, parce qu'il arrive précédé de sa houle.
+#
+# Source : bouée CANDHIS Porquerolles 08302. Mesure, pas prévision.
+# Rafraîchie toutes les 30 à 60 minutes.
+
+paliers_houle:
+  - { max: 0.3, note: 5, dit: "eau plate" }
+  - { max: 0.6, note: 4, dit: "petites vagues" }
+  - { max: 1.0, note: 2, dit: "agité" }
+  - { max: null, note: 0, dit: "à éviter" }
+
+# ATTENTION — correction obligatoire avant usage.
+# La bouée est à 4-5 km au SUD de l'île : elle mesure la côte exposée.
+# Sa valeur brute surestime toujours la côte nord. Le coefficient dépend de la
+# direction de la houle. Ces valeurs sont déduites, pas mesurées : à caler.
+attenuation_cote_nord:
+  houle_sud_sud_ouest: 0.0    # côte nord totalement masquée par l'île
+  houle_sud_est: 0.2
+  houle_est: 0.8              # la côte nord-est encaisse
+  houle_nord_est: 1.0
