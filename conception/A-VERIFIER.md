@@ -24,6 +24,7 @@ Le détail, les requêtes et les réponses sont dans `VERIFICATIONS.md`.
 | 6 | `porquerolles.guide` a-t-il un état du jour ? | **Non.** Guide éditorial WordPress très complet sur le statique, **zéro contenu vent, météo ou incendie**. Le créneau est libre localement. |
 | 7 | Le Parc publie-t-il ? | **Non, il renvoie** vers l'État dans le Var. La demande de flux vise donc la **préfecture**, pas le Parc. Sémantique par niveau confirmée. Acteur à ajouter au benchmark : l'app **Hyères-Risques**. |
 | 8 | OSM est-il un socle exploitable ? | **Non.** 145 objets sur l'île, **8 % avec `opening_hours`, 2 % avec `check_date`**. La brique « ouvert aujourd'hui » part de zéro. |
+| 9 | TLV-TVM réutilisable ? Et Google Maps pour les commerces ? | **Bateaux** : oui, mais la seule page lisible par machine **omet les navettes tardives** — table à la main depuis le PDF. **Commerces** : Google **affiche** une fiche à jour au clic (Places UI Kit), mais **interdit contractuellement** de s'en servir pour construire une liste « ouvert aujourd'hui ». Cette liste doit venir d'OpenStreetMap, à enrichir (32 fiches, ~22 % couvertes aujourd'hui). Détail dans `SOURCING-HORAIRES-COMMERCES.md`. |
 
 **Ce qui a changé dans la conception** — trois choses, reportées dans
 `SOURCES.md` et `CONCURRENCE.md` :
@@ -40,13 +41,24 @@ Le détail, les requêtes et les réponses sont dans `VERIFICATIONS.md`.
 
 ## Reste ouvert
 
-### 9. TLV-TVM
+### 9. TLV-TVM — traité le 31/07/2026, voir `SOURCING-HORAIRES-COMMERCES.md`
 
-CGU et mentions légales sur la réutilisation des horaires. Existence et
-conditions de la page « iframe horaire », qui suggère une intégration prévue.
-**Ne pas toucher à `tlv-tvm.resactivite.com`** : SaaS tiers, CGU probablement
-restrictives, fragile. L'affluence par la disponibilité de réservation passe par
-un accord, pas par un scraper.
+CGU et mentions légales lues directement. **La page `/iframe-horaires/` existe
+bien et est techniquement ouverte** (pas de blocage, dans le sitemap), mais
+**elle omet les navettes tardives** — piège disqualifiant si on s'y fie
+seule : elle donnerait un faux « dernier bateau » toute la haute saison. Les
+horaires réels, navettes tardives comprises, ne sont complets que dans le
+**guide PDF annuel**. Aucun texte de TLV n'autorise par écrit une intégration
+tierce de la page iframe : mail à `infos@tlv-tvm.com` nécessaire.
+
+Décision : table écrite à la main depuis le PDF (6 régimes/an, ≈5 h/an) +
+veilleur automatique qui alerte sans publier. Détail et sources dans
+`SOURCING-HORAIRES-COMMERCES.md`.
+
+**Ne pas toucher à `tlv-tvm.resactivite.com`** — confirmé : ses CGV invoquent
+nommément le droit des bases de données (directive 96/9). C'est le seul texte
+du dossier qui vise directement l'extraction : ne jamais en republier la
+grille complète, seulement le jour courant.
 
 ### 10. Météo-France
 

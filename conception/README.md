@@ -20,6 +20,7 @@ fermés, et quand partir pour ne pas rater le dernier bateau.
 |---|---|
 | `DECISIONS.md` | Le produit et l'architecture. **Commencer ici.** |
 | `VERIFICATIONS.md` | Ce qui a été vérifié le 31/07/2026, requêtes et réponses |
+| `SOURCING-HORAIRES-COMMERCES.md` | Bateaux TLV et horaires de commerces : ce qui est réutilisable et à quel coût |
 | `A-VERIFIER.md` | Ce qui reste à vérifier, et les démarches à engager |
 | `SOURCES.md` | Inventaire des sources de données, licences, statut |
 | `CONCURRENCE.md` | Benchmark mondial, ce qui reste libre, ce qui tue ces projets |
