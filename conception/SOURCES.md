@@ -3,19 +3,29 @@
 Statut : `vérifié` = lu directement · `probable` = extraits concordants ·
 `incertain` = à confirmer avant tout usage.
 
-Rappel : une seule ligne de ce document est `vérifié`.
+**Mis à jour le 31 juillet 2026** après la première session connectée. Les
+sources incendie, houle et relief sont passées en `vérifié` ; le détail des
+requêtes est dans `VERIFICATIONS.md`.
 
 ---
 
 ## Retenues
 
 ### Risque incendie — préfecture du Var
-**Statut : structure vérifiée, accès et droits non vérifiés**
+**Statut : vérifié** (accès et structure, 31/07/2026) — **droits toujours non
+vérifiés**
 
 ```
 https://www.risque-prevention-incendie.fr/static/{dep}/import_data/{AAAAMMJJ}.json
-→ { "massifs": { "<id>": [niveau, …] } }
+→ {
+     "massifs": { "<id>": [niveau, …] },
+     "zm":      { "<id>": niveau }
+   }
 ```
+
+**La clé `zm` s'ajoute à la description initiale** : elle était absente du code
+de `brandkaart` dont la structure était tirée. Les deux clés concordaient au
+relevé du 31/07/2026 ; ne pas préjuger que ce soit toujours le cas.
 
 Le premier élément du tableau correspond à la date du nom de fichier. Les
 réutilisateurs interrogent d'abord le fichier du lendemain et retombent sur
@@ -30,7 +40,8 @@ celui du jour s'il n'est pas encore publié.
 
 **Le mapping est départemental.** Coder une grille universelle serait une faute.
 
-Porquerolles relèverait du massif `839 ILES D'HYERES` — *à confirmer*. Les neuf
+Porquerolles relève du massif `839 ILES D'HYERES` — **confirmé le 31/07/2026**
+par la table publiée sur la page `/var`. Les neuf
 massifs du Var sont nommés sans traits d'union et en majuscules dans les
 données : `831 MONTS TOULONNAIS`, `832 SAINTE BAUME`, `833 HAUT VAR`,
 `834 CORNICHE DES MAURES`, `835 MAURES`, `836 CENTRE VAR`,
@@ -42,11 +53,43 @@ le repli et solliciter la préfecture.
 **Règle d'usage** : afficher **le niveau**, jamais le périmètre. Le détail de ce
 qui reste ouvert vient de la carte officielle du Parc, par lien.
 
-### Mer et houle — bouée CANDHIS Porquerolles 08302
-**Statut : probable**
+**Ne jamais annoncer d'heure de publication.** Les deux pages officielles du Parc
+national se contredisent — 18 h sur `fermeture-des-massifs`, 19 h sur
+`alerte-incendie`, avec des saisons également divergentes (8 juin ou 19 juin, au
+20 septembre). Sonder le fichier J+1, retomber sur celui du jour, et afficher la
+**date portée par la donnée**.
 
-À 4-5 km au sud de l'île. Hauteur significative, période et direction de houle,
-vent, températures. Rafraîchie toutes les 30 à 60 minutes.
+**La demande de flux ouvert vise la préfecture du Var, pas le Parc national** :
+le Parc ne produit pas la carte, il renvoie vers le site de l'État dans le Var.
+
+### Mer et houle — bouée CANDHIS Porquerolles 08302
+**Statut : vérifié** (31/07/2026) — **sous réserve d'obtention d'une clé**
+
+À 4-5 km au sud de l'île. Bouée **opérationnelle**, marquée `[TR]` temps réel
+dans la liste des campagnes. Une campagne historique `08301 Porquerolles` existe
+également, sans temps réel.
+
+**Accès par l'API REST officielle** — *API PHP REST de Candhis (v1)*, Cerema,
+octobre 2024, documentée sur 24 pages
+(`https://candhis.cerema.fr/doc/04_Candhis_API_v1_Utilisateur.pdf`).
+
+- Base : `https://candhis.cerema.fr/API/v1/` — `GET` uniquement
+- `getCampTR.php` (temps réel d'une campagne) et `getCampListeTR.php`
+- **Clé obligatoire**, en-tête `Authorization`, format UUID, sur demande à
+  **`candhis@cerema.fr`** (nom, domaine d'activité, type de structure)
+- Quota journalier (HTTP 429), bannissement d'IP possible (HTTP 423)
+- **Aucune licence de réutilisation n'est mentionnée** : à demander avec la clé
+
+**Trois points à intégrer au code :**
+
+1. **Cadence horaire**, pas 30 à 60 minutes — `getCampListeTR.php` ne rend que
+   « la dernière donnée horaire disponible ».
+2. **La direction de houle dépend du type de houlographe.** Un directionnel H13
+   rend `Dir. au pic (°)` et `Étal. au pic (°)` ; un non directionnel n'en rend
+   aucune. **Le type de 08302 est inconnu** — à établir avec la clé. S'il est non
+   directionnel, l'axe « eau » bascule sur Copernicus.
+3. **`999.9999` est la sentinelle de donnée manquante**, y compris sur `Hmax` et
+   la température. Ne pas la filtrer, c'est afficher des valeurs absurdes.
 
 **La seule source d'observation du dossier.** Pilote l'axe « eau ».
 Surestime systématiquement la côte nord — atténuation obligatoire selon la
@@ -82,16 +125,34 @@ Géométrie vérifiée : pin de 12 m au midi solaire → ombre de **4,3 m le 21 
 les ombres sont courtes.
 
 ### Relief et canopée — IGN
-**Statut : incertain, couverture à vérifier**
+**Statut : vérifié — Porquerolles est couverte** (31/07/2026)
 
-**LiDAR HD** — MNT et MNH (hauteur de végétation), 50 cm, GeoTIFF, dalles de
-1 km. Licence Ouverte 2.0, usage commercial autorisé, mention « IGN — Programme
-LiDAR HD ». Couverture nationale incomplète fin 2025.
-**RGE ALTI 1 m** — repli pour le relief seul.
+**LiDAR HD** — MNT et MNH (hauteur de végétation), **0,50 m**, GeoTIFF, dalles de
+1 km en Lambert-93. Licence Ouverte 2.0, usage commercial autorisé, mention
+« IGN — Programme LiDAR HD ».
+
+**28 dalles couvrent l'emprise de l'île**, millésime **2025-05-01**, sur les deux
+couches WFS de la Géoplateforme :
+
+```
+IGNF_MNT-LIDAR-HD:dalle   28 dalles   0,50 m   2025-05-01
+IGNF_MNH-LIDAR-HD:dalle   28 dalles   0,50 m   2025-05-01
+```
+
+Téléchargement GeoTIFF via `https://data.geopf.fr/wms-r`.
+
+**Le MNH change le périmètre du terrain** : la hauteur du rideau végétal, listée
+jusqu'ici en « seulement sur place », devient mesurable à distance. Restent au
+terrain le recul par rapport au sable sec et la porosité du houppier.
+
+**RGE ALTI 1 m** — également disponible, vérifié par l'API altimétrique
+(`data.geopf.fr/altimetrie/1.0/calcul/alti/rest/elevation.json`), altitudes
+cohérentes de 0 à 92 m sur une grille couvrant l'île, aucune valeur hors
+couverture. Repli pour le relief seul.
 **BD Forêt V2** — Licence Ouverte, mais unité minimale 0,5 ha et **aucune
 hauteur**. Insuffisant.
-**Meta/WRI Canopy Height** — 1 m, CC-BY 4.0, couverture mondiale, erreur 2,8 m.
-Repli si l'IGN ne couvre pas.
+~~**Meta/WRI Canopy Height**~~ — **repli devenu inutile**, l'IGN couvre l'île à
+une résolution deux fois meilleure et sous une licence plus permissive.
 
 ### Calendrier — Etalab
 **Statut : vérifié pour les jours fériés** — Licence Ouverte pour les données,
@@ -102,6 +163,19 @@ Seule matière disponible pour l'axe « tranquillité ». **Une prévision, jama
 une mesure**, et étiquetée comme telle.
 
 ### Carte — OpenStreetMap / BD TOPO
+**Statut : vérifié pour la couverture des commerces — le résultat est négatif**
+(31/07/2026)
+
+Relevé sur l'emprise de l'île : **145 objets** portant `shop`, `amenity` ou
+`tourism`, dont une majorité de mobilier urbain (18 parkings à vélos, 16 bancs,
+14 points de vue, 7 conteneurs). **13 objets renseignent `opening_hours` (8 %)**
+et **4 renseignent `check_date` (2 %)** — l'un porte encore une exception datée
+de mai 2024.
+
+**OSM n'est donc pas un socle exploitable pour « ouvert aujourd'hui ».** La
+brique part de zéro. OSM reste pertinent comme **exutoire de publication** : ce
+qui sera relevé sur le terrain a vocation à y être reversé.
+
 Trait de côte, sentiers, toponymes. Si OSM : mention « © les contributeurs
 OpenStreetMap » obligatoire et visible. Le partage à l'identique d'ODbL porte
 sur les bases dérivées, pas sur une image produite — mais la question se repose
@@ -153,8 +227,17 @@ paddé**. `idCarte=fra` en métropole.
 une interprétation.
 
 ### Transport
-Aucun jeu couvrant la traversée trouvé sur le PAN — **non trouvé, pas démontré
-absent**. Le GTFS de TPM contient la ligne de bus 67 vers La Tour Fondue.
+**Absence démontrée le 31/07/2026**, et non plus simplement « non trouvée » : le
+catalogue du PAN a été interrogé en entier (778 jeux, 36 candidats maritimes) et
+le GTFS de TPM téléchargé. Ses trois lignes `route_type=4` sont toutes dans la
+rade de Toulon (8M La Seyne, 18M Sablettes, 28M St Mandrier). Les arrêts
+`HYTFOO Tour Fondue` et `HYGIEE Giens` n'existent qu'en desserte routière.
+
+Onze opérateurs maritimes comparables publient pourtant sur le PAN : BreizhGo
+Bateaux, Yeu-Continent, Gironde, Martinique, Bacs de Loire, UBA Arcachon, Glénan
+(Sailcoop), Corsica Ferries, Corsica Linea, Brittany Ferries, Transmanche.
+
+Le GTFS de TPM contient la ligne de bus 67 vers La Tour Fondue.
 Le GTFS-RT de TPM ne porte que des alertes de service, pas de temps réel de
 course. TLV se réserve d'annuler sans préavis pour météo, sans canal
 machine-lisible.

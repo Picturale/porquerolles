@@ -1,8 +1,20 @@
 # Concurrence, survie, juridique
 
 Benchmark mondial mené sur six axes, avec passes de réfutation adversariale —
-dont quatre ont été interrompues. **Aucune des pages citées n'a pu être ouverte
-directement.** Voir `A-VERIFIER.md` §5.
+dont quatre ont été interrompues. Le benchmark initial a été construit sans
+pouvoir ouvrir une seule des pages citées.
+
+**Mise à jour du 31 juillet 2026** — les quatre pages principales ont été lues.
+Le relevé est dans `VERIFICATIONS.md` §5-6. La conclusion du benchmark tient :
+la matrice vent → plage existe bel et bien ailleurs. Trois précisions changent
+néanmoins l'analyse, notées en place ci-dessous :
+
+- **VientoPlaya est entièrement modélisé** — Open-Meteo et OpenStreetMap, aucune
+  observation. Le fossé « observation locale » est donc plus large qu'estimé.
+- **BeachScan couvre déjà l'ombre**, sur 21 400 plages. L'ombre n'est pas un
+  différenciant.
+- **`porquerolles.guide` n'a aucun état du jour** — le créneau est libre
+  localement.
 
 ---
 
@@ -23,11 +35,12 @@ exige d'être physiquement sur l'île ». Elle est fausse.
 
 | Produit | Ce qu'il fait |
 |---|---|
-| **VientoPlaya.es** | Le même produit, en Espagne : une adresse web, gratuite, sans compte, Open-Meteo, classement *cómodo / aceptable / incómodo* maintenant |
-| **isoladelbaapp.com** | Île d'Elbe, web app, plages abritées selon le vent en cours, **par façade d'île** |
+| **VientoPlaya.es** | Le même produit, en Espagne : une adresse web, gratuite, sans compte, Open-Meteo, classement *cómodo / aceptable / incómodo* maintenant. **Vérifié** : données Open-Meteo + OSM, donc **100 % modèle, zéro observation**. Publie une page « Info para IA », c'est-à-dire du référencement à destination des modèles de langage |
+| **isoladelbaapp.com** | Île d'Elbe, web app, plages abritées selon le vent en cours, **par façade d'île**. **Vérifié** : la matrice n'est pas le produit, c'est une brique d'acquisition dans un annuaire touristique monétisé — hôtels, résidences, campings, restaurants, agences immobilières |
 | **InfoElba** | Matrice statique exhaustive, une URL par vent (maestrale, scirocco, libeccio, grecale) |
-| **BeachScan** | 20 000 plages, score d'exposition de 0 à 1, rafraîchi toutes les 5 min — mais une app à installer |
+| **BeachScan** | **Vérifié, et plus large qu'estimé** : 21 400 plages, 9 littoraux, appli native iOS et Android, prévision à 7 jours, qualité des eaux aux classifications européennes, clarté de l'eau, abri au vent — **et prévision d'ombre**. Le plus sérieux des concurrents |
 | **RENTAL12** | 40 plages de Sardaigne × 8 vents |
+| **Hyères-Risques** | **Nouveau au benchmark.** Application de la commune d'Hyères, gratuite sur iOS et Android, information temps réel avec cartographie des risques et des voies interdites, couvrant le territoire communal **et ses îles** — donc Porquerolles. Le seul acteur qui touche déjà à l'axe « feu » sur le périmètre |
 
 En Grèce c'est un marronnier de presse nationale, republié chaque été. À
 Minorque, **sept acteurs** publient la même matrice, dont l'office de tourisme
@@ -45,7 +58,9 @@ location écrira la même page.
 
 **Le défaut commun de tous les concurrents automatisés est géométrique.** Ils
 comparent une orientation de plage à une direction de vent. BeachScan score
-20 000 plages sans que personne n'y soit allé.
+21 400 plages sans que personne n'y soit allé, et VientoPlaya tourne
+intégralement sur un modèle de prévision — vérifié le 31/07/2026 : aucun des
+deux ne consomme la moindre observation locale.
 
 Sur une île de 8 km avec 142 m de relief, cette géométrie se trompe — et on peut
 le démontrer :

@@ -1,6 +1,7 @@
 # Portail visiteurs Porquerolles — dossier de conception
 
-**État : conception arrêtée, aucun code applicatif écrit.**
+**État : conception arrêtée, aucun code applicatif écrit.
+Première passe de vérification connectée faite.**
 Dernière mise à jour : 31 juillet 2026.
 
 ## Ce que c'est
@@ -18,7 +19,8 @@ fermés, et quand partir pour ne pas rater le dernier bateau.
 | Fichier | Contenu |
 |---|---|
 | `DECISIONS.md` | Le produit et l'architecture. **Commencer ici.** |
-| `A-VERIFIER.md` | Ce qui reste à vérifier, avec les URLs. **Le plus urgent.** |
+| `VERIFICATIONS.md` | Ce qui a été vérifié le 31/07/2026, requêtes et réponses |
+| `A-VERIFIER.md` | Ce qui reste à vérifier, et les démarches à engager |
 | `SOURCES.md` | Inventaire des sources de données, licences, statut |
 | `CONCURRENCE.md` | Benchmark mondial, ce qui reste libre, ce qui tue ces projets |
 | `porquerolles/etats.yml` | Régimes de vent nommés et seuils |
@@ -28,20 +30,29 @@ fermés, et quand partir pour ne pas rater le dernier bateau.
 
 ## Avertissement de fiabilité — à lire avant d'utiliser quoi que ce soit
 
-Ce dossier a été construit dans un environnement où **l'accès réseau sortant
-était bloqué** : presque aucune page n'a pu être lue directement, les recherches
-n'ont rendu que des extraits d'index. Des passes de vérification adversariale
-ont été menées et ont rétrogradé beaucoup d'affirmations.
+Ce dossier a d'abord été construit dans un environnement où **l'accès réseau
+sortant était bloqué** : presque aucune page n'avait pu être lue directement, et
+les recherches n'avaient rendu que des extraits d'index.
 
-En conséquence :
+**Le 31 juillet 2026, une session connectée a traité les huit premiers points de
+`A-VERIFIER.md`**, dont les quatre bloquants. Les sources incendie, houle et
+relief sont désormais vérifiées par lecture directe, et les quatre concurrents
+ont été ouverts. Le relevé, avec les requêtes et les réponses, est dans
+`VERIFICATIONS.md`.
 
-- **Une seule chose est vérifiée par lecture de code source** : la structure du
-  flux de risque incendie (voir `SOURCES.md`).
-- **Tout le reste est à confirmer.** Chaque affirmation porte son niveau de
-  confiance. Les valeurs marquées `terrain` viennent du porteur du projet, qui
-  vit sur l'île — ce sont les plus fiables du dossier.
-- `A-VERIFIER.md` liste dans l'ordre ce qu'une session disposant d'un accès
-  internet complet doit reprendre. **C'est le premier travail à faire.**
+Ce qu'il faut savoir avant de se servir du dossier :
+
+- **Les points 9 à 12 restent non vérifiés** : CGU de TLV-TVM, API Météo-France
+  ponctuelle, prélèvement de baignade de l'année en cours, et **régime de quota
+  réellement en vigueur** — ce dernier étant le plus gênant pour un service
+  d'information.
+- **Trois démarches conditionnent la suite**, listées en fin de `A-VERIFIER.md`.
+  La demande de clé d'API CANDHIS bloque l'axe « eau » : à faire en premier.
+- **Une inconnue peut coûter cher** : le type du houlographe 08302. S'il est non
+  directionnel, il ne rend aucune direction de houle et l'axe « eau » doit
+  basculer sur Copernicus. Ça ne se saura qu'avec la clé.
+- Les valeurs marquées `terrain` viennent du porteur du projet, qui vit sur
+  l'île — ce sont toujours les plus fiables du dossier.
 
 ## L'idée en une page
 
