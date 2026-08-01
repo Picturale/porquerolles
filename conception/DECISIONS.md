@@ -296,7 +296,26 @@ Port-Cros, au Levant ou à Giens casse l'équation.
 
 - Pas d'application native
 - Pas de compte utilisateur
-- Pas de guide encyclopédique ni d'articles de référencement génériques
+- Pas de contenu générique écrit pour le référencement — voir ci-dessous,
+  la matière historique originale est une exception, pas un contournement
 - Pas de notes, pas d'avis, pas de classement de commerces
 - **Rien à vendre, jamais** — voir `CONCURRENCE.md`, c'est le seul basculement
   juridique vraiment dangereux du projet
+
+**Révisé le 31/07/2026** — la version initiale de ce point disait « pas de
+guide encyclopédique ni d'articles de référencement génériques ». Formulation
+trop large : elle interdisait en même temps deux choses très différentes.
+
+Ce qui reste interdit : des pages écrites pour exister aux yeux de Google,
+qui paraphrasent ce que `porquerolles.guide` fait déjà et fait mieux — c'est
+son terrain, il l'occupe depuis des années, on ne le bat pas dessus.
+
+Ce qui devient explicitement permis : de la **matière historique originale**
+— cartes anciennes, plans de fortification, photographies aériennes,
+notices de protection — intégrée aux fiches de lieux du socle `/toujours/…`,
+jamais en pages éditoriales à part. Un fort a sa fiche pratique (accès,
+horaires, ce qui est fermé aujourd'hui) *et* son plan de 1752 en regard :
+c'est un lieu, pas un article de blog. Voir `FONDS-ICONOGRAPHIQUES.md` pour
+l'inventaire — cette matière ne se copie pas en une après-midi, contrairement
+à une fiche pratique, ce qui en fait le contenu le moins cher à défendre de
+tout le dossier (elle ne périme jamais, donc n'entretient aucune dette).
