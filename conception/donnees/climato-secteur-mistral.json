@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "source": "Meteo-France BASE HORAIRE, station 83069002 PORQUEROLLES, 1950-2026",
+    "reproduction": "voir conception/donnees/CLIMATOLOGIE-VENT.md section Reproduire",
+    "qualite_retenue": [
+      "0 (protegee)",
+      "1 (validee)",
+      "9 (filtree)"
+    ],
+    "convention_secteur": "etats.yml direction:[270,320] interprete bornes incluses ; DD source deja quantifie sur 36 points de rose (pas de 10 deg), donc les sous-tranches de 10 deg = resolution native des donnees, pas un choix d'agregation",
+    "date_calcul": "2026-08-02"
+  },
+  "totaux": {
+    "heures_ff_valide": 298603,
+    "heures_ff_dd_valide": 271849,
+    "heures_mistral_270_320_ge12nds": 29920,
+    "heures_mistral_simple_12_25nds": 21126,
+    "heures_mistral_fort_ge25nds": 8794,
+    "pct_mistral_fort_sur_heures_dir_valide": 3.23
+  },
+  "sous_tranches_10deg": {
+    "270-280": {
+      "n_toutes_heures_secteur": 14562,
+      "pct_heures_dir_valides": 5.36,
+      "n_heures_mistral": 9979,
+      "pct_heures_mistral": 33.35
+    },
+    "280-290": {
+      "n_toutes_heures_secteur": 20456,
+      "pct_heures_dir_valides": 7.52,
+      "n_heures_mistral": 11649,
+      "pct_heures_mistral": 38.93
+    },
+    "290-300": {
+      "n_toutes_heures_secteur": 3926,
+      "pct_heures_dir_valides": 1.44,
+      "n_heures_mistral": 1569,
+      "pct_heures_mistral": 5.24
+    },
+    "300-310": {
+      "n_toutes_heures_secteur": 7753,
+      "pct_heures_dir_valides": 2.85,
+      "n_heures_mistral": 3215,
+      "pct_heures_mistral": 10.75
+    },
+    "310-320": {
+      "n_toutes_heures_secteur": 8927,
+      "pct_heures_dir_valides": 3.28,
+      "n_heures_mistral": 3508,
+      "pct_heures_mistral": 11.72
+    }
+  },
+  "regroupement_fetch": {
+    "note": "seuils 'long'/'court' bases sur le point notre-dame-est (seul point teste avec fetch >50km dans le secteur) -- voir MISTRAL-SECTEUR-ANALYSE.md, ce regroupement ne vaut pas pour tous les lieux",
+    "zone_270_290_fetch_long_a_notre_dame_est": {
+      "n_heures_mistral": 23197,
+      "pct_du_mistral": 77.5
+    },
+    "zone_300_320_fetch_court_partout_teste": {
+      "n_heures_mistral": 6723,
+      "pct_du_mistral": 22.5
+    }
+  }
+}

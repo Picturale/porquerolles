@@ -367,23 +367,45 @@ def query_elevations_batch(points):
     return data["elevations"]
 
 
-def fetch_elevations(points):
+ELEV_CACHE_PATH = "/tmp/trajet-elevation-cache.json"
+
+
+def fetch_elevations(points, use_cache=True):
     """points: iterable de (lon, lat) dedupliques. Retourne un dict
-    {(lon_round, lat_round): elevation_m}. Respecte ~1 req/s (IGN)."""
+    {(lon_round, lat_round): elevation_m}. Respecte ~1 req/s (IGN).
+    Cache disque : evite de re-interroger des points deja vus dans une
+    session de travail (le relief ne change pas d'une execution a l'autre)."""
     uniq = sorted({(round(lon, 6), round(lat, 6)) for lon, lat in points})
-    print(f"IGN: {len(uniq)} points d'altitude uniques a interroger "
-          f"({math.ceil(len(uniq)/IGN_BATCH)} requetes)...", file=sys.stderr)
-    elev = {}
-    for i in range(0, len(uniq), IGN_BATCH):
-        batch = uniq[i:i + IGN_BATCH]
+
+    cache = {}
+    if use_cache:
+        try:
+            with open(ELEV_CACHE_PATH, encoding="utf-8") as f:
+                raw = json.load(f)
+            cache = {tuple(map(float, k.split(","))): v for k, v in raw.items()}
+        except FileNotFoundError:
+            pass
+
+    missing = [p for p in uniq if p not in cache]
+    print(f"IGN: {len(uniq)} points d'altitude uniques, {len(missing)} a interroger "
+          f"({math.ceil(len(missing)/IGN_BATCH)} requetes, {len(uniq)-len(missing)} deja en cache)...",
+          file=sys.stderr)
+    for i in range(0, len(missing), IGN_BATCH):
+        batch = missing[i:i + IGN_BATCH]
         latlon_batch = [(lat, lon) for lon, lat in batch]
         elevs = query_elevations_batch(latlon_batch)
         for (lon, lat), e in zip(batch, elevs):
-            elev[(lon, lat)] = e
-        done = min(i + IGN_BATCH, len(uniq))
-        print(f"  {done}/{len(uniq)}", file=sys.stderr)
+            cache[(lon, lat)] = e
+        done = min(i + IGN_BATCH, len(missing))
+        print(f"  {done}/{len(missing)}", file=sys.stderr)
         time.sleep(IGN_SLEEP_S)
-    return elev
+
+    if missing and use_cache:
+        serializable = {f"{lon},{lat}": v for (lon, lat), v in cache.items()}
+        with open(ELEV_CACHE_PATH, "w", encoding="utf-8") as f:
+            json.dump(serializable, f)
+
+    return {p: cache[p] for p in uniq}
 
 
 # ---------------------------------------------------------------------------
@@ -642,8 +664,28 @@ def main():
             entry["velo"] = {"erreur": "hors reseau velo (voir limites)"}
         else:
             try:
+                path_v = nx.shortest_path(G_velo, beach_node_v, port_node_velo, weight="temps_velo_min")
                 total_v = nx.shortest_path_length(G_velo, beach_node_v, port_node_velo, weight="temps_velo_min")
-                entry["velo"] = {"temps_min": round(total_v, 1)}
+                path_len_v_m = sum(
+                    min(d["length_m"] for d in G_velo.get_edge_data(path_v[i], path_v[i+1]).values())
+                    for i in range(len(path_v) - 1)
+                )
+                troncons_v = []
+                for i in range(len(path_v) - 1):
+                    edata_dict = G_velo.get_edge_data(path_v[i], path_v[i + 1])
+                    best_k = min(edata_dict, key=lambda k: edata_dict[k]["temps_velo_min"])
+                    ed = edata_dict[best_k]
+                    troncons_v.append({
+                        "osm_id": ed.get("osm_id"), "nom": ed.get("nom"), "kind": ed.get("kind"),
+                        "highway": ed.get("highway"), "longueur_m": round(ed["length_m"], 0),
+                        "temps_min": round(ed["temps_velo_min"], 2),
+                    })
+                entry["velo"] = {
+                    "temps_min": round(total_v, 1),
+                    "distance_reseau_m": round(path_len_v_m, 0),
+                    "n_troncons": len(troncons_v),
+                    "troncons": troncons_v,
+                }
             except nx.NetworkXNoPath:
                 entry["velo"] = {"erreur": "pas de chemin dans la composante principale velo"}
 
