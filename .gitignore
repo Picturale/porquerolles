@@ -5,6 +5,11 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+# Python (moteur/precompute)
+__pycache__/
+*.pyc
+.venv/
+
 # Build files
 dist/
 build/
