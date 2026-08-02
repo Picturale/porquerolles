@@ -1,0 +1,302 @@
+{
+  "notre-dame-est": {
+    "lat": 43.0138632,
+    "lon": 6.235842,
+    "fetch_par_bearing": {
+      "0": {
+        "fetch_m": 15000,
+        "terre_alt_m": 50.8
+      },
+      "10": {
+        "fetch_m": 500,
+        "terre_alt_m": 9.86
+      },
+      "20": {
+        "fetch_m": 300,
+        "terre_alt_m": 5.92
+      },
+      "30": {
+        "fetch_m": 100,
+        "terre_alt_m": 4.17
+      },
+      "40": {
+        "fetch_m": 100,
+        "terre_alt_m": 8.09
+      },
+      "50": {
+        "fetch_m": 100,
+        "terre_alt_m": 11.17
+      },
+      "60": {
+        "fetch_m": 100,
+        "terre_alt_m": 14.18
+      },
+      "70": {
+        "fetch_m": 100,
+        "terre_alt_m": 17.82
+      },
+      "80": {
+        "fetch_m": 100,
+        "terre_alt_m": 20.37
+      },
+      "90": {
+        "fetch_m": 100,
+        "terre_alt_m": 20.56
+      },
+      "100": {
+        "fetch_m": 100,
+        "terre_alt_m": 19.04
+      },
+      "110": {
+        "fetch_m": 100,
+        "terre_alt_m": 17.4
+      },
+      "120": {
+        "fetch_m": 100,
+        "terre_alt_m": 15.45
+      },
+      "130": {
+        "fetch_m": 100,
+        "terre_alt_m": 13.49
+      },
+      "140": {
+        "fetch_m": 100,
+        "terre_alt_m": 12.38
+      },
+      "150": {
+        "fetch_m": 100,
+        "terre_alt_m": 10.95
+      },
+      "160": {
+        "fetch_m": 100,
+        "terre_alt_m": 9.25
+      },
+      "170": {
+        "fetch_m": 100,
+        "terre_alt_m": 7.35
+      },
+      "180": {
+        "fetch_m": 100,
+        "terre_alt_m": 5.27
+      },
+      "190": {
+        "fetch_m": 100,
+        "terre_alt_m": 3.96
+      },
+      "200": {
+        "fetch_m": 100,
+        "terre_alt_m": 3.08
+      },
+      "210": {
+        "fetch_m": 100,
+        "terre_alt_m": 1.02
+      },
+      "220": {
+        "fetch_m": 500,
+        "terre_alt_m": 5.17
+      },
+      "230": {
+        "fetch_m": 750,
+        "terre_alt_m": 9.13
+      },
+      "240": {
+        "fetch_m": 1000,
+        "terre_alt_m": 51.7
+      },
+      "250": {
+        "fetch_m": 1000,
+        "terre_alt_m": 15.61
+      },
+      "260": {
+        "fetch_m": 1500,
+        "terre_alt_m": 10.74
+      },
+      "270": {
+        "fetch_m": 200000,
+        "terre_alt_m": null
+      },
+      "280": {
+        "fetch_m": 200000,
+        "terre_alt_m": null
+      },
+      "290": {
+        "fetch_m": 75000,
+        "terre_alt_m": 6.04
+      },
+      "300": {
+        "fetch_m": 20000,
+        "terre_alt_m": 47.6
+      },
+      "310": {
+        "fetch_m": 15000,
+        "terre_alt_m": 110.82
+      },
+      "320": {
+        "fetch_m": 10000,
+        "terre_alt_m": 1.23
+      },
+      "330": {
+        "fetch_m": 15000,
+        "terre_alt_m": 119.8
+      },
+      "340": {
+        "fetch_m": 15000,
+        "terre_alt_m": 58.22
+      },
+      "350": {
+        "fetch_m": 15000,
+        "terre_alt_m": 149.04
+      }
+    }
+  },
+  "argent-ouest": {
+    "lat": 43.0067747,
+    "lon": 6.1851942,
+    "fetch_par_bearing": {
+      "0": {
+        "fetch_m": 100,
+        "terre_alt_m": 7.83
+      },
+      "10": {
+        "fetch_m": 100,
+        "terre_alt_m": 7.25
+      },
+      "20": {
+        "fetch_m": 100,
+        "terre_alt_m": 0.86
+      },
+      "30": {
+        "fetch_m": 15000,
+        "terre_alt_m": 10.08
+      },
+      "40": {
+        "fetch_m": 15000,
+        "terre_alt_m": 14.74
+      },
+      "50": {
+        "fetch_m": 15000,
+        "terre_alt_m": 18.73
+      },
+      "60": {
+        "fetch_m": 200000,
+        "terre_alt_m": null
+      },
+      "70": {
+        "fetch_m": 200000,
+        "terre_alt_m": null
+      },
+      "80": {
+        "fetch_m": 3000,
+        "terre_alt_m": 13.53
+      },
+      "90": {
+        "fetch_m": 3000,
+        "terre_alt_m": 75.31
+      },
+      "100": {
+        "fetch_m": 3000,
+        "terre_alt_m": 42.3
+      },
+      "110": {
+        "fetch_m": 2000,
+        "terre_alt_m": 10.92
+      },
+      "120": {
+        "fetch_m": 500,
+        "terre_alt_m": 5.9
+      },
+      "130": {
+        "fetch_m": 500,
+        "terre_alt_m": 2.51
+      },
+      "140": {
+        "fetch_m": 500,
+        "terre_alt_m": 2.94
+      },
+      "150": {
+        "fetch_m": 300,
+        "terre_alt_m": 1.23
+      },
+      "160": {
+        "fetch_m": 300,
+        "terre_alt_m": 4.34
+      },
+      "170": {
+        "fetch_m": 100,
+        "terre_alt_m": 4.47
+      },
+      "180": {
+        "fetch_m": 100,
+        "terre_alt_m": 5.79
+      },
+      "190": {
+        "fetch_m": 100,
+        "terre_alt_m": 6.42
+      },
+      "200": {
+        "fetch_m": 100,
+        "terre_alt_m": 7.68
+      },
+      "210": {
+        "fetch_m": 100,
+        "terre_alt_m": 8.7
+      },
+      "220": {
+        "fetch_m": 100,
+        "terre_alt_m": 9.31
+      },
+      "230": {
+        "fetch_m": 100,
+        "terre_alt_m": 9.08
+      },
+      "240": {
+        "fetch_m": 100,
+        "terre_alt_m": 8.69
+      },
+      "250": {
+        "fetch_m": 100,
+        "terre_alt_m": 8.29
+      },
+      "260": {
+        "fetch_m": 100,
+        "terre_alt_m": 7.56
+      },
+      "270": {
+        "fetch_m": 100,
+        "terre_alt_m": 6.56
+      },
+      "280": {
+        "fetch_m": 100,
+        "terre_alt_m": 5.9
+      },
+      "290": {
+        "fetch_m": 100,
+        "terre_alt_m": 5.81
+      },
+      "300": {
+        "fetch_m": 100,
+        "terre_alt_m": 6.19
+      },
+      "310": {
+        "fetch_m": 100,
+        "terre_alt_m": 7.74
+      },
+      "320": {
+        "fetch_m": 100,
+        "terre_alt_m": 9.77
+      },
+      "330": {
+        "fetch_m": 100,
+        "terre_alt_m": 11.79
+      },
+      "340": {
+        "fetch_m": 100,
+        "terre_alt_m": 13.22
+      },
+      "350": {
+        "fetch_m": 100,
+        "terre_alt_m": 10.65
+      }
+    }
+  }
+}
