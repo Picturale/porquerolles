@@ -1,0 +1,205 @@
+{
+  "meta": {
+    "date_calcul": "2026-08-02",
+    "spa": "pvlib.solarposition.get_solarposition, methode nrel_numpy (NREL SPA, Reda & Andreas 2004)",
+    "mnh_source": "data.geopf.fr WMS-R, IGNF_LIDAR-HD_MNH_ELEVATION.ELEVATIONGRIDCOVERAGE.WGS84G, GetMap FORMAT=image/x-bil;bits=32"
+  },
+  "midi_solaire": {
+    "2026-06-21": {
+      "notre-dame-centre": {
+        "heure_locale": "13:36:53",
+        "elevation_deg": 70.43236777073,
+        "azimut_deg": 179.9979573357259
+      },
+      "langoustier-blanche": {
+        "heure_locale": "13:37:09",
+        "elevation_deg": 70.44227259964136,
+        "azimut_deg": 180.00176404268723
+      }
+    },
+    "2026-08-15": {
+      "notre-dame-centre": {
+        "heure_locale": "13:39:27",
+        "elevation_deg": 60.95278596963219,
+        "azimut_deg": 179.93362443895262
+      },
+      "langoustier-blanche": {
+        "heure_locale": "13:39:42",
+        "elevation_deg": 60.962633611492635,
+        "azimut_deg": 179.9280901922782
+      }
+    }
+  },
+  "calibration_geometrique": {
+    "2026-06-21": {
+      "notre-dame-centre": {
+        "orientation_deg": 331,
+        "hauteur_m": 12.0,
+        "recul_m": 0.0,
+        "ombre_calculee_m": 3.731,
+        "attendu_texte": "3,8 m d'ombre a midi solaire le 21 juin (pin de 12 m)"
+      },
+      "langoustier-blanche": {
+        "orientation_deg": 200,
+        "hauteur_m": 12.0,
+        "recul_m": 0.0,
+        "ombre_calculee_m": 0.0,
+        "attendu_texte": "zero, exposee au sud"
+      }
+    },
+    "2026-08-15": {
+      "notre-dame-centre": {
+        "orientation_deg": 331,
+        "hauteur_m": 12.0,
+        "recul_m": 0.0,
+        "ombre_calculee_m": 5.833,
+        "attendu_texte": "3,8 m d'ombre a midi solaire le 21 juin (pin de 12 m)"
+      },
+      "langoustier-blanche": {
+        "orientation_deg": 200,
+        "hauteur_m": 12.0,
+        "recul_m": 0.0,
+        "ombre_calculee_m": 0.0,
+        "attendu_texte": "zero, exposee au sud"
+      }
+    }
+  },
+  "transect_mnh_notre_dame_centre": {
+    "bearing_interieur_deg": 151,
+    "hauteurs_par_distance_m": {
+      "0": 0.0,
+      "2": 0.0,
+      "4": 0.0,
+      "6": 0.0,
+      "8": 0.0,
+      "10": 1.4506971836090088,
+      "12": 5.7146992683410645,
+      "14": 7.312461853027344,
+      "16": 6.293943405151367,
+      "18": 5.385904312133789,
+      "20": 8.466551780700684,
+      "22": 7.197912216186523,
+      "24": 7.951258182525635,
+      "26": 10.725180625915527,
+      "28": 10.514251708984375,
+      "30": 12.120256423950195,
+      "32": 11.3905029296875,
+      "34": 12.060408592224121,
+      "36": 10.465072631835938,
+      "38": 8.718435287475586,
+      "40": 4.0114898681640625
+    }
+  },
+  "ombre_reelle_notre_dame_centre": {
+    "2026-06-21": {
+      "ombre_max_m": 0.0,
+      "x_critique_m": 0,
+      "hauteur_critique_m": 0.0,
+      "elevation_deg": 70.43236777073,
+      "azimut_deg": 179.9979573357259
+    },
+    "2026-08-15": {
+      "ombre_max_m": 0.0,
+      "x_critique_m": 0,
+      "hauteur_critique_m": 0.0,
+      "elevation_deg": 60.95278596963219,
+      "azimut_deg": 179.93362443895262
+    }
+  },
+  "extension_illustrative": {
+    "2026-06-21": {
+      "argent-ouest": {
+        "orientation_deg": 77,
+        "ombre_illustrative_m": 0.959,
+        "hauteur_source": "calibration_texte_non_mesuree"
+      },
+      "argent-centre": {
+        "orientation_deg": 21,
+        "ombre_illustrative_m": 3.981,
+        "hauteur_source": "calibration_texte_non_mesuree"
+      },
+      "argent-est": {
+        "orientation_deg": 309,
+        "ombre_illustrative_m": 2.684,
+        "hauteur_source": "calibration_texte_non_mesuree"
+      },
+      "courtade-ouest": {
+        "orientation_deg": 60,
+        "ombre_illustrative_m": 2.132,
+        "hauteur_source": "calibration_texte_non_mesuree"
+      },
+      "courtade-est": {
+        "orientation_deg": 276,
+        "ombre_illustrative_m": 0.445,
+        "hauteur_source": "calibration_texte_non_mesuree"
+      },
+      "notre-dame-ouest": {
+        "orientation_deg": 65,
+        "ombre_illustrative_m": 1.802,
+        "hauteur_source": "calibration_texte_non_mesuree"
+      },
+      "notre-dame-centre": {
+        "orientation_deg": 331,
+        "ombre_illustrative_m": 3.731,
+        "hauteur_source": "calibration_texte_non_mesuree"
+      },
+      "notre-dame-est": {
+        "orientation_deg": 297,
+        "ombre_illustrative_m": 1.937,
+        "hauteur_source": "calibration_texte_non_mesuree"
+      },
+      "lequin": {
+        "orientation_deg": 289,
+        "ombre_illustrative_m": 1.389,
+        "hauteur_source": "calibration_texte_non_mesuree"
+      }
+    },
+    "2026-08-15": {
+      "argent-ouest": {
+        "orientation_deg": 77,
+        "ombre_illustrative_m": 1.491,
+        "hauteur_source": "calibration_texte_non_mesuree"
+      },
+      "argent-centre": {
+        "orientation_deg": 21,
+        "ombre_illustrative_m": 6.217,
+        "hauteur_source": "calibration_texte_non_mesuree"
+      },
+      "argent-est": {
+        "orientation_deg": 309,
+        "ombre_illustrative_m": 4.199,
+        "hauteur_source": "calibration_texte_non_mesuree"
+      },
+      "courtade-ouest": {
+        "orientation_deg": 60,
+        "ombre_illustrative_m": 3.324,
+        "hauteur_source": "calibration_texte_non_mesuree"
+      },
+      "courtade-est": {
+        "orientation_deg": 276,
+        "ombre_illustrative_m": 0.705,
+        "hauteur_source": "calibration_texte_non_mesuree"
+      },
+      "notre-dame-ouest": {
+        "orientation_deg": 65,
+        "ombre_illustrative_m": 2.809,
+        "hauteur_source": "calibration_texte_non_mesuree"
+      },
+      "notre-dame-centre": {
+        "orientation_deg": 331,
+        "ombre_illustrative_m": 5.833,
+        "hauteur_source": "calibration_texte_non_mesuree"
+      },
+      "notre-dame-est": {
+        "orientation_deg": 297,
+        "ombre_illustrative_m": 3.033,
+        "hauteur_source": "calibration_texte_non_mesuree"
+      },
+      "lequin": {
+        "orientation_deg": 289,
+        "ombre_illustrative_m": 2.178,
+        "hauteur_source": "calibration_texte_non_mesuree"
+      }
+    }
+  }
+}
