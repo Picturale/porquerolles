@@ -4,7 +4,11 @@
 traité les **huit premiers points**, dont les quatre bloquants. Les relevés sont
 dans `VERIFICATIONS.md`, avec les requêtes et les réponses.
 
-Il ne reste ouvert que les points 9 à 12, et les relevés de terrain.
+**Mise à jour du 2 août 2026** — les points 9, 10 et 12 sont traités à leur
+tour (détail du 9 dans `SOURCING-HORAIRES-COMMERCES.md`, détail des 10 et 12
+dans `donnees/AVERIFIER-POINTS-10-12.md`).
+
+Il ne reste ouvert que le point 11, et les relevés de terrain.
 
 Format : ce qu'on cherche · où · ce qu'on en fait selon la réponse.
 
@@ -25,6 +29,8 @@ Le détail, les requêtes et les réponses sont dans `VERIFICATIONS.md`.
 | 7 | Le Parc publie-t-il ? | **Non, il renvoie** vers l'État dans le Var. La demande de flux vise donc la **préfecture**, pas le Parc. Sémantique par niveau confirmée. Acteur à ajouter au benchmark : l'app **Hyères-Risques**. |
 | 8 | OSM est-il un socle exploitable ? | **Non.** 145 objets sur l'île, **8 % avec `opening_hours`, 2 % avec `check_date`**. La brique « ouvert aujourd'hui » part de zéro. |
 | 9 | TLV-TVM réutilisable ? Et Google Maps pour les commerces ? | **Bateaux** : oui, mais la seule page lisible par machine **omet les navettes tardives** — table à la main depuis le PDF. **Commerces** : Google **affiche** une fiche à jour au clic (Places UI Kit), mais **interdit contractuellement** de s'en servir pour construire une liste « ouvert aujourd'hui ». Cette liste doit venir d'OpenStreetMap, à enrichir (32 fiches, ~22 % couvertes aujourd'hui). Détail dans `SOURCING-HORAIRES-COMMERCES.md`. |
+| 10 | Météo-France : une API de prévision ponctuelle existe-t-elle ? Quota/licence Vigilance ? | **Non**, catalogue officiel des 23 API du portail énuméré en direct (HTTP 200) : rien que de la grille, du radar ou de l'observation par station. Une API ponctuelle **existe bien** (`webservice.meteofrance.com`, testée avec succès) mais **hors du portail officiel**, avec un jeton partagé rétro-ingénié — écartée faute de licence. Vigilance : **60 req/min confirmé**, Licence Ouverte Etalab 2.0, commercial autorisé avec attribution datée, aucune garantie de disponibilité. Détail dans `donnees/AVERIFIER-POINTS-10-12.md`. |
+| 12 | Le quota de 6 000 visiteurs/jour a-t-il une source postérieure à 2024 ? | **Oui**, deux sources trouvées (Var Actu 7 juillet 2026, franceinfo 28 juillet 2025) : le dispositif est **toujours actif** pour l'été 2026, même chiffre, même mécanisme depuis 2021 — un plafond de billets sur les navettes maritimes, **pas un contrôle physique à l'entrée**. Reste non trouvé : un arrêté préfectoral ou municipal nommé qui l'instituerait formellement — tout indique un montage contractuel (charte des bateliers + DSP), pas un arrêté de police classique. Détail dans `donnees/AVERIFIER-POINTS-10-12.md`. |
 
 **Ce qui a changé dans la conception** — trois choses, reportées dans
 `SOURCES.md` et `CONCURRENCE.md` :
@@ -60,12 +66,29 @@ nommément le droit des bases de données (directive 96/9). C'est le seul texte
 du dossier qui vise directement l'extraction : ne jamais en republier la
 grille complète, seulement le jour courant.
 
-### 10. Météo-France
+### 10. Météo-France — traité le 02/08/2026, voir `donnees/AVERIFIER-POINTS-10-12.md`
 
-Portail `portail-api.meteofrance.fr` : existe-t-il une API de prévision
-**ponctuelle** (par commune ou coordonnées) plutôt qu'en grille ? AROME sert des
-champs GRIB/WMS/WCS, ce qui est disproportionné pour trois chiffres en un point.
-Vérifier aussi les quotas et la licence de l'API Bulletin Vigilance.
+Le catalogue technique réel du portail (23 API, énuméré en direct via son
+API de gestion WSO2, HTTP 200) confirme : **aucune API de prévision
+ponctuelle par commune ou coordonnées** — que de la grille (AROME, ARPEGE,
+PE-AROME, PE-ARPEGE, WavesModels, paquets `previnum`), du radar, ou de
+l'observation par station fixe. Une API ponctuelle existe pourtant bel et
+bien, testée avec succès (HTTP 200, vent/rafale/direction horaires sur le
+point « Porquerolle_Sémaphore ») : `webservice.meteofrance.com`, le service
+interne de l'appli mobile Météo-France, rétro-ingénié par des bibliothèques
+tierces, avec un jeton partagé et **aucune licence de réutilisation
+publiée** — techniquement disponible, mais écartée pour statut juridique
+non établi. Le contournement propre reste celui déjà noté en
+`CATALOGUE-SOURCES.md` §1.9 : bbox minuscule en WCS sur la grille AROME
+officielle pour lire un seul pixel.
+
+Quota et licence Bulletin Vigilance confirmés par une deuxième source
+indépendante (l'API de gestion du portail elle-même) : **60 requêtes/minute,
+gratuit**, Licence Ouverte Etalab 2.0, usage commercial explicitement
+autorisé, deux obligations (intégrité des données + mention de la source et
+de la date de mise à jour), et **aucune garantie de disponibilité** de
+l'API — à prendre en compte dans la conception (jamais de dépendance dure
+sans repli).
 
 ### 11. Qualité des eaux de baignade
 
@@ -78,14 +101,29 @@ résultat de prélèvement de l'année en cours existe réellement pour les site
 Porquerolles. Affichage passif daté uniquement, jamais un critère de classement,
 jamais une interprétation.
 
-### 12. Le régime de quota en vigueur
+### 12. Le régime de quota en vigueur — traité le 02/08/2026, voir `donnees/AVERIFIER-POINTS-10-12.md`
 
-Aucune source postérieure à 2024 n'a été trouvée sur le quota de 6 000
-visiteurs/jour : **le dispositif réellement appliqué aujourd'hui n'est pas
-établi**. Pour un service d'information, c'est rédhibitoire. À vérifier
-annuellement, avec la date de vérification affichée.
+Il existe bien des sources postérieures à 2024 : Var Actu (7 juillet 2026)
+et franceinfo (28 juillet 2025), toutes deux lues en HTML brut avec leur
+date de publication vérifiée dans les métadonnées de page, pas au résumé
+d'un moteur de recherche. **Le dispositif à 6 000 visiteurs/jour est
+toujours actif pour l'été 2026**, même chiffre et même mécanisme depuis
+2021 : un plafond sur le nombre de billets vendus par les navettes
+maritimes, **pas un contrôle physique à l'entrée de l'île** — Var Actu le
+dit explicitement.
 
-C'est le point ouvert le plus gênant.
+Ce qui reste non établi, et qui n'est plus le même problème : la **base
+juridique formelle** (un arrêté préfectoral ou municipal nommé et daté).
+Le règlement particulier de police du port de Porquerolles a été lu en
+entier (24 pages) et ne la contient pas. Tout indique un montage
+contractuel — charte des bateliers du 6 juillet 2021 + délégation de
+service public 2021-2025 (échéance passée, suite à vérifier) — plutôt
+qu'un arrêté de police classique, à la différence de l'Île-de-Bréhat qui
+en cite un nommément dans la même source franceinfo.
+
+Ce n'est plus le point ouvert le plus gênant du dossier : la mesure est
+confirmée active et récente, il ne manque que son fondement juridique
+précis si on veut un jour le citer.
 
 ---
 
