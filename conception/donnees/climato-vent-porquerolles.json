@@ -1,0 +1,356 @@
+{
+  "meta": {
+    "station": "83069002 PORQUEROLLES (sémaphore)",
+    "periode": "1950-2026",
+    "annees_couvertes": 68,
+    "heures_ff_valides": 298603,
+    "heures_ff_dd_valides": 271849,
+    "vitesse_mediane_kt": 10.1,
+    "vitesse_max_kt": 85.5,
+    "vitesse_max_date": "1996-02-01 21:00:00",
+    "definitions": {
+      "mistral_fort": "direction 270-320°, vent moyen >= 25 nds",
+      "mistral": "direction 270-320°, vent moyen >= 12 nds",
+      "est_fort": "direction 60-120°, vent moyen >= 20 nds",
+      "est": "direction 60-120°, vent moyen >= 10 nds",
+      "brise_sud_est": "direction 90-160°, vent moyen >= 12 nds, 14h-19h"
+    },
+    "source_seuils": "conception/porquerolles/etats.yml"
+  },
+  "etat_global": [
+    {
+      "etat": "mistral_fort",
+      "pct": 3.23
+    },
+    {
+      "etat": "mistral",
+      "pct": 7.77
+    },
+    {
+      "etat": "est_fort",
+      "pct": 6.0
+    },
+    {
+      "etat": "est",
+      "pct": 10.86
+    },
+    {
+      "etat": "brise_sud_est",
+      "pct": 0.09
+    },
+    {
+      "etat": "calme",
+      "pct": 72.05
+    }
+  ],
+  "etat_monthly": [
+    {
+      "mois": 1,
+      "mistral_fort": 5.66,
+      "mistral": 8.8,
+      "est_fort": 8.08,
+      "est": 9.41,
+      "brise_sud_est": 0.12,
+      "calme": 67.93,
+      "mois_nom": "janv"
+    },
+    {
+      "mois": 2,
+      "mistral_fort": 4.19,
+      "mistral": 8.66,
+      "est_fort": 7.82,
+      "est": 9.39,
+      "brise_sud_est": 0.1,
+      "calme": 69.84,
+      "mois_nom": "fevr"
+    },
+    {
+      "mois": 3,
+      "mistral_fort": 4.41,
+      "mistral": 7.85,
+      "est_fort": 8.34,
+      "est": 12.16,
+      "brise_sud_est": 0.06,
+      "calme": 67.18,
+      "mois_nom": "mars"
+    },
+    {
+      "mois": 4,
+      "mistral_fort": 3.02,
+      "mistral": 6.86,
+      "est_fort": 7.07,
+      "est": 13.78,
+      "brise_sud_est": 0.1,
+      "calme": 69.16,
+      "mois_nom": "avr"
+    },
+    {
+      "mois": 5,
+      "mistral_fort": 2.36,
+      "mistral": 6.93,
+      "est_fort": 4.5,
+      "est": 11.92,
+      "brise_sud_est": 0.08,
+      "calme": 74.22,
+      "mois_nom": "mai"
+    },
+    {
+      "mois": 6,
+      "mistral_fort": 1.56,
+      "mistral": 6.55,
+      "est_fort": 3.34,
+      "est": 9.85,
+      "brise_sud_est": 0.04,
+      "calme": 78.66,
+      "mois_nom": "juin"
+    },
+    {
+      "mois": 7,
+      "mistral_fort": 1.69,
+      "mistral": 8.0,
+      "est_fort": 1.37,
+      "est": 7.47,
+      "brise_sud_est": 0.04,
+      "calme": 81.43,
+      "mois_nom": "juil"
+    },
+    {
+      "mois": 8,
+      "mistral_fort": 1.8,
+      "mistral": 7.59,
+      "est_fort": 0.97,
+      "est": 7.14,
+      "brise_sud_est": 0.06,
+      "calme": 82.44,
+      "mois_nom": "aout"
+    },
+    {
+      "mois": 9,
+      "mistral_fort": 2.28,
+      "mistral": 6.98,
+      "est_fort": 4.45,
+      "est": 11.97,
+      "brise_sud_est": 0.09,
+      "calme": 74.24,
+      "mois_nom": "sept"
+    },
+    {
+      "mois": 10,
+      "mistral_fort": 2.3,
+      "mistral": 5.88,
+      "est_fort": 10.68,
+      "est": 15.85,
+      "brise_sud_est": 0.11,
+      "calme": 65.18,
+      "mois_nom": "oct"
+    },
+    {
+      "mois": 11,
+      "mistral_fort": 4.26,
+      "mistral": 9.36,
+      "est_fort": 8.66,
+      "est": 12.06,
+      "brise_sud_est": 0.08,
+      "calme": 65.58,
+      "mois_nom": "nov"
+    },
+    {
+      "mois": 12,
+      "mistral_fort": 5.31,
+      "mistral": 9.8,
+      "est_fort": 7.03,
+      "est": 9.54,
+      "brise_sud_est": 0.18,
+      "calme": 68.14,
+      "mois_nom": "dec"
+    }
+  ],
+  "monthly_speed_kt": [
+    {
+      "mois": 1,
+      "mois_nom": "janv",
+      "p10": 3.9,
+      "p25": 6.6,
+      "median": 11.7,
+      "p75": 19.4,
+      "p90": 27.2,
+      "n": 25494
+    },
+    {
+      "mois": 2,
+      "mois_nom": "fevr",
+      "p10": 3.9,
+      "p25": 6.6,
+      "median": 11.7,
+      "p75": 18.9,
+      "p90": 26.8,
+      "n": 23170
+    },
+    {
+      "mois": 3,
+      "mois_nom": "mars",
+      "p10": 3.9,
+      "p25": 7.0,
+      "median": 11.7,
+      "p75": 19.4,
+      "p90": 27.2,
+      "n": 25343
+    },
+    {
+      "mois": 4,
+      "mois_nom": "avr",
+      "p10": 3.9,
+      "p25": 6.8,
+      "median": 11.1,
+      "p75": 17.5,
+      "p90": 24.7,
+      "n": 24265
+    },
+    {
+      "mois": 5,
+      "mois_nom": "mai",
+      "p10": 3.9,
+      "p25": 6.0,
+      "median": 9.7,
+      "p75": 15.6,
+      "p90": 23.3,
+      "n": 25542
+    },
+    {
+      "mois": 6,
+      "mois_nom": "juin",
+      "p10": 3.9,
+      "p25": 5.8,
+      "median": 9.7,
+      "p75": 15.0,
+      "p90": 21.4,
+      "n": 24904
+    },
+    {
+      "mois": 7,
+      "mois_nom": "juil",
+      "p10": 3.9,
+      "p25": 5.8,
+      "median": 9.7,
+      "p75": 14.2,
+      "p90": 21.2,
+      "n": 25736
+    },
+    {
+      "mois": 8,
+      "mois_nom": "aout",
+      "p10": 3.5,
+      "p25": 5.8,
+      "median": 9.1,
+      "p75": 13.6,
+      "p90": 20.8,
+      "n": 25414
+    },
+    {
+      "mois": 9,
+      "mois_nom": "sept",
+      "p10": 3.9,
+      "p25": 5.8,
+      "median": 9.7,
+      "p75": 15.6,
+      "p90": 22.0,
+      "n": 24714
+    },
+    {
+      "mois": 10,
+      "mois_nom": "oct",
+      "p10": 3.9,
+      "p25": 6.2,
+      "median": 10.3,
+      "p75": 17.5,
+      "p90": 25.3,
+      "n": 24666
+    },
+    {
+      "mois": 11,
+      "mois_nom": "nov",
+      "p10": 3.9,
+      "p25": 6.6,
+      "median": 11.7,
+      "p75": 18.9,
+      "p90": 26.0,
+      "n": 24438
+    },
+    {
+      "mois": 12,
+      "mois_nom": "dec",
+      "p10": 3.9,
+      "p25": 6.4,
+      "median": 11.7,
+      "p75": 19.2,
+      "p90": 26.4,
+      "n": 24917
+    }
+  ],
+  "wind_rose": [
+    {
+      "secteur": "N",
+      "pct": 6.54
+    },
+    {
+      "secteur": "NNE",
+      "pct": 2.89
+    },
+    {
+      "secteur": "NE",
+      "pct": 4.15
+    },
+    {
+      "secteur": "ENE",
+      "pct": 13.75
+    },
+    {
+      "secteur": "E",
+      "pct": 11.17
+    },
+    {
+      "secteur": "ESE",
+      "pct": 3.4
+    },
+    {
+      "secteur": "SE",
+      "pct": 2.09
+    },
+    {
+      "secteur": "SSE",
+      "pct": 1.74
+    },
+    {
+      "secteur": "S",
+      "pct": 1.77
+    },
+    {
+      "secteur": "SSW",
+      "pct": 2.72
+    },
+    {
+      "secteur": "SW",
+      "pct": 4.03
+    },
+    {
+      "secteur": "WSW",
+      "pct": 9.52
+    },
+    {
+      "secteur": "W",
+      "pct": 24.84
+    },
+    {
+      "secteur": "WNW",
+      "pct": 4.39
+    },
+    {
+      "secteur": "NW",
+      "pct": 3.36
+    },
+    {
+      "secteur": "NNW",
+      "pct": 3.65
+    }
+  ]
+}
