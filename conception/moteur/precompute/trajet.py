@@ -36,7 +36,6 @@ import networkx as nx
 # ---------------------------------------------------------------------------
 
 SENTIERS_PATH = "conception/donnees/socle-osm/sentiers.geojson"
-PLAGES_PATH = "conception/donnees/socle-osm/plages.geojson"
 
 BBOX = "42.978,6.155,43.030,6.260"  # meme emprise corrigee que le socle OSM
 OVERPASS = "https://overpass-api.de/api/interpreter"
