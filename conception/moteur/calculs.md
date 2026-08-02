@@ -42,7 +42,9 @@ nécessaire à ce stade.
 
 ## 2. Masque de relief — pilote l'axe SABLE
 
-C'est la donnée qui manquait et qui a fait rater le Lequin.
+C'était l'hypothèse pour expliquer pourquoi le Lequin avait été raté — voir
+la correction plus bas : le calcul réel ne la confirme pas, mais la question
+qu'elle pose (le relief seul suffit-il ?) reste la bonne à instruire.
 
 Pour chaque tronçon et chaque direction, calculer l'**angle d'horizon amont** :
 depuis le point, en remontant le vent sur 200 m puis 500 m puis 1500 m, l'angle
@@ -52,20 +54,42 @@ transport de neige par le vent, et il s'applique à l'identique ici.
 - angle amont > ~8° → le point est **sous le vent**, vent réduit
 - angle amont ~0° → le point est **au vent**, vent plein
 
-Le Lequin : crête de l'île à 142 m au nord-ouest, à quelques centaines de
-mètres. L'angle amont est élevé, le point est sous le vent du mistral. Le
-calcul l'aurait dit.
+**Correction du 02/08/2026** — cette section disait : « Le Lequin : crête de
+l'île à 142 m au nord-ouest, à quelques centaines de mètres. L'angle amont
+est élevé, le point est sous le vent du mistral. Le calcul l'aurait dit. »
+**Faux, vérifié par le calcul réel** (voir `donnees/RELIEF-EXPOSITION.md`) :
+au mistral (295°), le Sx du Lequin est ≈0° jusqu'à 1500 m — aucune crête sur
+ce relèvement. Le sommet à 142 m existe bien, mais à ~1,5 km au
+**sud-sud-est** (≈152°), pas au nord-ouest à quelques centaines de mètres :
+géométriquement, il ne peut pas abriter le Lequin du mistral. L'abri du
+Lequin — réel, confirmé `terrain` dans `lieux.yml`, non remis en cause —
+vient donc soit d'un obstacle très local (<200 m, sous la résolution testée
+ici), soit de la canopée (MNH, hors périmètre de ce masque qui ne lit qu'un
+MNT nu). Ne pas réutiliser l'ancienne phrase comme exemple pédagogique du
+calcul : c'est le contre-exemple qui montre pourquoi la règle de surcharge
+juste en dessous n'est pas une précaution de style.
 
-**Données** : IGN **RGE ALTI 1 m**, ou le MNT issu de **LiDAR HD** si les
-dalles de Porquerolles sont livrées — à vérifier, la couverture nationale
-n'était pas complète fin 2025. Licence Ouverte 2.0, usage commercial autorisé,
-mention « IGN » obligatoire.
+**Données** : IGN **RGE ALTI 1 m**, ou le MNT issu de **LiDAR HD**, dont la
+couverture de Porquerolles est confirmée (28 dalles à 0,50 m, voir
+`A-VERIFIER.md` #4). Licence Ouverte 2.0, usage commercial autorisé, mention
+« IGN » obligatoire.
 
 **Limite honnête** : un indice d'exposition topographique n'est pas de la
 mécanique des fluides. L'écoulement réel décolle, recircule sous la crête et
 accélère autour des pointes. On sera juste dans l'ensemble et faux quelque
-part. D'où la règle de surcharge — ce n'est pas une précaution de style, c'est
-la condition pour que le calcul soit utilisable.
+part — le Lequin en est la preuve mesurée, pas seulement une mise en garde
+théorique. D'où la règle de surcharge — ce n'est pas une précaution de
+style, c'est la condition pour que le calcul soit utilisable.
+
+**Second constat empirique** (`RELIEF-EXPOSITION.md`) : sur les 8 points
+testés à Argent et Notre-Dame, le classement relatif des segments d'une même
+baie recoupe `lieux.yml` dans les deux cas — mais le seuil de 8° ci-dessus
+n'est franchi que sur 3 des 8, alors que `lieux.yml` documente des abris
+francs sur davantage de segments. Sonder un seul azimut central (295° ou
+90°) peut aussi rater un obstacle décentré (cas d'Argent-ouest, où le
+mamelon protecteur pointe plutôt vers 335-345°). Le seuil et l'azimut unique
+mériteraient d'être recalibrés avant tout usage du masque de relief en
+valeur absolue plutôt qu'en classement relatif.
 
 ---
 

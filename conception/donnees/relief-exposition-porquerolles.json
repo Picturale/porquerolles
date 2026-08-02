@@ -1,0 +1,406 @@
+{
+  "meta": {
+    "methode": "Angle d'horizon amont (indice Sx), voir conception/moteur/calculs.md §2",
+    "source_altimetrique": "IGN data.geopf.fr/altimetrie/1.0/calcul/alti/rest/elevation.json, resource=ign_rge_alti_wld",
+    "distances_m": [
+      200,
+      500,
+      1500
+    ],
+    "bearings_deg": {
+      "mistral": 295,
+      "est": 90
+    },
+    "date_ingestion": "2026-08-02",
+    "note": "resource=ign_rge_alti_wld: le fournisseur exact (RGE ALTI 1m vs LiDAR HD 0.5m) n'est pas distingué par l'API pour un point donné — voir limites dans RELIEF-EXPOSITION.md"
+  },
+  "points": {
+    "lequin_petit": {
+      "nom": "Plage du Lequin (way OSM 51076995, cove isolée)",
+      "lat": 43.0123908,
+      "lon": 6.218111,
+      "correspond_lieux_yml": "lequin",
+      "elevation_point_m": 0.49,
+      "sx": {
+        "mistral_295": {
+          "par_distance": {
+            "200": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.14
+            },
+            "500": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.06
+            },
+            "1500": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.02
+            }
+          },
+          "sx_max_deg": -0.02
+        },
+        "est_090": {
+          "par_distance": {
+            "200": {
+              "elevation_m": 12.67,
+              "angle_deg": 3.49
+            },
+            "500": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.06
+            },
+            "1500": {
+              "elevation_m": 10.6,
+              "angle_deg": 0.39
+            }
+          },
+          "sx_max_deg": 3.49
+        }
+      }
+    },
+    "lequin_grand": {
+      "nom": "way OSM 48890706 'plage du Lequin' = Troisième Courtade (name:oc)",
+      "lat": 43.0091307,
+      "lon": 6.2175284,
+      "correspond_lieux_yml": "courtade-est",
+      "elevation_point_m": 0.06,
+      "sx": {
+        "mistral_295": {
+          "par_distance": {
+            "200": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.02
+            },
+            "500": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.01
+            },
+            "1500": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.0
+            }
+          },
+          "sx_max_deg": -0.0
+        },
+        "est_090": {
+          "par_distance": {
+            "200": {
+              "elevation_m": 18.22,
+              "angle_deg": 5.19
+            },
+            "500": {
+              "elevation_m": 55.17,
+              "angle_deg": 6.29
+            },
+            "1500": {
+              "elevation_m": 9.89,
+              "angle_deg": 0.38
+            }
+          },
+          "sx_max_deg": 6.29
+        }
+      }
+    },
+    "argent_centre": {
+      "nom": "Plage d'Argent — centre",
+      "lat": 43.0046932,
+      "lon": 6.1874497,
+      "correspond_lieux_yml": "argent-centre",
+      "elevation_point_m": 0.0,
+      "sx": {
+        "mistral_295": {
+          "par_distance": {
+            "200": {
+              "elevation_m": 3.73,
+              "angle_deg": 1.07
+            },
+            "500": {
+              "elevation_m": 23.91,
+              "angle_deg": 2.74
+            },
+            "1500": {
+              "elevation_m": 0.0,
+              "angle_deg": 0.0
+            }
+          },
+          "sx_max_deg": 2.74
+        },
+        "est_090": {
+          "par_distance": {
+            "200": {
+              "elevation_m": 0.0,
+              "angle_deg": 0.0
+            },
+            "500": {
+              "elevation_m": 0.0,
+              "angle_deg": 0.0
+            },
+            "1500": {
+              "elevation_m": 0.0,
+              "angle_deg": 0.0
+            }
+          },
+          "sx_max_deg": 0.0
+        }
+      }
+    },
+    "argent_ouest (Anse de Bon-Renaud)": {
+      "nom": "Plage d'Argent — côté Bon Renaud",
+      "lat": 43.0067747,
+      "lon": 6.1851942,
+      "correspond_lieux_yml": "argent-ouest",
+      "elevation_point_m": 0.0,
+      "sx": {
+        "mistral_295": {
+          "par_distance": {
+            "200": {
+              "elevation_m": 18.31,
+              "angle_deg": 5.23
+            },
+            "500": {
+              "elevation_m": 7.79,
+              "angle_deg": 0.89
+            },
+            "1500": {
+              "elevation_m": 0.0,
+              "angle_deg": 0.0
+            }
+          },
+          "sx_max_deg": 5.23
+        },
+        "est_090": {
+          "par_distance": {
+            "200": {
+              "elevation_m": 0.0,
+              "angle_deg": 0.0
+            },
+            "500": {
+              "elevation_m": 0.0,
+              "angle_deg": 0.0
+            },
+            "1500": {
+              "elevation_m": 0.0,
+              "angle_deg": 0.0
+            }
+          },
+          "sx_max_deg": 0.0
+        }
+      }
+    },
+    "argent_est (extremite est du croissant)": {
+      "nom": "Plage d'Argent — côté est",
+      "lat": 43.0042197,
+      "lon": 6.1896692,
+      "correspond_lieux_yml": "argent-est",
+      "elevation_point_m": 1.27,
+      "sx": {
+        "mistral_295": {
+          "par_distance": {
+            "200": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.36
+            },
+            "500": {
+              "elevation_m": 11.1,
+              "angle_deg": 1.13
+            },
+            "1500": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.05
+            }
+          },
+          "sx_max_deg": 1.13
+        },
+        "est_090": {
+          "par_distance": {
+            "200": {
+              "elevation_m": 7.76,
+              "angle_deg": 1.86
+            },
+            "500": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.15
+            },
+            "1500": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.05
+            }
+          },
+          "sx_max_deg": 1.86
+        }
+      }
+    },
+    "notre_dame_centre": {
+      "nom": "Notre-Dame — centre",
+      "lat": 43.0107079,
+      "lon": 6.2318669,
+      "correspond_lieux_yml": "notre-dame-centre",
+      "elevation_point_m": 0.01,
+      "sx": {
+        "mistral_295": {
+          "par_distance": {
+            "200": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.0
+            },
+            "500": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.0
+            },
+            "1500": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.0
+            }
+          },
+          "sx_max_deg": -0.0
+        },
+        "est_090": {
+          "par_distance": {
+            "200": {
+              "elevation_m": 3.93,
+              "angle_deg": 1.12
+            },
+            "500": {
+              "elevation_m": 23.09,
+              "angle_deg": 2.64
+            },
+            "1500": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.0
+            }
+          },
+          "sx_max_deg": 2.64
+        }
+      }
+    },
+    "notre_dame_ouest (Alycastre)": {
+      "nom": "Notre-Dame — côté Alycastre",
+      "lat": 43.0113243,
+      "lon": 6.2226917,
+      "correspond_lieux_yml": "notre-dame-ouest",
+      "elevation_point_m": 0.74,
+      "sx": {
+        "mistral_295": {
+          "par_distance": {
+            "200": {
+              "elevation_m": 12.29,
+              "angle_deg": 3.31
+            },
+            "500": {
+              "elevation_m": 12.44,
+              "angle_deg": 1.34
+            },
+            "1500": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.03
+            }
+          },
+          "sx_max_deg": 3.31
+        },
+        "est_090": {
+          "par_distance": {
+            "200": {
+              "elevation_m": 11.72,
+              "angle_deg": 3.14
+            },
+            "500": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.08
+            },
+            "1500": {
+              "elevation_m": 34.06,
+              "angle_deg": 1.27
+            }
+          },
+          "sx_max_deg": 3.14
+        }
+      }
+    },
+    "notre_dame_est (extremite est)": {
+      "nom": "Notre-Dame — côté est",
+      "lat": 43.0138632,
+      "lon": 6.235842,
+      "correspond_lieux_yml": "notre-dame-est",
+      "elevation_point_m": 2.83,
+      "sx": {
+        "mistral_295": {
+          "par_distance": {
+            "200": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.81
+            },
+            "500": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.32
+            },
+            "1500": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.11
+            }
+          },
+          "sx_max_deg": -0.11
+        },
+        "est_090": {
+          "par_distance": {
+            "200": {
+              "elevation_m": 46.21,
+              "angle_deg": 12.24
+            },
+            "500": {
+              "elevation_m": 71.7,
+              "angle_deg": 7.84
+            },
+            "1500": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.11
+            }
+          },
+          "sx_max_deg": 12.24
+        }
+      }
+    },
+    "courtade_ouest (Premiere Courtade, cote port)": {
+      "nom": "La Courtade — côté port (contexte)",
+      "lat": 43.0018,
+      "lon": 6.207,
+      "correspond_lieux_yml": "courtade-ouest",
+      "elevation_point_m": 4.26,
+      "sx": {
+        "mistral_295": {
+          "par_distance": {
+            "200": {
+              "elevation_m": 7.83,
+              "angle_deg": 1.02
+            },
+            "500": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.49
+            },
+            "1500": {
+              "elevation_m": 0.0,
+              "angle_deg": -0.16
+            }
+          },
+          "sx_max_deg": 1.02
+        },
+        "est_090": {
+          "par_distance": {
+            "200": {
+              "elevation_m": 1.74,
+              "angle_deg": -0.72
+            },
+            "500": {
+              "elevation_m": 6.03,
+              "angle_deg": 0.2
+            },
+            "1500": {
+              "elevation_m": 107.18,
+              "angle_deg": 3.93
+            }
+          },
+          "sx_max_deg": 3.93
+        }
+      }
+    }
+  }
+}
