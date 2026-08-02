@@ -4,11 +4,13 @@
 traité les **huit premiers points**, dont les quatre bloquants. Les relevés sont
 dans `VERIFICATIONS.md`, avec les requêtes et les réponses.
 
-**Mise à jour du 2 août 2026** — les points 9, 10 et 12 sont traités à leur
-tour (détail du 9 dans `SOURCING-HORAIRES-COMMERCES.md`, détail des 10 et 12
-dans `donnees/AVERIFIER-POINTS-10-12.md`).
+**Mise à jour du 2 août 2026** — les points 9, 10, 11 et 12 sont traités à
+leur tour (détail du 9 dans `SOURCING-HORAIRES-COMMERCES.md`, détail du 11
+dans `donnees/QUALITE-EAUX-BAIGNADE.md`, détail des 10 et 12 dans
+`donnees/AVERIFIER-POINTS-10-12.md`).
 
-Il ne reste ouvert que le point 11, et les relevés de terrain.
+Il ne reste ouvert que les démarches à engager (clé CANDHIS, signalement
+PAN, demande à la préfecture) et les relevés de terrain.
 
 Format : ce qu'on cherche · où · ce qu'on en fait selon la réponse.
 
@@ -28,6 +30,7 @@ Le détail, les requêtes et les réponses sont dans `VERIFICATIONS.md`.
 | 6 | `porquerolles.guide` a-t-il un état du jour ? | **Non.** Guide éditorial WordPress très complet sur le statique, **zéro contenu vent, météo ou incendie**. Le créneau est libre localement. |
 | 7 | Le Parc publie-t-il ? | **Non, il renvoie** vers l'État dans le Var. La demande de flux vise donc la **préfecture**, pas le Parc. Sémantique par niveau confirmée. Acteur à ajouter au benchmark : l'app **Hyères-Risques**. |
 | 8 | OSM est-il un socle exploitable ? | **Non.** 145 objets sur l'île, **8 % avec `opening_hours`, 2 % avec `check_date`**. La brique « ouvert aujourd'hui » part de zéro. |
+| 11 | Un prélèvement de l'année en cours existe-t-il réellement pour les sites de Porquerolles ? | **Oui**, vérifié en direct (codes HTTP, dates, valeurs) : les trois sites officiels ont chacun 7 prélèvements 2026, le dernier daté du 29/07/2026, résultat « Bon » (Courtade, Argent) ou majoritairement « Moyen » (Notre-Dame, 4/7). Le classement UE de la saison en cours **n'existe pas encore** (« site non classé ») — confirme que la règle du dossier (affichage passif daté, jamais un classement) est nécessaire, pas seulement prudente. Détail dans `donnees/QUALITE-EAUX-BAIGNADE.md`. |
 | 9 | TLV-TVM réutilisable ? Et Google Maps pour les commerces ? | **Bateaux** : oui, mais la seule page lisible par machine **omet les navettes tardives** — table à la main depuis le PDF. **Commerces** : Google **affiche** une fiche à jour au clic (Places UI Kit), mais **interdit contractuellement** de s'en servir pour construire une liste « ouvert aujourd'hui ». Cette liste doit venir d'OpenStreetMap, à enrichir (32 fiches, ~22 % couvertes aujourd'hui). Détail dans `SOURCING-HORAIRES-COMMERCES.md`. |
 | 10 | Météo-France : une API de prévision ponctuelle existe-t-elle ? Quota/licence Vigilance ? | **Non**, catalogue officiel des 23 API du portail énuméré en direct (HTTP 200) : rien que de la grille, du radar ou de l'observation par station. Une API ponctuelle **existe bien** (`webservice.meteofrance.com`, testée avec succès) mais **hors du portail officiel**, avec un jeton partagé rétro-ingénié — écartée faute de licence. Vigilance : **60 req/min confirmé**, Licence Ouverte Etalab 2.0, commercial autorisé avec attribution datée, aucune garantie de disponibilité. Détail dans `donnees/AVERIFIER-POINTS-10-12.md`. |
 | 12 | Le quota de 6 000 visiteurs/jour a-t-il une source postérieure à 2024 ? | **Oui**, deux sources trouvées (Var Actu 7 juillet 2026, franceinfo 28 juillet 2025) : le dispositif est **toujours actif** pour l'été 2026, même chiffre, même mécanisme depuis 2021 — un plafond de billets sur les navettes maritimes, **pas un contrôle physique à l'entrée**. Reste non trouvé : un arrêté préfectoral ou municipal nommé qui l'instituerait formellement — tout indique un montage contractuel (charte des bateliers + DSP), pas un arrêté de police classique. Détail dans `donnees/AVERIFIER-POINTS-10-12.md`. |
@@ -90,16 +93,30 @@ de la date de mise à jour), et **aucune garantie de disponibilité** de
 l'API — à prendre en compte dans la conception (jamais de dépendance dure
 sans repli).
 
-### 11. Qualité des eaux de baignade
+### 11. Qualité des eaux de baignade — traité le 02/08/2026, voir `donnees/QUALITE-EAUX-BAIGNADE.md`
 
-Open data annuel seulement, donc inutilisable pour « aujourd'hui ». Le portail
-`baignades.sante.gouv.fr` est scrapable ; implémentation de référence chez
-SocialGouv/recosante, branche `master` (pas `main`).
+La vérification bloquante est faite, avec preuve (codes HTTP, dates,
+valeurs lues), pas supposée : les trois sites officiels de Porquerolles
+(Grande Plage/Courtade, Plage d'Argent, Notre-Dame) ont chacun 7
+prélèvements réels pour la saison 2026, le dernier daté du 29 juillet
+2026. Résultat « Bon » sur les deux premiers, « Bon »/« Moyen » partagé
+sur Notre-Dame (3/7 Bon, 4/7 Moyen). Le classement officiel UE de la
+saison en cours n'existe pas encore (« site non classé » sur les trois
+sites) — se calcule *a posteriori* sur 4 saisons glissantes, jamais en
+cours de saison.
 
-**Vérification bloquante avant d'afficher quoi que ce soit** : confirmer qu'un
-résultat de prélèvement de l'année en cours existe réellement pour les sites de
-Porquerolles. Affichage passif daté uniquement, jamais un critère de classement,
-jamais une interprétation.
+L'archive 2013-2025 (13 saisons × 3 sites, Licence Ouverte, data.gouv.fr)
+a été récupérée et croisée : aucun site, aucune année, sous « Bonne » sur
+toute la série ; un tassement net et non expliqué en 2024 sur les trois
+sites (voir le détail).
+
+Règle d'affichage confirmée nécessaire par cette vérification, pas
+seulement prudente : **affichage passif daté uniquement, jamais un
+critère de classement, jamais une interprétation** — le classement 2026
+n'existe simplement pas encore côté source officielle tant que la saison
+n'est pas terminée. Reste à sécuriser avant un usage publicitaire : la
+licence du scraping temps réel de `baignades.sante.gouv.fr` lui-même
+(inconnue sur ce site précis, contrairement à l'archive data.gouv.fr).
 
 ### 12. Le régime de quota en vigueur — traité le 02/08/2026, voir `donnees/AVERIFIER-POINTS-10-12.md`
 
