@@ -1,11 +1,6 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // TEMP: Open read access for all documents to stabilize production UI
-    // TODO: tighten once verification complete
-    match /{document=**} {
-      allow read: if true;
-    }
     // Usernames collection rules (for username reservation)
     match /usernames/{username} {
       // Anyone can read to check availability
