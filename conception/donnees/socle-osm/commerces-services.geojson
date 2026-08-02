@@ -1,0 +1,855 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 649010909,
+    "nom": "Utile",
+    "categorie": "convenience",
+    "horaires": "Mo-Su 08:30-19:00"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2029864,
+     43.0001836
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 649030347,
+    "nom": "Presse",
+    "categorie": "library",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2035122,
+     43.0008513
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 649030960,
+    "nom": "Boulangerie de l'île",
+    "categorie": "bakery",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2026197,
+     43.0004882
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 649031908,
+    "nom": "Société Générale",
+    "categorie": "atm",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2031985,
+     43.0011415
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 649169374,
+    "nom": "Le cycle porquerollais",
+    "categorie": "bicycle",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2032341,
+     43.0011917
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 673065235,
+    "nom": "L'Arche de Porquerolles",
+    "categorie": "restaurant",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2026979,
+     43.0006347
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 694167116,
+    "nom": "Restaurant Le Prado",
+    "categorie": "restaurant",
+    "horaires": "Mo-Su,PH 07:00-23:00"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.1552001,
+     43.0278674
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 1813802340,
+    "nom": null,
+    "categorie": "drinking_water",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.1557907,
+     43.0280231
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 3166476975,
+    "nom": null,
+    "categorie": "fuel",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2010037,
+     43.0033145
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 3637983680,
+    "nom": "Epicerie",
+    "categorie": "convenience",
+    "horaires": "Mo-Su 08:00-13:00; Mo-We,Fr-Sa 17:30-19:00"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.1561419,
+     43.0296937
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 3649313947,
+    "nom": null,
+    "categorie": "toilets",
+    "horaires": "Mo-Su,PH 06:00-22:00"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2030128,
+     43.0022298
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 3670871186,
+    "nom": "Le Team",
+    "categorie": "bicycle_rental",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2034244,
+     43.0012664
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 3683738436,
+    "nom": "Au petit marché",
+    "categorie": "convenience",
+    "horaires": "Mo-Su 07:30-13:30,15:30-19:30"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.1555103,
+     43.0282874
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 3683738437,
+    "nom": "Fruits et legumes",
+    "categorie": "greengrocer",
+    "horaires": "Mo-Su 10:00-18:00"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.1553534,
+     43.0277947
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 3683738441,
+    "nom": "Les trois îles",
+    "categorie": "restaurant",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.1554839,
+     43.0277702
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 3714253830,
+    "nom": "O'Pelican",
+    "categorie": "restaurant",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.1560452,
+     43.0297074
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 3798156270,
+    "nom": "La plage",
+    "categorie": "restaurant",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2046215,
+     43.0026956
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 4163961714,
+    "nom": "L'Étal du boucher",
+    "categorie": "restaurant",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2029087,
+     43.00023
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 4163964089,
+    "nom": "La Méduse",
+    "categorie": "bicycle_rental",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2032429,
+     43.0025734
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 5102851973,
+    "nom": "L'Escale",
+    "categorie": "restaurant",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.202879,
+     43.0011923
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 5102851974,
+    "nom": "Le Chamo - Maison Pesce - glacier Porquerollais",
+    "categorie": "ice_cream",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.202653,
+     43.0005597
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 5102851975,
+    "nom": "Coco Frio",
+    "categorie": "ice_cream",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2025001,
+     43.0002649
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 5102851976,
+    "nom": "La Calanque",
+    "categorie": "restaurant",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2027217,
+     43.0007266
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 5102851977,
+    "nom": "L'aventure...",
+    "categorie": "restaurant",
+    "horaires": "Mo-Su 12:00-14:30, 19:00-23:00"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2031016,
+     43.000976
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 5102851978,
+    "nom": "O'Tobago",
+    "categorie": "restaurant",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2027146,
+     43.0002788
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 5102851979,
+    "nom": "L'Oustaou",
+    "categorie": "restaurant",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2027925,
+     43.0008768
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 5102851980,
+    "nom": "L'Orangeraie",
+    "categorie": "restaurant",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2028536,
+     43.0009701
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 5102851981,
+    "nom": "L'indien",
+    "categorie": "bicycle_rental",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.202906,
+     43.001081
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 5102851982,
+    "nom": "Vival - La Superette",
+    "categorie": "convenience",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.203151,
+     43.002468
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 5548748922,
+    "nom": "Il pescatore",
+    "categorie": "restaurant",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2031969,
+     43.0025388
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 6006872185,
+    "nom": "Pelagos",
+    "categorie": "restaurant",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2037519,
+     43.000793
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 6006872186,
+    "nom": "Le Porquerollais",
+    "categorie": "restaurant",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2036191,
+     43.0008136
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 6149905585,
+    "nom": "Autour de la Mer",
+    "categorie": "variety_store",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.1555672,
+     43.0281417
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 6425504085,
+    "nom": "Île de Porquerolles",
+    "categorie": "post_office",
+    "horaires": "Mo-Fr 09:30-12:00; PH off; 2024 May 10,2024 May 20 off"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2025551,
+     43.0004103
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 8533293917,
+    "nom": "Porquerolles à vélo",
+    "categorie": "bicycle",
+    "horaires": "Mo-Su 09:15-17:15"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2035091,
+     43.0011141
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 9846683296,
+    "nom": "Le Pirate",
+    "categorie": "bicycle_rental",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2035176,
+     43.0025943
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 10142347517,
+    "nom": "La Fringale",
+    "categorie": "bar",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2031088,
+     43.0024149
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 10142347518,
+    "nom": "Côté Port",
+    "categorie": "bar",
+    "horaires": "Apr-Oct: Mo-Su 12:00-14:00; Jun-Sep: Mo-Su 12:00-14:00,18:00-22:00"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2032868,
+     43.0013567
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 12229874389,
+    "nom": null,
+    "categorie": "toilets",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.1564063,
+     43.0293055
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 12301632402,
+    "nom": "Chez Cathy",
+    "categorie": "greengrocer",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.20249,
+     43.0001748
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 12373127802,
+    "nom": null,
+    "categorie": "drinking_water",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2034591,
+     42.9993245
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 12441620463,
+    "nom": null,
+    "categorie": "toilets",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2114561,
+     42.9993478
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 13028144079,
+    "nom": "Chez Laura",
+    "categorie": "convenience",
+    "horaires": "Th-Su 10:00-13:00,16:00-20:00"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.20197,
+     43.0000958
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 13103842201,
+    "nom": "Natif",
+    "categorie": "clothes",
+    "horaires": "Mo-Su 10:00-22:30"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2035639,
+     43.000835
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "way",
+    "osm_id": 57769246,
+    "nom": "Restaurant de la Plage d'Argent",
+    "categorie": "restaurant",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.1880101199999995,
+     43.0038929
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "way",
+    "osm_id": 57887185,
+    "nom": "Vente Fruits et Légumes",
+    "categorie": "farm",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.201634919999999,
+     42.997646800000005
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "way",
+    "osm_id": 58679667,
+    "nom": null,
+    "categorie": "toilets",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.20172686,
+     42.99933897999999
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "way",
+    "osm_id": 60208221,
+    "nom": null,
+    "categorie": "toilets",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.1876233,
+     43.003814600000005
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "way",
+    "osm_id": 637294020,
+    "nom": null,
+    "categorie": "toilets",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.20107388,
+     43.00305708
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "way",
+    "osm_id": 1323619715,
+    "nom": "Le Poisson Ivre",
+    "categorie": "restaurant",
+    "horaires": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.211184733333333,
+     42.99968736666667
+    ]
+   }
+  }
+ ]
+}

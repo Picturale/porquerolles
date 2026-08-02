@@ -1,0 +1,293 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 606345733,
+    "nom": "Grand-Câle ouest",
+    "direction": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2128941,
+     42.9887021
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 606345735,
+    "nom": "Grand-Câle est",
+    "direction": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.215011,
+     42.991165
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 609487737,
+    "nom": null,
+    "direction": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.1799467,
+     43.0029578
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 663731409,
+    "nom": null,
+    "direction": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.1980427,
+     42.9863823
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 663731460,
+    "nom": null,
+    "direction": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.1963931,
+     42.9841285
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 666164341,
+    "nom": null,
+    "direction": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.1900465,
+     42.9947899
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 721837433,
+    "nom": null,
+    "direction": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2052845,
+     43.0025311
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 724944821,
+    "nom": null,
+    "direction": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.205244,
+     42.9827744
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 724955285,
+    "nom": null,
+    "direction": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2082481,
+     42.9842088
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 731832179,
+    "nom": null,
+    "direction": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.1844679,
+     43.0081492
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 832802645,
+    "nom": null,
+    "direction": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.1926761,
+     42.9915736
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 877208549,
+    "nom": null,
+    "direction": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2414954,
+     43.0199558
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 881822329,
+    "nom": null,
+    "direction": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2413922,
+     43.0244684
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 928888867,
+    "nom": null,
+    "direction": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.1841651,
+     42.9930281
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 1298434494,
+    "nom": null,
+    "direction": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.1801541,
+     42.9946203
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 1813802345,
+    "nom": null,
+    "direction": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.155982,
+     43.0282105
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 6007285989,
+    "nom": "Calanque de l'Indienne",
+    "direction": null
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.208355,
+     42.9857846
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "osm_type": "node",
+    "osm_id": 13021374142,
+    "nom": null,
+    "direction": "360"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2063655,
+     42.9998297
+    ]
+   }
+  }
+ ]
+}
