@@ -80,17 +80,59 @@ Codes qualité retenus : `0` (protégée), `1` (validée), `9` (filtrée) — ja
 cohérent avec la convention `etats.yml` (« jamais des km/h : c'est la
 convention lue en bord de mer »).
 
-## Trouvaille annexe, non exploitée ici
+## Deuxième passe — l'état de la mer contre le vent, même poste
 
-La même station (le sémaphore) a aussi enregistré à l'œil, de 1950 à 1998,
-l'**état de la mer** (`ETATMER`, 104 985 relevés) et la **direction de la
+La même station a aussi enregistré à l'œil, de 1950 à 1998, l'**état de la
+mer** (`ETATMER`, 104 985 relevés, échelle OMM 0-9) et la **direction de la
 houle** (`DIRHOULE`, 44 068 relevés) — un demi-siècle d'observation humaine
-de la mer, depuis l'île même, distinct de la bouée CANDHIS (au sud, depuis
-les années 2000 seulement). Piste à creuser pour calibrer le masque de houle
-(`moteur/calculs.md` §5) contre du réel, dans une passe dédiée.
+de la mer depuis l'île même, distinct de la bouée CANDHIS (au sud, depuis
+les années 2000 seulement).
 
-## Artefact visuel
+**Localisation précise du poste** (point géodésique IGN, confirmé par
+Overpass) : à 500 m au nord de la **Calanque des Salins**, sur les hauteurs
+du centre-sud de l'île (143 m). **Ce n'est pas la côte nord abritée** à
+laquelle le dossier promet une mer plate par mistral — c'est un point exposé
+côté sud. Le champ de vue exact du poste n'est pas confirmé par une source
+qui le décrit explicitement, seulement déduit de sa position géographique.
 
-Trois graphiques (fréquence des états par mois, distribution mensuelle des
-vitesses, rose des vents) : voir la conversation Claude Code du 31 juillet
-2026, ou régénérer depuis `conception/donnees/climato-vent-porquerolles.json`.
+**Croisement vent/mer, 77 328 heures avec les deux mesures simultanées** —
+classification de l'état de vent selon les seuils exacts de `etats.yml` :
+
+| Vent | Calme | Belle | Peu agitée | Agitée | Forte et plus | n |
+|---|---|---|---|---|---|---|
+| Mistral (établi + fort) | 0,1 % | 5,2 % | 30,5 % | 51,1 % | 13,1 % | 9 146 |
+| Vent d'est (modéré + fort) | 0,2 % | 20,8 % | 42,5 % | 26,8 % | 9,7 % | 13 357 |
+| Vent calme | 3,1 % | 60,2 % | 25,6 % | 9,7 % | 1,3 % | 54 825 |
+
+**La mer est plus agitée par mistral que par vent d'est, à ce point précis**
+— 64 % « agitée » ou pire par mistral, contre 36 % par vent d'est. Au premier
+regard ça semble contredire la promesse du dossier. **Ce n'est pas une
+contradiction, c'est la confirmation du mécanisme mesurée au mauvais
+endroit pour trancher la question posée.** La station est en plein fetch
+face au mistral (secteur ouest, ouvert sur le large depuis le sud) ; le vent
+d'est y est probablement plus abrité localement. C'est exactement ce que
+prédit le masque directionnel de `moteur/calculs.md` §5 : le même vent
+produit une mer complètement différente selon le point de côte — la preuve,
+mesurée, qu'aucune source unique (bouée ou station) ne peut représenter
+toute l'île.
+
+**Ce que ça ne tranche pas** : si la côte nord reste vraiment plate par
+mistral. Cette station ne peut pas le dire, elle regarde le mauvais côté.
+Cette question reste entièrement portée par le calcul de fetch (2-5 km au
+nord contre plusieurs centaines à l'est), jamais mesurée directement.
+
+**Note annexe sur la houle** — sur 44 038 heures avec vent et houle valides
+simultanément, la direction de la houle est alignée à moins de 30° du vent
+local 51 % du temps (cohérent avec de la mer de vent locale, court terme) et
+diverge de plus de 90° dans 26 % des cas (houle distincte, arrivant d'ailleurs
+que ce que le vent local suggère) — non creusé plus loin ici.
+
+**Artefact dérivé** : `conception/donnees/mer-vs-vent-porquerolles.json`.
+
+## Artefacts visuels
+
+Quatre graphiques : fréquence des états de vent par mois, distribution
+mensuelle des vitesses, rose des vents, état de la mer selon le vent. Voir la
+conversation Claude Code du 31 juillet 2026, ou régénérer depuis
+`conception/donnees/climato-vent-porquerolles.json` et
+`mer-vs-vent-porquerolles.json`.

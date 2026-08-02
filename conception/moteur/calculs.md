@@ -122,6 +122,15 @@ la côte nord-est encaisse.
 Ça remplace les coefficients d'atténuation écrits au doigt mouillé dans
 `etats.yml`.
 
+**Premier indice empirique, 31/07/2026** — voir
+`donnees/CLIMATOLOGIE-VENT.md`. La station météo du sémaphore (centre-sud de
+l'île, exposée) a aussi enregistré l'état de la mer à l'œil, 1950-1998. Par
+mistral, la mer y est mesurée nettement plus agitée que par vent d'est
+(64 % « agitée ou pire » contre 36 %) — l'inverse de la côte nord, mais
+cohérent avec le principe : le même vent produit une mer différente selon
+le point de côte, mesuré et non plus seulement supposé. Ne tranche pas la
+question nord, la station regarde le mauvais côté.
+
 ---
 
 ## Ce qui ne se calculera jamais
