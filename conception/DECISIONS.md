@@ -265,7 +265,7 @@ chemin du retour. Aucune de ces cinq choses n'est possible avec des tuiles.
 | | |
 |---|---|
 | `/aujourdhui/quelle-plage` | matrice à trois axes × tronçons × ombre calculée |
-| Bandeau dernier bateau | horaire saisi, marge, **auto-retrait hors saison** |
+| Bandeau dernier bateau | horaire saisi, marge, **auto-retrait hors saison**, **à pied seulement** |
 | `/aujourdhui/feu` | **le niveau seul**. Jamais le périmètre → lien Parc |
 | `/aujourdhui/ouvert` | daté, plafonné |
 | `/` | routage contextuel + « ce n'est pas votre situation ? » |
@@ -319,3 +319,80 @@ c'est un lieu, pas un article de blog. Voir `FONDS-ICONOGRAPHIQUES.md` pour
 l'inventaire — cette matière ne se copie pas en une après-midi, contrairement
 à une fiche pratique, ce qui en fait le contenu le moins cher à défendre de
 tout le dossier (elle ne périme jamais, donc n'entretient aucune dette).
+
+---
+
+## 14. Pile technique
+
+**Décidé le 2 août 2026, prudent et simple plutôt qu'ambitieux.** Rien n'était
+tranché jusqu'ici ; le dépôt ne contenait que l'ancienne app à abandonner
+(Capacitor/Firebase/React, `src/social-app/`) et des scripts Python jetables
+dans `moteur/precompute/`. Ce point ne construit pas encore le site — il fixe
+la direction pour ne pas repartir de zéro à la prochaine session.
+
+**Site : générateur statique à îlots (Astro), pas de framework applicatif
+complet.** Justifié directement par la doctrine déjà écrite, pas par
+préférence technique :
+- §9 dit que le visiteur n'interroge jamais les sources — donc le site n'a
+  structurellement pas besoin d'un serveur applicatif qui recalcule à chaque
+  requête. Un générateur statique correspond exactement à « un traitement
+  calcule, le site sert du statique ».
+- §11 (la carte, un SVG unique, pas de tuiles) et §4 (un gabarit de réponse,
+  partout) demandent très peu de JavaScript côté visiteur — l'essentiel de
+  chaque page est du texte et un dessin coloré par des données déjà calculées.
+  L'architecture à îlots d'Astro (zéro JS par défaut, un composant
+  interactif seulement où il sert, ex. la carte) colle à ce besoin sans
+  charger un framework complet pour des pages qui n'en ont pas besoin.
+- §3 (URL stables, partageables, indexables) est le cas d'usage central d'un
+  générateur statique : chaque route est une vraie page, pas un état
+  d'application.
+
+**Alternative écartée** : reprendre React/Vite déjà présent dans le dépôt
+pour l'app à abandonner. Rejetée parce que cette pile est taillée pour une
+app avec compte utilisateur et état client complexe (§13 : precisément ce
+qu'on ne construit pas ici), et parce que mélanger le nouveau projet dans le
+même arbre que le code voué à l'abandon rendrait plus dur, pas plus facile,
+le jour où ce dernier est effectivement retiré.
+
+**Pipeline de données : Python, séparé du site, relié seulement par des
+fichiers.** Les cinq précalculs de `moteur/calculs.md` sont déjà écrits et
+vérifiés en Python (`moteur/precompute/`) — les réécrire dans le langage du
+site n'apporterait rien, seulement un risque de régression sur du code déjà
+validé contre des données réelles. Conforme à §10 (« dossier île = données,
+pas du code ») : le seul contrat entre les deux mondes est un fichier
+(JSON/YAML), jamais un import de code d'un langage dans l'autre.
+
+**Fraîcheur (§8, les trois niveaux live/structurel/socle) : une fonction
+périphérique légère, pas un serveur applicatif.** Les connecteurs vent/mer/feu
+tournent sur un déclencheur planifié (cron), écrivent une observation datée
+dans un petit fichier JSON servi depuis un cache en périphérie ; le site
+statique le lit au chargement et dégrade vers la dernière valeur connue si la
+source est tombée — jamais de page qui attend une réponse réseau pour
+s'afficher.
+
+**Hébergement : une plateforme statique/edge généraliste** (Cloudflare Pages
+ou équivalent), pas d'infrastructure dédiée. Peu coûteux, rapide par
+construction (le rendu est déjà fait au moment de la requête), et le
+déclencheur planifié pour les connecteurs peut vivre sur la même plateforme
+sans service supplémentaire à opérer.
+
+**Ce qui n'est pas fait par cette décision** : aucun code d'application n'est
+écrit. Le prochain pas concret est un squelette minimal (structure de
+dossiers, une page `/toujours/` alimentée par `lieux.yml`) une fois qu'un
+gabarit visuel existe — prématuré tant qu'aucune maquette n'a été discutée.
+
+---
+
+## 15. Le mode vélo n'est pas publié
+
+**Décidé le 2 août 2026.** `moteur/precompute/trajet.py` calcule un temps de
+trajet à vélo vers le port (voir `TRAJET-PREMIER-CALCUL.md`), mais le réseau
+cyclable OSM de l'île se fragmente assez pour produire, sur certains
+itinéraires testés, un temps vélo pire qu'à pied (Argent : 43 min à vélo
+contre 26 min à pied, à cause d'un détour de plusieurs kilomètres autour
+d'une rue fermée au vélo en saison). Publier un « dernier bateau vélo » sur
+cette base donnerait une heure fausse à un visiteur qui compte dessus —
+contraire au §8 (« défaut restrictif : si la récupération échoue, on
+n'écrit jamais une donnée qui autorise »). Le calcul reste dans le dépôt,
+documenté, réutilisable le jour où le réseau cyclable de `socle-osm/` est
+enrichi ou vérifié sur place — mais V1 n'affiche que le temps à pied.

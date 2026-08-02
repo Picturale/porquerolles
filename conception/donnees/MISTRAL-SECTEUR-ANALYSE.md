@@ -270,6 +270,40 @@ fin), mais pas pour l'axe eau des lieux au fetch variable.
   (non versionnée, comme documenté dans `CLIMATOLOGIE-VENT.md` — seuls les
   artefacts dérivés sont écrits sur disque).
 
+## Décision — 2 août 2026
+
+**`etats.yml` ne change pas.** Ni A (scinder `mistral` par sous-direction)
+ni C (sortir l'axe eau des états nommés pour les lieux exposés) ne sont
+retenues : les trois limites listées plus haut — un seul point sur six
+montre le bascule, la distance de fetch n'est pas une hauteur de vague
+(SMB non fait), et l'échantillon reste petit — rendent une frontière à
+295° arbitraire pour tout ce qui n'est pas `notre-dame-est`, et C est le
+changement le plus lourd des trois pour un problème démontré sur un seul
+lieu. Ni l'un ni l'autre n'est le choix simple et prudent tant que le
+reste de l'île n'est pas testé.
+
+**Ce qui referme la question sans y toucher** : la doctrine du dossier
+(« le calcul propose, le terrain tranche ») a déjà réglé le seul cas
+mesuré. `notre-dame-est` porte `confiance: terrain` dans `lieux.yml`, avec
+des notes `mistral_fort` déjà différenciées de ses voisins
+(`eau: 3, sable: 0`, contre `eau: 4` pour `notre-dame-centre` et
+`notre-dame-ouest`) et la remarque manuscrite *« c'est cette moitié qui
+est exposée au mistral »*, écrite avant tout calcul. Le calcul de fetch
+retrouve exactement cette différence par un autre chemin — il confirme le
+terrain, il ne le corrige pas. Aucune valeur de `lieux.yml` n'est
+recalculée ni modifiée par ce document, conformément à la règle « ne
+jamais recalculer » du dossier.
+
+**Ce qui reste ouvert, en version légère de l'option B** — pas un
+changement de mécanique, une règle de méthode pour les futures notes
+`deduit` : avant d'écrire une note `mistral_fort` sur un nouveau lieu
+exposé au nord, faire tourner `fetch.py` sur ce point comme fait ici pour
+les 4 points supplémentaires (coût : ~25 s, une requête IGN par seconde,
+36 rayons) et croiser avec la table de Résultat 1 avant de choisir la
+valeur `eau`. Ça ne change rien pour les 6 lieux déjà testés ni pour ceux
+en `confiance: terrain` (le terrain gagne toujours), seulement pour de
+futures notes `deduit` sur des lieux non encore visités.
+
 ## Reproduire
 
 ```bash
