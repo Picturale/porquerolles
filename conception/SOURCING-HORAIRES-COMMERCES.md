@@ -235,11 +235,24 @@ sur place, plus une repasse aux deux bascules de saison (avril, octobre).
 
 Base publique alimentée par les offices de tourisme, licence ouverte, usage
 commercial explicitement autorisé, mise à jour quotidienne. Contient déjà
-48 à 55 fiches Porquerolles, réellement à jour (juillet 2026). **Mais zéro
-horaire** : le champ existe dans le modèle, jamais rempli — 0 sur 34 482
-fiches dans l'export régional. Utilisable dès maintenant pour la liste des
-établissements et les contacts, à négocier pour les horaires — une seule
-question à poser à l'office de tourisme (voir recommandations).
+48 à 55 fiches Porquerolles, réellement à jour (juillet 2026).
+
+**Correction du 02/08/2026, avec une clé API obtenue depuis** — voir
+`donnees/DATATOURISME-INVENTAIRE.md`. Le CSV régional n'a bien que 7 fiches
+Porquerolles sur 55 avec la colonne `Periodes_regroupees` remplie (et ce ne
+sont que des plages de dates d'événements, jamais un horaire hebdomadaire).
+Mais **l'API v1, avec le bon paramètre `fields`, expose un champ absent du
+CSV** (`openingHoursSpecification[].additionalInformation`, du texte libre
+avec de vraies indications jour/heure) : **20 fiches sur 55 (36 %)** le
+renseignent, dont **11 (20 %)** avec une plage horaire chiffrée exploitable
+— restaurants, commerces, office de tourisme, port, église inclus, pas
+seulement des événements. Ça comble une partie mesurable du trou identifié
+sur OSM (36 % contre 22 %), mais pas les deux commerces de première
+nécessité (boulangerie, supérette, absents des deux bases) ni le trou
+spécifique aux restaurants (2/16 avec horaire chiffré, contre 1/14 sur OSM —
+écart non significatif). DATAtourisme devient une source de recoupement et
+de contacts (téléphone sur 100 % des fiches, site web sur 82 %) utile pour
+préparer la campagne de relevé OSM, pas un substitut à cette campagne.
 
 ### Pistes mortes
 
