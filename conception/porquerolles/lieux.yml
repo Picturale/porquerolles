@@ -19,8 +19,11 @@
 #
 # Les trois échecs constatés sont des échecs de DONNÉES, pas de méthode :
 #   - Le Lequin : orienté ouest-nord-ouest, donc nominalement face au mistral.
-#     Il en est totalement protégé, parce que la crête de l'île (142 m) est au
-#     nord-ouest et le met sous le vent. Il manquait un modèle de terrain.
+#     Il en est totalement protégé (confirmé terrain, jamais recalculé) —
+#     mais le mécanisme géométrique exact reste ouvert : l'explication par
+#     une crête à 142 m au nord-ouest, écrite ici jusqu'au 02/08/2026, a été
+#     réfutée par le calcul de fetch réel (la crête est en fait à 1,5 km au
+#     sud-sud-est, incapable de faire écran). Voir moteur/calculs.md §2.
 #   - La Courtade : par mistral l'eau est plate et le sable décape. Il manquait
 #     le fetch (1,7 km au plus étroit) et la séparation des deux axes.
 #   - Notre-Dame : les guides de mouillage disent "à éviter par mistral".

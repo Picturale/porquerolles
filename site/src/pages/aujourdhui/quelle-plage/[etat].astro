@@ -15,14 +15,22 @@ export function getStaticPaths() {
 
 const { etat } = Astro.props;
 
-// Seuil provisoire, pas encore une décision produit actée (voir
+// Seuils provisoires, pas encore une décision produit actée (voir
 // conception/DECISIONS.md §5 pour le vocabulaire à trois niveaux — les
 // bornes numériques ci-dessous sont une proposition de cette maquette,
 // à confirmer avant toute mise en production).
+//
+// « à faire aujourd'hui » n'apparaît volontairement jamais ici : §5 dit
+// explicitement que ce cran « exige un humain » et que « le moteur [...]
+// ne peut jamais le monter » — trouvé et corrigé après une revue croisée
+// du 3 août 2026 (le moteur seul l'affichait avant cette correction). Le
+// moteur ne peut donc que descendre vers « à éviter » ou rester à
+// « correct » ; la couleur reste un dégradé continu (verte pour une bonne
+// note), le mot ne franchit jamais la ligne réservée à un humain.
 function niveau(min) {
-  if (min >= 4) return { mot: 'à faire aujourd’hui', couleur: '#2f6b4f' };
-  if (min >= 2) return { mot: 'correct', couleur: '#b8862e' };
-  return { mot: 'à éviter aujourd’hui', couleur: '#b23b3b' };
+  if (min <= 1) return { mot: 'à éviter aujourd’hui', couleur: '#b23b3b' };
+  if (min >= 4) return { mot: 'correct — pas encore validé à la main', couleur: '#2f6b4f' };
+  return { mot: 'correct', couleur: '#b8862e' };
 }
 
 const plages = getPlages()
@@ -58,7 +66,7 @@ const constat = meilleure
         <p class="conseil-label label">Conseil</p>
         <p>
           {meilleure.score.min >= 4
-            ? `Bonne journée pour ${meilleure.lieu.nom.toLowerCase()}.`
+            ? `${meilleure.lieu.nom} a la meilleure note aujourd’hui sur les données seules — pas encore un « à faire aujourd’hui » validé à la main (DECISIONS.md §5).`
             : meilleure.score.min >= 2
               ? `${meilleure.lieu.nom} reste la meilleure option, sans être idéale.`
               : `Aucune plage n’est vraiment recommandable aujourd’hui — la moins mauvaise est ${meilleure.lieu.nom}.`}
@@ -93,9 +101,17 @@ const constat = meilleure
                 {lieu.remarque ? ` · ${lieu.remarque}` : ''}
               </div>
             </div>
-            <div class="axes">
+            {/*
+              DECISIONS.md §4 : "le produit ne montre jamais ses critères [...]
+              les autres axes restent dépliables" — repéré et corrigé après
+              une revue croisée du 3 août 2026 (les trois notes étaient
+              affichées en permanence avant cette correction). <details>
+              natif, sans JS.
+            */}
+            <details class="axes">
+              <summary>détail des trois notes</summary>
               eau {score.notes.eau} · sable {score.notes.sable} · tranq. {score.notes.tranquillite}
-            </div>
+            </details>
           </li>
         );
       })

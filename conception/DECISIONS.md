@@ -164,9 +164,14 @@ discussion, et porte sa date.
 
 Motif : trois erreurs constatées, toutes par manque de données et non par
 manque de méthode. Le Lequin est nominalement face au mistral d'après son
-orientation, et en est totalement protégé — parce que la crête de l'île (142 m)
-est au nord-ouest. Un modèle de terrain l'aurait dit ; une orientation seule,
-non.
+orientation, et en est totalement protégé — l'abri est confirmé par le
+terrain (`confiance: terrain` dans `lieux.yml`, jamais recalculé), mais son
+mécanisme géométrique exact reste à établir : le calcul de fetch réel
+(`donnees/RELIEF-EXPOSITION.md`) a réfuté l'explication qui figurait ici
+jusqu'au 02/08/2026 (une crête à 142 m au nord-ouest — en réalité à 1,5 km au
+sud-sud-est, géométriquement incapable de faire écran) sans la remplacer par
+une autre confirmée. Voir `moteur/calculs.md` §2 pour le détail de la
+correction et les deux hypothèses encore ouvertes.
 
 Mais un indice d'exposition topographique n'est pas de la mécanique des fluides :
 l'écoulement décolle sous la crête, recircule, accélère autour des pointes. On

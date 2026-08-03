@@ -45,12 +45,13 @@ etats:
       Vent d'est. La houle arrive avant le vent et déferle sur la côte
       nord-est. L'eau peut rester mauvaise le lendemain, vent tombé.
 
-  - id: est
-    nom: Vent d'est modéré
-    quand:
-      direction: [60, 120]
-      moyen_min: 10
-
+  # brise_sud_est avant est : sur leur recouvrement de direction (90-120°),
+  # brise_sud_est est le plus specifique des deux (condition d'heure en
+  # plus), donc doit gagner en premier — "premier qui correspond gagne, du
+  # plus specifique au plus general" (voir l'en-tete de ce fichier). Avant
+  # ce reordonnancement (revue croisee du 3 aout 2026), est etait place en
+  # premier et brise_sud_est ne pouvait jamais se declencher sur ce
+  # recouvrement, quelle que soit l'heure.
   - id: brise_sud_est
     nom: Brise de mer
     quand:
@@ -60,6 +61,12 @@ etats:
     constat: >-
       Brise de mer d'après-midi. Quasi quotidienne en été. Ce n'est pas un
       événement — la réponse du matin reste valable pour l'essentiel.
+
+  - id: est
+    nom: Vent d'est modéré
+    quand:
+      direction: [60, 120]
+      moyen_min: 10
 
   - id: calme
     nom: Calme
@@ -86,7 +93,9 @@ paliers_vent:
 # faible rend l'eau mauvaise, parce qu'il arrive précédé de sa houle.
 #
 # Source : bouée CANDHIS Porquerolles 08302. Mesure, pas prévision.
-# Rafraîchie toutes les 30 à 60 minutes.
+# Rafraîchie toutes les heures (cadence horaire confirmée par un appel direct
+# à l'API le 02/08/2026, voir A-VERIFIER.md #3 — corrige l'estimation
+# "30 à 60 minutes" écrite avant cette vérification).
 
 paliers_houle:
   - { max: 0.3, note: 5, dit: "eau plate" }
