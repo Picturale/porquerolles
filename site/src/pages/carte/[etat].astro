@@ -1,0 +1,87 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCoastlinePaths, getPlagePolygons } from '../../lib/carte.js';
+import { ETATS, ETAT_LABELS, getPlages, scoreDuJour } from '../../lib/lieux.js';
+
+export function getStaticPaths() {
+  return ETATS.map((etat) => ({ params: { etat: etat.replace('_', '-') }, props: { etat } }));
+}
+
+const { etat } = Astro.props;
+
+const coastline = getCoastlinePaths();
+const polygones = getPlagePolygons();
+const plages = getPlages();
+
+// Meilleur score parmi les segments d'un même polygone OSM — voir la note
+// dans src/lib/carte.js : OSM ne découpe pas les baies en tiers comme
+// lieux.yml, donc tout le polygone porte la couleur du meilleur segment.
+function meilleurScore(lieuIds) {
+  let best = null;
+  for (const id of lieuIds) {
+    const lieu = plages.find((l) => l.id === id);
+    if (!lieu) continue;
+    const s = scoreDuJour(lieu, etat);
+    if (s && (best === null || s.min > best)) best = s.min;
+  }
+  return best;
+}
+
+function couleur(score) {
+  if (score === null) return '#cfcabb';
+  if (score >= 4) return '#2f6b4f';
+  if (score >= 2) return '#c99a3a';
+  return '#b23b3b';
+}
+---
+
+<Layout title={`Carte — ${ETAT_LABELS[etat]}`}>
+  <h1>Carte</h1>
+
+  <nav class="etat-nav" aria-label="Choisir l'état du jour">
+    {
+      ETATS.map((e) => (
+        <a href={`/carte/${e.replace('_', '-')}/`} aria-current={e === etat ? 'true' : 'false'}>
+          {ETAT_LABELS[e]}
+        </a>
+      ))
+    }
+  </nav>
+
+  <svg viewBox="-3839 -2672 7854 5248" style="width:100%;height:auto;border:1px solid #e4ded0;border-radius:10px;background:#dceaf0;">
+    <g>
+      {coastline.map((d) => (
+        <path d={d} fill="#f2ecd8" stroke="#2a4a3f" stroke-width="4" />
+      ))}
+    </g>
+    <g>
+      {/*
+        Une plage réelle fait quelques centaines à quelques milliers de m²
+        contre une île de plusieurs km² : son polygone à l'échelle vraie
+        est presque invisible (vérifié — voir CARTE-PREMIER-TRACE.md). Le
+        remplissage réel reste dessiné, mais le trait est volontairement
+        épaissi et non proportionnel pour porter la couleur du jour — une
+        exagération de lisibilité assumée, pas une prétention sur la
+        largeur réelle du sable.
+      */}
+      {polygones.map((p) => (
+        <path
+          d={p.path}
+          fill={couleur(meilleurScore(p.lieuIds))}
+          fill-opacity="0.9"
+          stroke={couleur(meilleurScore(p.lieuIds))}
+          stroke-width="34"
+          stroke-linejoin="round"
+        >
+          <title>{p.nom}</title>
+        </path>
+      ))}
+    </g>
+  </svg>
+
+  <p style="font-size:0.82rem;color:#4d5854;margin-top:0.75rem;">
+    © les contributeurs OpenStreetMap, ODbL — trait de côte et plages, relevé du 2 août 2026
+    (<code>socle-osm/</code>). Pas encore de hachure par moitié exposée ni de relevé vent/mer
+    en direct : voir <code>conception/DECISIONS.md</code> §11 et <code>moteur/carte.md</code>.
+  </p>
+</Layout>

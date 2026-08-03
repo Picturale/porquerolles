@@ -1,0 +1,11 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { ETATS, ETAT_LABELS } from '../../lib/lieux.js';
+---
+<Layout title="Carte">
+  <h1>Carte</h1>
+  <p>Choisissez l'état du jour :</p>
+  <nav class="etat-nav" aria-label="Choisir l'état du jour">
+    {ETATS.map((e) => <a href={`/carte/${e.replace('_', '-')}/`}>{ETAT_LABELS[e]}</a>)}
+  </nav>
+</Layout>
