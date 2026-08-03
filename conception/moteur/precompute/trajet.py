@@ -117,6 +117,39 @@ def haversine_m(lat1, lon1, lat2, lon2):
     return 2 * R * math.asin(math.sqrt(a))
 
 
+def rdp_open(coords, epsilon_m):
+    """Douglas-Peucker sur une polyligne ouverte [[lon, lat], ...].
+    Distances calculees en metres via haversine projete localement."""
+    if len(coords) < 3:
+        return coords
+
+    def perp_dist(p, a, b):
+        # repere local plan en metres, origine a
+        def to_m(q):
+            return (
+                haversine_m(a[1], a[0], a[1], q[0]) * (1 if q[0] >= a[0] else -1),
+                haversine_m(a[1], a[0], q[1], a[0]) * (1 if q[1] >= a[1] else -1),
+            )
+        px, py = to_m(p)
+        bx, by = to_m(b)
+        if bx == 0 and by == 0:
+            return math.hypot(px, py)
+        t = (px * bx + py * by) / (bx * bx + by * by)
+        t = max(0.0, min(1.0, t))
+        return math.hypot(px - t * bx, py - t * by)
+
+    dmax, idx = 0.0, 0
+    for i in range(1, len(coords) - 1):
+        d = perp_dist(coords[i], coords[0], coords[-1])
+        if d > dmax:
+            dmax, idx = d, i
+    if dmax > epsilon_m:
+        left = rdp_open(coords[: idx + 1], epsilon_m)
+        right = rdp_open(coords[idx:], epsilon_m)
+        return left[:-1] + right
+    return [coords[0], coords[-1]]
+
+
 def polyline_length_m(coords):
     """coords: liste de (lon, lat)."""
     return sum(
@@ -634,6 +667,7 @@ def main():
                     for i in range(len(path) - 1)
                 )
                 troncons = []
+                geometrie = []   # trace reelle du chemin, pour la carte
                 for i in range(len(path) - 1):
                     edata_dict = G_pied.get_edge_data(path[i], path[i + 1])
                     best_k = min(edata_dict, key=lambda k: edata_dict[k]["temps_pied_min"])
@@ -643,12 +677,29 @@ def main():
                         "highway": ed.get("highway"), "longueur_m": round(ed["length_m"], 0),
                         "temps_min": round(ed["temps_pied_min"], 2),
                     })
+                    # La geometrie d'un troncon est stockee dans l'ordre OSM,
+                    # pas forcement dans le sens du parcours : on la retourne
+                    # si son extremite de depart est plus proche du noeud
+                    # d'arrivee que du noeud de depart.
+                    coords = ed.get("coords")
+                    if coords:
+                        a = G_pied.nodes[path[i]]
+                        if "lat" in a:
+                            d_first = haversine_m(a["lat"], a["lon"], coords[0][1], coords[0][0])
+                            d_last = haversine_m(a["lat"], a["lon"], coords[-1][1], coords[-1][0])
+                            seq = coords if d_first <= d_last else list(reversed(coords))
+                        else:
+                            seq = coords
+                        for c in seq:
+                            if not geometrie or geometrie[-1] != [c[0], c[1]]:
+                                geometrie.append([c[0], c[1]])
                 entry["pied"] = {
                     "temps_min": round(total, 1),
                     "distance_reseau_m": round(path_len_m, 0),
                     "circuity": round(path_len_m / (dist_vol_oiseau_km * 1000), 2) if dist_vol_oiseau_km > 0 else None,
                     "n_troncons": len(troncons),
                     "troncons": troncons,
+                    "geometrie": geometrie,
                 }
             except nx.NetworkXNoPath:
                 entry["pied"] = {"erreur": "pas de chemin dans la composante principale pied"}
@@ -700,6 +751,43 @@ def main():
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
     print(f"Ecrit {out_path}", file=sys.stderr)
+
+    # GeoJSON des traces pietonnes, pour la carte (moteur/carte.md :
+    # « le chemin du retour vers le port »). Mode pieton seulement : le
+    # mode velo n'est pas publiable (voir DECISIONS.md Sec.15).
+    #
+    # Simplifiees (Douglas-Peucker, meme epsilon que le trait de cote dans
+    # carte.py) : a l'echelle de la carte, le detail metrique d'un sentier
+    # est invisible et ne sert qu'a gonfler le poids de la page, borne par
+    # carte.md a 50 ko pour un rendu complet.
+    geo_path = "conception/donnees/trajets-pieton.geojson"
+    SIMPLIFY_M = 15.0
+    feats = []
+    for name, entry in results["plages"].items():
+        geom = entry.get("pied", {}).get("geometrie")
+        if not geom:
+            continue
+        geom = rdp_open(geom, SIMPLIFY_M)
+        feats.append({
+            "type": "Feature",
+            "properties": {
+                "depart": name,
+                "temps_min": entry["pied"]["temps_min"],
+                "distance_reseau_m": entry["pied"]["distance_reseau_m"],
+            },
+            "geometry": {"type": "LineString", "coordinates": geom},
+        })
+    with open(geo_path, "w", encoding="utf-8") as f:
+        json.dump({
+            "type": "FeatureCollection",
+            "properties": {
+                "source": "Dijkstra sur reseau OSM (ODbL) + altimetrie IGN, "
+                          "vitesse de Tobler -- voir TRAJET-PREMIER-CALCUL.md",
+                "mode": "pieton uniquement",
+            },
+            "features": feats,
+        }, f, ensure_ascii=False, indent=2)
+    print(f"Ecrit {geo_path} ({len(feats)} traces)", file=sys.stderr)
 
 
 if __name__ == "__main__":

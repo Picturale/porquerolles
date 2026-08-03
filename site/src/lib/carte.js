@@ -47,26 +47,62 @@ export function getCoastlinePaths() {
 // aucune des baies à plusieurs segments n'a de polygone par tiers) — donc
 // V1 colore tout le polygone par le MEILLEUR score parmi ses segments,
 // pas un dégradé fidèle à la hachure décrite dans carte.md §"ce que ça
-// permet" (le côté exposé hachuré). C'est une simplification assumée,
-// pas une donnée manquante : il faudrait redécouper les polygones à la
-// main (ou par un heuristique géométrique) pour aller plus loin.
-const OSM_NOM_VERS_LIEUX = {
-  'Plage de Notre-Dame': ['notre-dame-ouest', 'notre-dame-centre', 'notre-dame-est'],
-  "Plage d'Argent": ['argent-ouest', 'argent-centre', 'argent-est'],
-  'Première Courtade': ['courtade-ouest', 'courtade-centre', 'courtade-est'],
-  'Deuxième Courtade': ['courtade-ouest', 'courtade-centre', 'courtade-est'],
-  'plage du Lequin': ['lequin'],
-  'Plage Blanche du Langoustier': ['langoustier-blanche'],
-  'Plage Noire du Langoustier': ['langoustier-noire'],
-};
+// permet" (le côté exposé hachuré).
+//
+// Depuis le 3 août 2026, ce n'est plus le cas : les polygones sont
+// découpés en segments par conception/moteur/precompute/segments.py
+// (heuristique géométrique documentée, validée à 6/6 contre les points de
+// référence de relief-exposition-porquerolles.json — voir
+// CARTE-PREMIER-TRACE.md). Chaque part porte son propre lieu_id, donc sa
+// propre note et sa propre hachure.
+export function getPlageSegments() {
+  const fc = readJSON('../conception/donnees/socle-osm/plages-segments.geojson');
+  return fc.features.map((f) => ({
+    lieuId: f.properties.lieu_id,
+    nomOsm: f.properties.nom_osm,
+    decoupe: f.properties.decoupe,
+    path: ringToSvgPath(f.geometry.coordinates[0]),
+  }));
+}
 
-export function getPlagePolygons() {
-  const fc = readJSON('../conception/donnees/socle-osm/plages.geojson');
-  return fc.features
-    .filter((f) => f.geometry.type === 'Polygon' && OSM_NOM_VERS_LIEUX[f.properties.nom])
-    .map((f) => ({
-      nom: f.properties.nom,
-      lieuIds: OSM_NOM_VERS_LIEUX[f.properties.nom],
-      path: ringToSvgPath(f.geometry.coordinates[0]),
-    }));
+/**
+ * Trajet piéton retour vers le port, calculé par
+ * conception/moteur/precompute/trajet.py (Dijkstra sur le réseau OSM,
+ * vitesse de Tobler). Seules 5 plages ont été calculées — les autres
+ * n'ont pas de trajet à tracer, et on n'en invente pas.
+ */
+export function getTrajetsPieton() {
+  let fc;
+  try {
+    fc = readJSON('../conception/donnees/trajets-pieton.geojson');
+  } catch {
+    return [];
+  }
+  return fc.features.map((f) => ({
+    depart: f.properties.depart,
+    tempsMin: f.properties.temps_min,
+    path: lineToSvgPath(f.geometry.coordinates),
+  }));
+}
+
+/**
+ * Position du port dans le repère du SVG (y déjà inversé, nord en haut).
+ * Coordonnées identiques à celles de moteur/precompute/trajet.py
+ * (nœud Overpass 280076697, amenity=ferry_terminal).
+ */
+export function getPortXY() {
+  const [x, y] = project(43.0032981, 6.199641);
+  return { x, y: -y };
+}
+
+function lineToSvgPath(coords) {
+  const pts = coords.map(([lon, lat]) => project(lat, lon));
+  const [x0, y0] = pts[0];
+  return (
+    `M ${x0.toFixed(1)} ${(-y0).toFixed(1)} ` +
+    pts
+      .slice(1)
+      .map(([x, y]) => `L ${x.toFixed(1)} ${(-y).toFixed(1)}`)
+      .join(' ')
+  );
 }

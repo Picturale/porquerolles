@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getCoastlinePaths, getPlagePolygons } from '../../lib/carte.js';
-import { ETATS, ETAT_LABELS, getPlages, scoreDuJour } from '../../lib/lieux.js';
+import { getCoastlinePaths, getPlageSegments, getTrajetsPieton, getPortXY } from '../../lib/carte.js';
+import { ETATS, ETAT_LABELS, getPlages, scoreDuJour, AXE_LABELS } from '../../lib/lieux.js';
 
 export function getStaticPaths() {
   return ETATS.map((etat) => ({ params: { etat: etat.replace('_', '-') }, props: { etat } }));
@@ -10,21 +10,15 @@ export function getStaticPaths() {
 const { etat } = Astro.props;
 
 const coastline = getCoastlinePaths();
-const polygones = getPlagePolygons();
+const segments = getPlageSegments();
+const trajets = getTrajetsPieton();
+const port = getPortXY();
 const plages = getPlages();
 
-// Meilleur score parmi les segments d'un même polygone OSM — voir la note
-// dans src/lib/carte.js : OSM ne découpe pas les baies en tiers comme
-// lieux.yml, donc tout le polygone porte la couleur du meilleur segment.
-function meilleurScore(lieuIds) {
-  let best = null;
-  for (const id of lieuIds) {
-    const lieu = plages.find((l) => l.id === id);
-    if (!lieu) continue;
-    const s = scoreDuJour(lieu, etat);
-    if (s && (best === null || s.min > best)) best = s.min;
-  }
-  return best;
+function scoreDe(lieuId) {
+  const lieu = plages.find((l) => l.id === lieuId);
+  if (!lieu) return null;
+  return scoreDuJour(lieu, etat);
 }
 
 function couleur(score) {
@@ -33,6 +27,37 @@ function couleur(score) {
   if (score >= 2) return '#c99a3a';
   return '#b23b3b';
 }
+
+// carte.md : « le côté exposé hachuré : sur Notre-Dame, la moitié est se
+// hachure les jours de mistral ».
+//
+// La hachure dit EXPOSÉ, pas « mal noté » — ce sont deux choses
+// différentes. DECISIONS.md §6 répartit les trois axes par ce qui les
+// pilote : l'eau par la houle, le sable par le vent, la tranquillité par
+// l'affluence (« connaissance locale, aucune donnée »). Seuls les deux
+// premiers décrivent une exposition au temps qu'il fait.
+//
+// Première version de cette règle (3 août 2026) prenait le minimum des
+// TROIS axes : par temps calme, elle hachurait les trois tronçons de
+// Notre-Dame et deux d'Argent — parce qu'ils sont fréquentés, pas parce
+// qu'ils sont exposés. Une plage bondée un jour sans vent n'est pas
+// « exposée » ; hachurer là aurait été un contresens.
+//
+// Vérifié après correction : sous mistral fort, notre-dame-est se hachure
+// (eau 3, sable 0) et ni le centre (4/2) ni l'ouest (4/4) — exactement
+// l'exemple donné par carte.md ; par temps calme, plus rien ne se hachure.
+function estExpose(s) {
+  if (s === null) return false;
+  return Math.min(s.notes.eau, s.notes.sable) <= 1;
+}
+
+const dessines = segments.map((seg) => {
+  const s = scoreDe(seg.lieuId);
+  const lieu = plages.find((l) => l.id === seg.lieuId);
+  return { ...seg, score: s, nom: lieu?.nom ?? seg.nomOsm, expose: estExpose(s) };
+});
+
+const exposes = dessines.filter((d) => d.expose);
 ---
 
 <Layout title={`Carte — ${ETAT_LABELS[etat]}`}>
@@ -48,40 +73,155 @@ function couleur(score) {
     }
   </nav>
 
-  <svg viewBox="-3839 -2672 7854 5248" style="width:100%;height:auto;border:1px solid #e4ded0;border-radius:10px;background:#dceaf0;">
+  <svg
+    viewBox="-3839 -2672 7854 5248"
+    style="width:100%;height:auto;border:1px solid #e4ded0;border-radius:10px;background:#dceaf0;"
+    role="img"
+    aria-label={`Carte de Porquerolles, état ${ETAT_LABELS[etat]}`}
+  >
+    <defs>
+      <pattern id="hachure" width="46" height="46" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <rect width="46" height="46" fill="#b23b3b" fill-opacity="0.55" />
+        <line x1="0" y1="0" x2="0" y2="46" stroke="#5c1a1a" stroke-width="14" />
+      </pattern>
+    </defs>
+
     <g>
-      {coastline.map((d) => (
-        <path d={d} fill="#f2ecd8" stroke="#2a4a3f" stroke-width="4" />
-      ))}
+      {coastline.map((d) => <path d={d} fill="#f2ecd8" stroke="#2a4a3f" stroke-width="4" />)}
     </g>
+
+    {/*
+      Chemin du retour vers le port (carte.md). Tracé réel calculé par
+      moteur/precompute/trajet.py (Dijkstra, vitesse de Tobler), pas une
+      ligne droite. Mode piéton seulement — DECISIONS.md §15 exclut le
+      vélo de la V1. Seules 5 plages ont un trajet calculé ; les autres
+      n'en affichent aucun plutôt qu'un tracé approché.
+    */}
     <g>
-      {/*
-        Une plage réelle fait quelques centaines à quelques milliers de m²
-        contre une île de plusieurs km² : son polygone à l'échelle vraie
-        est presque invisible (vérifié — voir CARTE-PREMIER-TRACE.md). Le
-        remplissage réel reste dessiné, mais le trait est volontairement
-        épaissi et non proportionnel pour porter la couleur du jour — une
-        exagération de lisibilité assumée, pas une prétention sur la
-        largeur réelle du sable.
-      */}
-      {polygones.map((p) => (
-        <path
-          d={p.path}
-          fill={couleur(meilleurScore(p.lieuIds))}
-          fill-opacity="0.9"
-          stroke={couleur(meilleurScore(p.lieuIds))}
-          stroke-width="34"
-          stroke-linejoin="round"
-        >
-          <title>{p.nom}</title>
-        </path>
-      ))}
+      {
+        trajets.map((t) => (
+          <path
+            d={t.path}
+            fill="none"
+            stroke="#1b4b43"
+            stroke-width="13"
+            stroke-opacity="0.75"
+            stroke-dasharray="34 26"
+            stroke-linecap="round"
+          >
+            <title>{`Retour à pied vers le port depuis ${t.depart} — ${t.tempsMin} min`}</title>
+          </path>
+        ))
+      }
     </g>
+
+    {/*
+      Une plage réelle fait quelques centaines à quelques milliers de m²
+      contre une île de plusieurs km² : à l'échelle vraie son polygone est
+      presque invisible. Le trait est donc volontairement épaissi et non
+      proportionnel — un porteur de couleur, pas une prétention sur la
+      largeur du sable.
+    */}
+    <g>
+      {
+        dessines.map((d) => (
+          <path
+            d={d.path}
+            fill={d.expose ? 'url(#hachure)' : couleur(d.score?.min ?? null)}
+            fill-opacity={d.expose ? 1 : 0.9}
+            stroke={d.expose ? '#5c1a1a' : couleur(d.score?.min ?? null)}
+            stroke-width="30"
+            stroke-linejoin="round"
+          >
+            <title>
+              {d.score
+                ? `${d.nom} — ${d.score.min}/5 (${AXE_LABELS[d.score.raisonAxe]} au plus bas)`
+                : d.nom}
+            </title>
+          </path>
+        ))
+      }
+    </g>
+
+    {
+      trajets.length > 0 && (
+        <circle cx={port.x.toFixed(0)} cy={port.y.toFixed(0)} r="42" fill="#1b4b43" stroke="#f2ecd8" stroke-width="12">
+          <title>Port de Porquerolles</title>
+        </circle>
+      )
+    }
   </svg>
 
+  <ul class="legende">
+    <li><span class="pastille" style="background:#2f6b4f"></span> note haute</li>
+    <li><span class="pastille" style="background:#c99a3a"></span> correct</li>
+    <li><span class="pastille hach"></span> côté exposé — eau ou sable au plus bas</li>
+    <li><span class="pastille trait"></span> retour à pied vers le port</li>
+  </ul>
+
+  {
+    exposes.length > 0 ? (
+      <p class="expose-resume">
+        Hachuré aujourd’hui : {exposes.map((d) => d.nom).join(', ')}.
+      </p>
+    ) : (
+      <p class="expose-resume">Aucun segment de plage n’est exposé pour cet état.</p>
+    )
+  }
+
+  {
+    trajets.length > 0 && (
+      <p class="expose-resume">
+        Retour à pied :{' '}
+        {trajets
+          .slice()
+          .sort((a, b) => a.tempsMin - b.tempsMin)
+          .map((t) => `${t.depart} ${t.tempsMin} min`)
+          .join(' · ')}
+        . Cinq plages calculées sur quinze — les autres n’ont pas de tracé plutôt qu’un tracé approché.
+      </p>
+    )
+  }
+
   <p style="font-size:0.82rem;color:#4d5854;margin-top:0.75rem;">
-    © les contributeurs OpenStreetMap, ODbL — trait de côte et plages, relevé du 2 août 2026
-    (<code>socle-osm/</code>). Pas encore de hachure par moitié exposée ni de relevé vent/mer
-    en direct : voir <code>conception/DECISIONS.md</code> §11 et <code>moteur/carte.md</code>.
+    © les contributeurs OpenStreetMap, ODbL — trait de côte, plages et réseau de chemins
+    (<code>socle-osm/</code>, relevé du 2 août 2026). Découpage des plages en segments :
+    heuristique géométrique, voir <code>CARTE-PREMIER-TRACE.md</code>. Pas encore d’ombre à
+    l’heure qu’il est (données réelles sur 2 lieux seulement) ni de massif grisé en risque
+    incendie (hors V1, <code>DECISIONS.md</code> §12).
   </p>
 </Layout>
+
+<style>
+  ul.legende {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.1rem;
+    padding: 0;
+    margin: 0.9rem 0 0.4rem;
+    font-size: 0.86rem;
+    color: #4d5854;
+  }
+  ul.legende li { display: flex; align-items: center; gap: 0.4rem; }
+  .pastille {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 3px;
+    display: inline-block;
+    flex: none;
+  }
+  .pastille.hach {
+    background: repeating-linear-gradient(45deg, #b23b3b 0 3px, #5c1a1a 3px 6px);
+  }
+  .pastille.trait {
+    height: 0;
+    border-top: 3px dashed #1b4b43;
+    border-radius: 0;
+  }
+  .expose-resume {
+    font-size: 0.9rem;
+    color: #4d5854;
+    margin: 0.35rem 0;
+  }
+</style>
