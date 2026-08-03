@@ -1,0 +1,110 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import {
+  ETATS,
+  ETAT_LABELS,
+  CONFIANCE_LABELS,
+  AXE_LABELS,
+  getPlages,
+  scoreDuJour,
+} from '../../../lib/lieux.js';
+
+export function getStaticPaths() {
+  return ETATS.map((etat) => ({ params: { etat: etat.replace('_', '-') }, props: { etat } }));
+}
+
+const { etat } = Astro.props;
+
+// Seuil provisoire, pas encore une décision produit actée (voir
+// conception/DECISIONS.md §5 pour le vocabulaire à trois niveaux — les
+// bornes numériques ci-dessous sont une proposition de cette maquette,
+// à confirmer avant toute mise en production).
+function niveau(min) {
+  if (min >= 4) return { mot: 'à faire aujourd’hui', couleur: '#2f6b4f' };
+  if (min >= 2) return { mot: 'correct', couleur: '#b8862e' };
+  return { mot: 'à éviter aujourd’hui', couleur: '#b23b3b' };
+}
+
+const plages = getPlages()
+  .map((lieu) => ({ lieu, score: scoreDuJour(lieu, etat) }))
+  .filter((p) => p.score !== null)
+  .sort((a, b) => b.score.min - a.score.min);
+
+const meilleure = plages[0];
+const constat = meilleure
+  ? meilleure.lieu.dit?.[etat] ??
+    `Eau ${meilleure.score.notes.eau}/5, sable ${meilleure.score.notes.sable}/5, tranquillité ${meilleure.score.notes.tranquillite}/5.`
+  : null;
+---
+
+<Layout title={`Quelle plage — ${ETAT_LABELS[etat]}`}>
+  <h1>Quelle plage aujourd’hui ?</h1>
+
+  <nav class="etat-nav" aria-label="Choisir l'état du jour">
+    {
+      ETATS.map((e) => (
+        <a href={`/aujourdhui/quelle-plage/${e.replace('_', '-')}/`} aria-current={e === etat ? 'true' : 'false'}>
+          {ETAT_LABELS[e]}
+        </a>
+      ))
+    }
+  </nav>
+
+  {
+    meilleure && (
+      <div class="constat">
+        <p class="label">Constat — {meilleure.lieu.nom}</p>
+        <p>{constat}</p>
+        <p class="conseil-label label">Conseil</p>
+        <p>
+          {meilleure.score.min >= 4
+            ? `Bonne journée pour ${meilleure.lieu.nom.toLowerCase()}.`
+            : meilleure.score.min >= 2
+              ? `${meilleure.lieu.nom} reste la meilleure option, sans être idéale.`
+              : `Aucune plage n’est vraiment recommandable aujourd’hui — la moins mauvaise est ${meilleure.lieu.nom}.`}
+          {' '}Raison : {AXE_LABELS[meilleure.score.raisonAxe]} à {meilleure.score.notes[meilleure.score.raisonAxe]}/5.
+        </p>
+        <p class="source">
+          Confiance de la donnée : {meilleure.lieu.confiance}
+          {meilleure.lieu.confiance === 'terrain' ? ' (un relevé sur place l’emporte toujours sur le calcul)' : ''}.
+        </p>
+      </div>
+    )
+  }
+
+  <ul class="plages">
+    {
+      plages.map(({ lieu, score }) => {
+        const niv = niveau(score.min);
+        return (
+          <li class="plage">
+            <span class="score-badge" style={`background:${niv.couleur}`} title={niv.mot}>
+              {score.min}
+            </span>
+            <div>
+              <div class="nom">
+                {lieu.nom}
+                <span class={`confiance-tag ${lieu.confiance !== 'terrain' ? 'faible' : ''}`}>
+                  {lieu.confiance}
+                </span>
+              </div>
+              <div class="raison">
+                {niv.mot} — {AXE_LABELS[score.raisonAxe]} au plus bas ({score.notes[score.raisonAxe]}/5)
+                {lieu.remarque ? ` · ${lieu.remarque}` : ''}
+              </div>
+            </div>
+            <div class="axes">
+              eau {score.notes.eau} · sable {score.notes.sable} · tranq. {score.notes.tranquillite}
+            </div>
+          </li>
+        );
+      })
+    }
+  </ul>
+
+  {
+    plages.length === 0 && (
+      <p>Aucune donnée pour cet état — {ETAT_LABELS[etat]} n’est pas encore documenté dans lieux.yml.</p>
+    )
+  }
+</Layout>

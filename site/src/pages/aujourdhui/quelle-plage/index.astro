@@ -1,0 +1,18 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { ETATS, ETAT_LABELS } from '../../../lib/lieux.js';
+---
+<Layout title="Quelle plage aujourd’hui">
+  <h1>Quelle plage aujourd’hui ?</h1>
+  <p>
+    Le relevé vent/mer en direct n'est pas encore branché — voir <code>conception/A-VERIFIER.md</code>
+    et les démarches CANDHIS/Météo-France en cours. En attendant, choisissez l'état du jour :
+  </p>
+  <nav class="etat-nav" aria-label="Choisir l'état du jour">
+    {
+      ETATS.map((e) => (
+        <a href={`/aujourdhui/quelle-plage/${e.replace('_', '-')}/`}>{ETAT_LABELS[e]}</a>
+      ))
+    }
+  </nav>
+</Layout>

@@ -1,0 +1,158 @@
+---
+const { title } = Astro.props;
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} · Porquerolles</title>
+    <style is:global>
+      :root {
+        --ink: #1b2321;
+        --ink-soft: #4d5854;
+        --paper: #faf8f3;
+        --card: #ffffff;
+        --line: #e4ded0;
+        --accent: #1b4b43;
+        --accent-soft: #e6efe9;
+        color-scheme: light;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.5;
+      }
+      a { color: var(--accent); }
+      header.top {
+        padding: 1.5rem 1.25rem 0.5rem;
+        max-width: 760px;
+        margin: 0 auto;
+      }
+      header.top .brand {
+        font-size: 0.8rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+        margin: 0 0 0.35rem;
+      }
+      main {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 0.5rem 1.25rem 4rem;
+      }
+      h1 {
+        font-size: 1.6rem;
+        margin: 0.2rem 0 0.6rem;
+      }
+      .etat-nav {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin: 1rem 0 1.75rem;
+      }
+      .etat-nav a {
+        display: inline-block;
+        padding: 0.45rem 0.9rem;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        text-decoration: none;
+        color: var(--ink-soft);
+        font-size: 0.92rem;
+        background: var(--card);
+      }
+      .etat-nav a[aria-current="true"] {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: white;
+        font-weight: 600;
+      }
+      .constat {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 1.25rem 1.4rem;
+        margin-bottom: 2rem;
+      }
+      .constat .label {
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+        margin: 0 0 0.35rem;
+      }
+      .constat .conseil-label { color: var(--accent); margin-top: 1rem; }
+      .constat p { margin: 0.15rem 0 0; }
+      .constat .source {
+        margin-top: 0.9rem;
+        font-size: 0.82rem;
+        color: var(--ink-soft);
+      }
+      ul.plages {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+      li.plage {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 0.9rem;
+        align-items: center;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 0.85rem 1.1rem;
+      }
+      .score-badge {
+        width: 2.4rem;
+        height: 2.4rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.05rem;
+        color: white;
+      }
+      .plage .nom { font-weight: 600; }
+      .plage .raison { font-size: 0.86rem; color: var(--ink-soft); margin-top: 0.15rem; }
+      .plage .axes { font-size: 0.8rem; color: var(--ink-soft); text-align: right; white-space: nowrap; }
+      .confiance-tag {
+        display: inline-block;
+        font-size: 0.72rem;
+        padding: 0.1rem 0.5rem;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: var(--accent);
+        margin-left: 0.4rem;
+      }
+      .confiance-tag.faible { background: #f5e9dd; color: #8a5a20; }
+      footer.doctrine {
+        max-width: 760px;
+        margin: 2.5rem auto 0;
+        padding: 1rem 1.25rem;
+        font-size: 0.78rem;
+        color: var(--ink-soft);
+        border-top: 1px solid var(--line);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <p class="brand">Porquerolles — état du jour</p>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="doctrine">
+      Maquette de travail — les scores viennent de <code>conception/porquerolles/lieux.yml</code>,
+      pas encore d'un relevé vent/mer en direct. Voir <code>conception/DECISIONS.md</code>.
+    </footer>
+  </body>
+</html>
