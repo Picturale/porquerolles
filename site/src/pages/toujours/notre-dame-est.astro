@@ -1,0 +1,145 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { CONFIANCE_LABELS, ETAT_LABELS } from '../../lib/lieux.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import yaml from 'js-yaml';
+
+// Le site ne duplique jamais les données du dossier île : lu directement
+// dans conception/porquerolles/lieux.yml au moment du build, comme
+// site/src/lib/lieux.js (conception/DECISIONS.md §10). Ce chargement est
+// répété par page plutôt que partagé, pour rester une simple nouvelle page
+// de /toujours/, sans toucher aux fichiers lib/*.js existants.
+const doc = yaml.load(
+  fs.readFileSync(path.resolve(process.cwd(), '../conception/porquerolles/lieux.yml'), 'utf-8')
+);
+const lieu = doc.lieux.find((l) => l.id === "notre-dame-est");
+
+const ORDRE_ETATS = ['mistral_fort', 'est_fort', 'calme'];
+
+// Texte de présentation : produit par Kimi K2 (moonshotai/kimi-k2-0905, via
+// OpenRouter) à partir du texte réel de la fiche pilote correspondante
+// (conception/donnees/FICHES-PILOTES.md ou FICHES-PILOTES-2.md, sections
+// factuelles seulement — méta-commentaire de vérification retiré), puis
+// vérifié et corrigé à la main phrase par phrase. Voir
+// conception/donnees/TOUJOURS-PAGES.md pour le détail des corrections.
+const presentation = [
+    "La baie dessine un croissant en trois segments aux orientations distinctes — ouest vers Alycastre, centre, est — offrant trois expositions au vent sur une même plage. Les calculs d’exposition au mistral et au vent d’est révèlent des situations contrastées : le segment est, totalement découvert au mistral, constitue paradoxalement le mieux protégé du vent d’est parmi les neuf lieux testés sur l’île ; le centre subit les deux vents ; l’ouest bénéficie d’une légère protection des deux. Par mistral fort, les bateaux au mouillage abandonnent la baie, et les guides de mouillage la déconseillent — un avis valable pour l’ancre, non pour le baigneur. Le vent ne dégrade pas la plage, il la vide de ses bateaux.",
+    "Le segment central se situe en zone d’aléa de submersion marine à forte probabilité selon la carte réglementaire du Territoire à Risque d’Inondation Toulon-Hyères, datée de 2013. Trois submersions marines par tempête ont été recensées dans la commune depuis cette date, en 2019, 2020 et 2023. Les autres plages testées de l’île — Argent, Lequin, etc. — ne sont pas concernées par ce risque.",
+    "Les conditions varient sensiblement selon les segments et le temps. Côté Alycastre, par mistral fort, l’eau et le sable restent de bonne qualité et la tranquillité est maximale, les bateaux ayant pris la mer ; par vent d’est fort, la qualité de l’eau chute et le sable se dégrade, tandis que le calme absolu attire la foule. Le centre connaît des variations similaires, avec une qualité de sable plus dégradée par mistral. Le côté est, exposé au mistral, voit son sable fortement affecté par ce vent, mais mieux préservé par vent d’est.",
+  ];
+---
+
+<Layout title={lieu.nom}>
+  <p class="retour"><a href="/">&larr; Retour à l'accueil</a></p>
+  <h1>{lieu.nom}</h1>
+
+  <div class="constat">
+    <p class="label">Présentation</p>
+    {presentation.map((para) => <p>{para}</p>)}
+  </div>
+
+  {lieu.notes && (
+    <div class="constat">
+      <p class="label">Notes par état</p>
+      {lieu.type !== 'plage' && (
+        <p style="font-size:0.85rem;color:var(--ink-soft);margin:0 0 0.5rem;">
+          Pas un lieu de baignade : seule la tranquillité est notée (eau et sable ne s'appliquent pas ici).
+        </p>
+      )}
+      <table class="notes-table">
+        <thead>
+          <tr>
+            <th>État</th>
+            {lieu.type === 'plage' && <th>Eau</th>}
+            {lieu.type === 'plage' && <th>Sable</th>}
+            <th>Tranquillité</th>
+          </tr>
+        </thead>
+        <tbody>
+          {ORDRE_ETATS.filter((e) => lieu.notes[e]).map((e) => (
+            <tr>
+              <td>{ETAT_LABELS[e]}</td>
+              {lieu.type === 'plage' && <td>{lieu.notes[e].eau}/5</td>}
+              {lieu.type === 'plage' && <td>{lieu.notes[e].sable}/5</td>}
+              <td>{lieu.notes[e].tranquillite}/5</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {lieu.dit && (
+        <ul class="dits">
+          {Object.entries(lieu.dit).map(([etat, phrase]) => (
+            <li><strong>{ETAT_LABELS[etat]}</strong> — « {phrase} »</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )}
+
+  {lieu.remarque && <p class="remarque">{lieu.remarque}</p>}
+  {lieu.ombre && <p>Ombre : {lieu.ombre}.</p>}
+  {lieu.orientation && <p>Orientation mesurée ou approximative : {lieu.orientation}°.</p>}
+  
+  <p class="source">
+    <span class={`confiance-tag ${lieu.confiance !== 'terrain' ? 'faible' : ''}`}>{lieu.confiance}</span>
+    {' '}{CONFIANCE_LABELS[lieu.confiance]}. Un relevé sur place l'emporte toujours sur le calcul
+    (<code>conception/DECISIONS.md</code> §7).
+  </p>
+
+  <p class="retour"><a href="/">&larr; Retour à l'accueil</a></p>
+</Layout>
+
+<style>
+  .notes-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.75rem 0;
+    font-size: 0.9rem;
+  }
+  .notes-table th, .notes-table td {
+    text-align: left;
+    padding: 0.4rem 0.6rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .notes-table th { color: var(--ink-soft); font-weight: 600; }
+  ul.dits {
+    list-style: none;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+  }
+  ul.dits li { margin: 0.3rem 0; }
+  p.remarque {
+    background: var(--accent-soft);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    font-size: 0.92rem;
+    margin: 1.25rem 0;
+  }
+  .retour { margin: 0 0 0.75rem; font-size: 0.9rem; }
+  .iconographie {
+    margin-top: 1.5rem;
+    padding-top: 0.25rem;
+  }
+  .iconographie h2 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    margin: 0 0 0.75rem;
+  }
+  .iconographie ul { list-style: none; margin: 0; padding: 0; }
+  .iconographie li {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.9rem;
+  }
+  .iconographie li a { word-break: break-word; }
+  .iconographie .detail { color: var(--ink-soft); display: block; margin-top: 0.2rem; }
+</style>
+

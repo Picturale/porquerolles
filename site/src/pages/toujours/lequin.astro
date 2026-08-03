@@ -1,0 +1,144 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { CONFIANCE_LABELS, ETAT_LABELS } from '../../lib/lieux.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import yaml from 'js-yaml';
+
+// Le site ne duplique jamais les données du dossier île : lu directement
+// dans conception/porquerolles/lieux.yml au moment du build, comme
+// site/src/lib/lieux.js (conception/DECISIONS.md §10). Ce chargement est
+// répété par page plutôt que partagé, pour rester une simple nouvelle page
+// de /toujours/, sans toucher aux fichiers lib/*.js existants.
+const doc = yaml.load(
+  fs.readFileSync(path.resolve(process.cwd(), '../conception/porquerolles/lieux.yml'), 'utf-8')
+);
+const lieu = doc.lieux.find((l) => l.id === "lequin");
+
+const ORDRE_ETATS = ['mistral_fort', 'est_fort', 'calme'];
+
+// Texte de présentation : produit par Kimi K2 (moonshotai/kimi-k2-0905, via
+// OpenRouter) à partir du texte réel de la fiche pilote correspondante
+// (conception/donnees/FICHES-PILOTES.md ou FICHES-PILOTES-2.md, sections
+// factuelles seulement — méta-commentaire de vérification retiré), puis
+// vérifié et corrigé à la main phrase par phrase. Voir
+// conception/donnees/TOUJOURS-PAGES.md pour le détail des corrections.
+const presentation = [
+    "Par mistral fort, c’est la plage de repli. L’observation sur place donne le maximum partout : eau, sable et tranquillité sont au meilleur niveau. L’eau reste calme, le sable ne vole pas. Pourtant, l’orientation mesurée de la plage est de 289°, ouest-nord-ouest, nominalement face au mistral. Le terrain contredit donc l’orientation théorique, et le dossier la classe comme « repli sable par mistral ». Par vent d’est, en revanche, le comportement change : l’eau devient mauvaise, le sable moyen, et il vaut mieux ne pas choisir ce lieu pour la baignade. Par temps calme, tout revient à l’excellent, sauf la tranquillité qui reste légèrement en retrait. L’ombre est bonne, on peut s’installer à l’abri du soleil. La plage est étroite et très peu fréquentée, même en août.",
+    "Le calcul de l’exposition au vent, réalisé à partir du relief IGN, ne confirme pas cet abri. Pour le Lequin, au mistral, il donne un indice Sx proche de 0° jusqu’à 1 500 m : aucune crête, aucune protection. Le relief ne suffit pas à expliquer ce qui est pourtant observé. Une hypothèse ancienne invoquait une crête de 142 m au nord-ouest, mais une vérification sur le terrain a montré qu’elle se situe en réalité à 1,5 km au sud-sud-est, incapable de protéger du mistral. Cette hypothèse a été abandonnée. Deux explications demeurent possibles : un obstacle très local, à moins de 200 m, sous la résolution du calcul, ou bien la végétation — un couvert dense de pins pouvant casser le vent sans laisser de trace dans un modèle de terrain nu. La plage est documentée comme ombragée, ce qui va dans le sens de cette piste, sans pour autant la confirmer. Rien ne permet de trancher entre ces deux hypothèses. À l’inverse, par vent d’est, le calcul et le terrain s’accordent : l’indice Sx mesure une protection faible, et l’eau est effectivement mauvaise. Seul le cas du mistral pose question. Pour le visiteur, c’est l’observation du terrain qui prime : par mistral fort, le Lequin est bel et bien abrité, même si le calcul n’a pas trouvé pourquoi.",
+  ];
+---
+
+<Layout title={lieu.nom}>
+  <p class="retour"><a href="/">&larr; Retour à l'accueil</a></p>
+  <h1>{lieu.nom}</h1>
+
+  <div class="constat">
+    <p class="label">Présentation</p>
+    {presentation.map((para) => <p>{para}</p>)}
+  </div>
+
+  {lieu.notes && (
+    <div class="constat">
+      <p class="label">Notes par état</p>
+      {lieu.type !== 'plage' && (
+        <p style="font-size:0.85rem;color:var(--ink-soft);margin:0 0 0.5rem;">
+          Pas un lieu de baignade : seule la tranquillité est notée (eau et sable ne s'appliquent pas ici).
+        </p>
+      )}
+      <table class="notes-table">
+        <thead>
+          <tr>
+            <th>État</th>
+            {lieu.type === 'plage' && <th>Eau</th>}
+            {lieu.type === 'plage' && <th>Sable</th>}
+            <th>Tranquillité</th>
+          </tr>
+        </thead>
+        <tbody>
+          {ORDRE_ETATS.filter((e) => lieu.notes[e]).map((e) => (
+            <tr>
+              <td>{ETAT_LABELS[e]}</td>
+              {lieu.type === 'plage' && <td>{lieu.notes[e].eau}/5</td>}
+              {lieu.type === 'plage' && <td>{lieu.notes[e].sable}/5</td>}
+              <td>{lieu.notes[e].tranquillite}/5</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {lieu.dit && (
+        <ul class="dits">
+          {Object.entries(lieu.dit).map(([etat, phrase]) => (
+            <li><strong>{ETAT_LABELS[etat]}</strong> — « {phrase} »</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )}
+
+  {lieu.remarque && <p class="remarque">{lieu.remarque}</p>}
+  {lieu.ombre && <p>Ombre : {lieu.ombre}.</p>}
+  {lieu.orientation && <p>Orientation mesurée ou approximative : {lieu.orientation}°.</p>}
+  
+  <p class="source">
+    <span class={`confiance-tag ${lieu.confiance !== 'terrain' ? 'faible' : ''}`}>{lieu.confiance}</span>
+    {' '}{CONFIANCE_LABELS[lieu.confiance]}. Un relevé sur place l'emporte toujours sur le calcul
+    (<code>conception/DECISIONS.md</code> §7).
+  </p>
+
+  <p class="retour"><a href="/">&larr; Retour à l'accueil</a></p>
+</Layout>
+
+<style>
+  .notes-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.75rem 0;
+    font-size: 0.9rem;
+  }
+  .notes-table th, .notes-table td {
+    text-align: left;
+    padding: 0.4rem 0.6rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .notes-table th { color: var(--ink-soft); font-weight: 600; }
+  ul.dits {
+    list-style: none;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+  }
+  ul.dits li { margin: 0.3rem 0; }
+  p.remarque {
+    background: var(--accent-soft);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    font-size: 0.92rem;
+    margin: 1.25rem 0;
+  }
+  .retour { margin: 0 0 0.75rem; font-size: 0.9rem; }
+  .iconographie {
+    margin-top: 1.5rem;
+    padding-top: 0.25rem;
+  }
+  .iconographie h2 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    margin: 0 0 0.75rem;
+  }
+  .iconographie ul { list-style: none; margin: 0; padding: 0; }
+  .iconographie li {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.9rem;
+  }
+  .iconographie li a { word-break: break-word; }
+  .iconographie .detail { color: var(--ink-soft); display: block; margin-top: 0.2rem; }
+</style>
+

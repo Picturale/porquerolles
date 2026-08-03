@@ -1,0 +1,146 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { CONFIANCE_LABELS, ETAT_LABELS } from '../../lib/lieux.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import yaml from 'js-yaml';
+
+// Le site ne duplique jamais les données du dossier île : lu directement
+// dans conception/porquerolles/lieux.yml au moment du build, comme
+// site/src/lib/lieux.js (conception/DECISIONS.md §10). Ce chargement est
+// répété par page plutôt que partagé, pour rester une simple nouvelle page
+// de /toujours/, sans toucher aux fichiers lib/*.js existants.
+const doc = yaml.load(
+  fs.readFileSync(path.resolve(process.cwd(), '../conception/porquerolles/lieux.yml'), 'utf-8')
+);
+const lieu = doc.lieux.find((l) => l.id === "langoustier-noire");
+
+const ORDRE_ETATS = ['mistral_fort', 'est_fort', 'calme'];
+
+// Texte de présentation : produit par Kimi K2 (moonshotai/kimi-k2-0905, via
+// OpenRouter) à partir du texte réel de la fiche pilote correspondante
+// (conception/donnees/FICHES-PILOTES.md ou FICHES-PILOTES-2.md, sections
+// factuelles seulement — méta-commentaire de vérification retiré), puis
+// vérifié et corrigé à la main phrase par phrase. Voir
+// conception/donnees/TOUJOURS-PAGES.md pour le détail des corrections.
+const presentation = [
+    "Deux plages se font face sur les versants opposés d’un même isthme, distantes de 300 à 500 mètres à vol d’oiseau. La Blanche s’étend côté sud, la Noire côté nord.",
+    "La plage Blanche du Langoustier, observée directement sur place, offre une orientation approximative d’environ 200°, encore à établir précisément. Elle ne dispose d’aucune ombre. Abritée des vents d’est, elle se trouve exposée au sud : même un rideau d’arbres ne porterait pas son ombre sur le sable, mais vers l’intérieur des terres, si bien qu’aucune ombre ne tombe à midi. Le sable y est clair et peu profond. Selon les conditions, l’expérience varie sensiblement : sous mistral fort, l’eau et le sable perdent en qualité, tandis que la tranquillité reste bonne ; vent d’est fort, tout s’améliore sauf la tranquillité qui demeure inchangée ; par calme, l’eau devient excellente, le sable très bon, la tranquillité un peu moins.",
+    "La plage Noire du Langoustier, située sur le versant opposé de l’isthme, n’a pas été vérifiée sur place. Son orientation n’est pas renseignée. Elle bénéficie d’une bonne ombre, portée par des pins en bordure. Son sable sombre tient aux scories de l’ancienne usine de soude. Les conditions s’y ressentent différemment : mistral fort, l’eau et le sable restent médiocres, la tranquillité bonne ; vent d’est fort, eau et sable deviennent très bons, la tranquillité suivant ; par calme, eau, sable et tranquillité atteignent leur meilleur niveau, sauf cette dernière qui reste modérée.",
+    "Pour l’une comme pour l’autre, le relief, le risque de submersion marine et la qualité des eaux n’ont pas été évalués.",
+  ];
+---
+
+<Layout title={lieu.nom}>
+  <p class="retour"><a href="/">&larr; Retour à l'accueil</a></p>
+  <h1>{lieu.nom}</h1>
+
+  <div class="constat">
+    <p class="label">Présentation</p>
+    {presentation.map((para) => <p>{para}</p>)}
+  </div>
+
+  {lieu.notes && (
+    <div class="constat">
+      <p class="label">Notes par état</p>
+      {lieu.type !== 'plage' && (
+        <p style="font-size:0.85rem;color:var(--ink-soft);margin:0 0 0.5rem;">
+          Pas un lieu de baignade : seule la tranquillité est notée (eau et sable ne s'appliquent pas ici).
+        </p>
+      )}
+      <table class="notes-table">
+        <thead>
+          <tr>
+            <th>État</th>
+            {lieu.type === 'plage' && <th>Eau</th>}
+            {lieu.type === 'plage' && <th>Sable</th>}
+            <th>Tranquillité</th>
+          </tr>
+        </thead>
+        <tbody>
+          {ORDRE_ETATS.filter((e) => lieu.notes[e]).map((e) => (
+            <tr>
+              <td>{ETAT_LABELS[e]}</td>
+              {lieu.type === 'plage' && <td>{lieu.notes[e].eau}/5</td>}
+              {lieu.type === 'plage' && <td>{lieu.notes[e].sable}/5</td>}
+              <td>{lieu.notes[e].tranquillite}/5</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {lieu.dit && (
+        <ul class="dits">
+          {Object.entries(lieu.dit).map(([etat, phrase]) => (
+            <li><strong>{ETAT_LABELS[etat]}</strong> — « {phrase} »</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )}
+
+  {lieu.remarque && <p class="remarque">{lieu.remarque}</p>}
+  {lieu.ombre && <p>Ombre : {lieu.ombre}.</p>}
+  {lieu.orientation && <p>Orientation mesurée ou approximative : {lieu.orientation}°.</p>}
+  
+  <p class="source">
+    <span class={`confiance-tag ${lieu.confiance !== 'terrain' ? 'faible' : ''}`}>{lieu.confiance}</span>
+    {' '}{CONFIANCE_LABELS[lieu.confiance]}. Un relevé sur place l'emporte toujours sur le calcul
+    (<code>conception/DECISIONS.md</code> §7).
+  </p>
+
+  <p class="retour"><a href="/">&larr; Retour à l'accueil</a></p>
+</Layout>
+
+<style>
+  .notes-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.75rem 0;
+    font-size: 0.9rem;
+  }
+  .notes-table th, .notes-table td {
+    text-align: left;
+    padding: 0.4rem 0.6rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .notes-table th { color: var(--ink-soft); font-weight: 600; }
+  ul.dits {
+    list-style: none;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+  }
+  ul.dits li { margin: 0.3rem 0; }
+  p.remarque {
+    background: var(--accent-soft);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    font-size: 0.92rem;
+    margin: 1.25rem 0;
+  }
+  .retour { margin: 0 0 0.75rem; font-size: 0.9rem; }
+  .iconographie {
+    margin-top: 1.5rem;
+    padding-top: 0.25rem;
+  }
+  .iconographie h2 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    margin: 0 0 0.75rem;
+  }
+  .iconographie ul { list-style: none; margin: 0; padding: 0; }
+  .iconographie li {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.9rem;
+  }
+  .iconographie li a { word-break: break-word; }
+  .iconographie .detail { color: var(--ink-soft); display: block; margin-top: 0.2rem; }
+</style>
+

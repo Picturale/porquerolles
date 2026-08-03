@@ -1,0 +1,147 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { CONFIANCE_LABELS, ETAT_LABELS } from '../../lib/lieux.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import yaml from 'js-yaml';
+
+// Le site ne duplique jamais les données du dossier île : lu directement
+// dans conception/porquerolles/lieux.yml au moment du build, comme
+// site/src/lib/lieux.js (conception/DECISIONS.md §10). Ce chargement est
+// répété par page plutôt que partagé, pour rester une simple nouvelle page
+// de /toujours/, sans toucher aux fichiers lib/*.js existants.
+const doc = yaml.load(
+  fs.readFileSync(path.resolve(process.cwd(), '../conception/porquerolles/lieux.yml'), 'utf-8')
+);
+const lieu = doc.lieux.find((l) => l.id === "courtade-est");
+
+const ORDRE_ETATS = ['mistral_fort', 'est_fort', 'calme'];
+
+// Texte de présentation : produit par Kimi K2 (moonshotai/kimi-k2-0905, via
+// OpenRouter) à partir du texte réel de la fiche pilote correspondante
+// (conception/donnees/FICHES-PILOTES.md ou FICHES-PILOTES-2.md, sections
+// factuelles seulement — méta-commentaire de vérification retiré), puis
+// vérifié et corrigé à la main phrase par phrase. Voir
+// conception/donnees/TOUJOURS-PAGES.md pour le détail des corrections.
+const presentation = [
+    "La Courtade dessine un large croissant tourné vers le nord, comme Argent et Notre-Dame. De l’extrémité ouest à la pointe du Lequin, l’orientation varie : la corne ouest fuit le mistral et reçoit le vent d’est, le fond de baie donne sur le nord, la corne est affronte le mistral et se protège du vent d’est. Les guides de mouillage placent le meilleur abri de vent d’est de l’île tout à l’est, derrière la pointe du Lequin — même si le calcul de relief mesuré à cet endroit (indice Sx 6,29°) reste sous le seuil de protection retenu par le dossier (8°) : c’est la valeur la plus haute mesurée dans cette baie, sans confirmer pleinement le verdict des guides.",
+    "L’eau et le sable n’obéissent pas aux mêmes lois : par mistral, le fetch n’excède pas 1,7 km, la surface reste lisse, mais le sable peut être balayé sans que la mer ne gronde. À l’ouest, le mistral fort donne une eau à 4/5, un sable à 3/5, une tranquillité à 2/5 ; par vent d’est fort, l’eau tombe à 1/5 et le sable à 2/5, la tranquillité remontant légèrement à 3/5.",
+    "Au centre, la plage s’étend sur près d’un kilomètre, bordée de pins parasols et d’eucalyptus ; par mistral, l’eau est plate, mais le sable dérape — idéal pour nager, moins pour s’installer. C’est aussi le seul des trois segments situé en zone de submersion marine (aléa moyenne probabilité, carte réglementaire de 2013), une donnée structurelle du lieu, à ne pas confondre avec la houle du jour.",
+    "À l’est, la pointe du Lequin offre, sous vent d’est fort, le refuge le plus sûr de la baie : eau 3/5, sable 4/5, tranquillité 4/5.",
+    "Aucune surveillance, mais une base nautique. La qualité des eaux de baignade, suivie sur un point unique pour toute la baie, n’est jamais redescendue sous la mention « Bonne » depuis treize saisons, sans toutefois retrouver le niveau « Excellente » atteint avant 2022.",
+  ];
+---
+
+<Layout title={lieu.nom}>
+  <p class="retour"><a href="/">&larr; Retour à l'accueil</a></p>
+  <h1>{lieu.nom}</h1>
+
+  <div class="constat">
+    <p class="label">Présentation</p>
+    {presentation.map((para) => <p>{para}</p>)}
+  </div>
+
+  {lieu.notes && (
+    <div class="constat">
+      <p class="label">Notes par état</p>
+      {lieu.type !== 'plage' && (
+        <p style="font-size:0.85rem;color:var(--ink-soft);margin:0 0 0.5rem;">
+          Pas un lieu de baignade : seule la tranquillité est notée (eau et sable ne s'appliquent pas ici).
+        </p>
+      )}
+      <table class="notes-table">
+        <thead>
+          <tr>
+            <th>État</th>
+            {lieu.type === 'plage' && <th>Eau</th>}
+            {lieu.type === 'plage' && <th>Sable</th>}
+            <th>Tranquillité</th>
+          </tr>
+        </thead>
+        <tbody>
+          {ORDRE_ETATS.filter((e) => lieu.notes[e]).map((e) => (
+            <tr>
+              <td>{ETAT_LABELS[e]}</td>
+              {lieu.type === 'plage' && <td>{lieu.notes[e].eau}/5</td>}
+              {lieu.type === 'plage' && <td>{lieu.notes[e].sable}/5</td>}
+              <td>{lieu.notes[e].tranquillite}/5</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {lieu.dit && (
+        <ul class="dits">
+          {Object.entries(lieu.dit).map(([etat, phrase]) => (
+            <li><strong>{ETAT_LABELS[etat]}</strong> — « {phrase} »</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )}
+
+  {lieu.remarque && <p class="remarque">{lieu.remarque}</p>}
+  {lieu.ombre && <p>Ombre : {lieu.ombre}.</p>}
+  {lieu.orientation && <p>Orientation mesurée ou approximative : {lieu.orientation}°.</p>}
+  
+  <p class="source">
+    <span class={`confiance-tag ${lieu.confiance !== 'terrain' ? 'faible' : ''}`}>{lieu.confiance}</span>
+    {' '}{CONFIANCE_LABELS[lieu.confiance]}. Un relevé sur place l'emporte toujours sur le calcul
+    (<code>conception/DECISIONS.md</code> §7).
+  </p>
+
+  <p class="retour"><a href="/">&larr; Retour à l'accueil</a></p>
+</Layout>
+
+<style>
+  .notes-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.75rem 0;
+    font-size: 0.9rem;
+  }
+  .notes-table th, .notes-table td {
+    text-align: left;
+    padding: 0.4rem 0.6rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .notes-table th { color: var(--ink-soft); font-weight: 600; }
+  ul.dits {
+    list-style: none;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+  }
+  ul.dits li { margin: 0.3rem 0; }
+  p.remarque {
+    background: var(--accent-soft);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    font-size: 0.92rem;
+    margin: 1.25rem 0;
+  }
+  .retour { margin: 0 0 0.75rem; font-size: 0.9rem; }
+  .iconographie {
+    margin-top: 1.5rem;
+    padding-top: 0.25rem;
+  }
+  .iconographie h2 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    margin: 0 0 0.75rem;
+  }
+  .iconographie ul { list-style: none; margin: 0; padding: 0; }
+  .iconographie li {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.9rem;
+  }
+  .iconographie li a { word-break: break-word; }
+  .iconographie .detail { color: var(--ink-soft); display: block; margin-top: 0.2rem; }
+</style>
+

@@ -1,0 +1,58 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { CONFIANCE_LABELS } from '../../lib/lieux.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import yaml from 'js-yaml';
+
+// Le site ne duplique jamais les données du dossier île : lu directement
+// dans conception/porquerolles/lieux.yml au moment du build, comme
+// site/src/lib/lieux.js (conception/DECISIONS.md §10).
+const doc = yaml.load(
+  fs.readFileSync(path.resolve(process.cwd(), '../conception/porquerolles/lieux.yml'), 'utf-8')
+);
+const lieux = doc.lieux;
+
+const TYPE_LABELS = { plage: 'Plage', village: 'Village et port', site: 'Site' };
+---
+
+<Layout title="Le socle">
+  <p class="retour"><a href="/">&larr; Retour à l'accueil</a></p>
+  <h1>Le socle</h1>
+  <p>
+    Ce que chaque lieu de l'île est <em>toujours</em> — sa fiche pratique,
+    indépendante de la météo du jour. Voir <code>conception/DECISIONS.md</code> §3.
+    Les scores affichés ici sont ceux de <code>lieux.yml</code>, pas un relevé
+    vent/mer en direct — pour l'état du jour, voir
+    <a href="/aujourdhui/quelle-plage/">quelle plage aujourd'hui</a>.
+  </p>
+
+  <ul class="plages">
+    {
+      lieux.map((lieu) => (
+        <li class="plage">
+          <span class="score-badge" style="background:#4d5854" title={TYPE_LABELS[lieu.type]}>
+            {TYPE_LABELS[lieu.type]?.[0] ?? '?'}
+          </span>
+          <div>
+            <div class="nom">
+              <a href={`/toujours/${lieu.id}/`}>{lieu.nom}</a>
+              <span class={`confiance-tag ${lieu.confiance !== 'terrain' ? 'faible' : ''}`}>
+                {lieu.confiance}
+              </span>
+            </div>
+            <div class="raison">{TYPE_LABELS[lieu.type]}</div>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="source" style="margin-top:1.5rem;font-size:0.82rem;color:var(--ink-soft);">
+    Confiance de la donnée : {CONFIANCE_LABELS.terrain} · {CONFIANCE_LABELS.deduit} ·
+    {' '}{CONFIANCE_LABELS.a_verifier}. Un relevé sur place l'emporte toujours sur le calcul
+    (<code>conception/DECISIONS.md</code> §7).
+  </p>
+
+  <p class="retour"><a href="/">&larr; Retour à l'accueil</a></p>
+</Layout>
