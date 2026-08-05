@@ -140,30 +140,28 @@ vieillissent dès qu'on cesse de relancer les connecteurs à la main.
 
 ---
 
-## 3. Phase B — Fiabilisation (priorité 2)
+## 3. Phase B — Fiabilisation (priorité 2) — B1–B3 faits le 5 août 2026
 
-### B1. Dette immédiate : vérification visuelle de `/aujourdhui/feu/`
-La page est committée, le HTML généré vérifié par grep, mais aucune
-capture d'écran n'a été faite. La rendre dans un navigateur, corriger
-tout défaut de rendu. **Critère** : capture propre, zéro erreur console.
+### B1. Dette immédiate : vérification visuelle de `/aujourdhui/feu/` — FAIT
+Rendu navigateur (desktop + mobile), captures sous
+`/opt/cursor/artifacts/screenshots/feu-*.png`. Défaut trouvé : 404
+favicon → `public/favicon.svg` + `<link rel="icon">` via `u()`.
+**Critère** : capture propre, zéro erreur console — vérifié après correctif.
 
-### B2. Tests automatisés
-- **JS (vitest)** : `scoreDuJour` (minimum, égalité eau>sable>tranq,
-  état absent → null), exclusion `veto`, `getConstatEtat` (état sans
-  constat → null).
-- **Python (pytest)** : porter les 10 cas de classification de
-  `CONNECTEUR-VENT-PREMIER-CALCUL.md` (ils y sont tabulés), les seuils du
-  veto (25/29 → inactif, 30/45 → actif), la règle J+1→J de `feu.py`
-  (avec mocks HTTP, pas d'appel réseau en test).
-- **Critères** : tout passe en local et en CI ; aucun test ne dépend du
-  réseau.
+### B2. Tests automatisés — FAIT
+- **JS (vitest)** : `site/src/lib/__tests__/lieux.test.js` — `scoreDuJour`
+  (minimum, égalité eau>sable>tranq, état absent → null), `filtrePlages`
+  (exclusion veto), `getConstatEtat` (calme → null).
+- **Python (pytest)** : `conception/moteur/connecteurs/tests/` — 10 cas
+  de `CONNECTEUR-VENT-PREMIER-CALCUL.md`, seuils veto 25/29/30/45,
+  règle J+1→J de `feu.py` (mocks HTTP).
+- **Critères** : 8 vitest + 21 pytest verts en local ; aucun test réseau.
 
-### B3. CI
+### B3. CI — FAIT
 `.github/workflows/ci.yml` sur chaque push : pytest + vitest +
-`astro build` + validation YAML (`etats.yml`, `lieux.yml` chargent et
-respectent leur schéma : ids uniques, notes entre 0 et 5, axes complets)
-+ vérification de budget (chaque page `/carte/*` < 50 ko) + vérificateur
-de liens sur `dist/` (`linkinator` ou équivalent).
+`astro build` + validation YAML (`conception/tests/test_yaml_schema.py`)
++ `scripts/check-carte-budget.sh` + `scripts/check-liens.sh` (linkinator,
+liens externes de sources ignorés).
 
 ### B4. Accessibilité
 Passe axe-core sur les 5 gabarits de page. Points connus à vérifier :
@@ -348,8 +346,8 @@ devient pressant).
 - [x] Site en ligne, HTTPS, toutes pages accessibles, liens internes OK — *workflow + base prêts ; activation Pages après merge main (A1)*
 - [x] Vent + incendie rafraîchis toutes les heures sans intervention — *refresh.yml (A2)*
 - [x] Panne de source → dernière donnée grisée/datée + lien officiel, jamais de page blanche — *fraicheur.js + --tolerant (A2/A3)*
-- [ ] CI verte : tests Python + JS, build, YAML, budgets, liens
-- [ ] Budget carte < 50 ko vérifié en CI — *déjà dans deploy.yml ; à remonter en ci.yml (B3)*
+- [x] CI verte : tests Python + JS, build, YAML, budgets, liens — *ci.yml (B3) ; B4–B6 restent*
+- [x] Budget carte < 50 ko vérifié en CI — *check-carte-budget.sh + deploy.yml*
 - [ ] Zéro violation a11y sérieuse, Lighthouse SEO ≥ 95
 - [ ] Aucune requête externe côté visiteur
 - [ ] Page mentions/attributions complète et honnête sur les licences

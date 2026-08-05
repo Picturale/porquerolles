@@ -1,0 +1,49 @@
+name: CI portail Porquerolles
+
+# PLAN-ATELIER B3 — sur chaque push : pytest + vitest + astro build +
+# validation YAML + budget carte + liens internes.
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test-python:
+    name: pytest (vent, feu, YAML)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pytest pyyaml
+      - name: Tests connecteurs + schéma YAML
+        run: |
+          python3 -m pytest \
+            conception/moteur/connecteurs/tests \
+            conception/tests \
+            -v
+
+  test-js:
+    name: vitest + build + budget + liens
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Installer
+        working-directory: site
+        run: npm ci
+      - name: Vitest
+        working-directory: site
+        run: npm test
+      - name: Build Astro
+        working-directory: site
+        run: npm run build
+      - name: Budget carte (< 50 ko)
+        run: bash scripts/check-carte-budget.sh site/dist
+      - name: Liens internes
+        run: bash scripts/check-liens.sh

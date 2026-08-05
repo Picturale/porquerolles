@@ -40,6 +40,15 @@ function loadEtats() {
 }
 
 /**
+ * Filtre les lieux publiables pour la matrice plages — DECISIONS.md §6 :
+ * un lieu avec `veto` disparaît, il ne descend pas. Exporté pour les tests
+ * (PLAN-ATELIER B2) : aucun lieu de lieux.yml ne porte encore ce champ.
+ */
+export function filtrePlages(lieux) {
+  return lieux.filter((l) => l.type === 'plage' && !l.veto);
+}
+
+/**
  * Tous les lieux de type "plage", avec leurs notes brutes de lieux.yml.
  * Exclut tout lieu qui porte un `veto` — DECISIONS.md §6 : « aucun score
  * ne peut annuler un veto », le lieu disparaît, il ne descend pas dans le
@@ -49,7 +58,7 @@ function loadEtats() {
  */
 export function getPlages() {
   const doc = loadRaw();
-  return doc.lieux.filter((l) => l.type === 'plage' && !l.veto);
+  return filtrePlages(doc.lieux);
 }
 
 /**
