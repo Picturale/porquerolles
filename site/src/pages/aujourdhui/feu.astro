@@ -1,0 +1,76 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getRisqueIncendie, NIVEAU_COULEURS } from '../../lib/feu.js';
+
+const relevé = getRisqueIncendie();
+---
+
+<Layout title="Risque incendie">
+  <h1>Risque incendie</h1>
+
+  <p>
+    Le niveau seul — jamais le périmètre de ce qui est ouvert ou fermé.
+    <code>DECISIONS.md</code> §12 : coder en dur une liste de plages et de sentiers
+    « change par arrêté et qu’on ne saura pas tenir ». Pour ce que ça ferme
+    concrètement aujourd’hui, le lien officiel du Parc national est en bas de page.
+  </p>
+
+  {
+    !relevé && (
+      <p>
+        Le connecteur incendie (<code>moteur/connecteurs/feu.py</code>) n’a jamais tourné dans
+        cet environnement. Rien à afficher — pas de niveau inventé.
+      </p>
+    )
+  }
+
+  {
+    relevé && (
+      <div class="constat">
+        <p class="label">Massif {relevé.observation.massif}</p>
+        <p>
+          <span
+            class="score-badge"
+            style={`background:${NIVEAU_COULEURS[relevé.observation.niveau] ?? '#9a9488'};display:inline-flex;`}
+          >
+            {relevé.observation.niveau}
+          </span>{' '}
+          <strong>{relevé.observation.niveau_label}</strong>
+        </p>
+        <p class="source">
+          Donnée du {relevé.observation.date_donnee} · reçue le{' '}
+          {new Date(relevé.genere_le).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })} · source :{' '}
+          <a href={relevé.observation.url}>{relevé.observation.source}</a>.
+        </p>
+        {!relevé.observation.zm_concorde && (
+          <p class="source" style="color:#b23b3b;">
+            La source publie deux indicateurs pour ce massif et ils ne concordent pas
+            aujourd’hui (second indicateur : {relevé.observation.zm_valeur}) — affiché tel quel,
+            pas arbitré.
+          </p>
+        )}
+        <p class="source">
+          Volontairement <strong>pas d’heure de publication affichée</strong> : les deux pages
+          officielles du Parc se contredisent sur l’heure (18h vs 19h) — seule la date portée par
+          la donnée elle-même est fiable.
+        </p>
+        <p class="source">
+          Licence de cette source non établie — usage de test, pas encore une intégration
+          publique (voir <code>CATALOGUE-SOURCES.md</code> §3.1 et <code>A-VERIFIER.md</code>,
+          démarche n°3).
+        </p>
+      </div>
+    )
+  }
+
+  <p>
+    <a href="https://www.portcros-parcnational.fr/fr/alerte-incendie">
+      Ce qui est fermé aujourd’hui — page officielle du Parc national →
+    </a>
+  </p>
+
+  <nav class="etat-nav">
+    <a href="/aujourdhui/">Aujourd’hui</a>
+    <a href="/carte/">Carte</a>
+  </nav>
+</Layout>
