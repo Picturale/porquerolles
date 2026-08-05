@@ -1,10 +1,9 @@
 # Déploie le portail Porquerolles (site/ Astro) sur GitHub Pages.
 # PLAN-ATELIER A1 — Node ≥ 20, npm ci + build dans site/, publication de site/dist.
 #
-# Domaine custom : DEMANDER #9 encore ouvert. Tant qu'aucun nom n'est choisi,
-# le site vit sous /porquerolles/ (base configurée dans site/astro.config.mjs).
-# Quand un domaine sera tranché, basculer sur Cloudflare Pages (DECISIONS.md §14)
-# et retirer le base /porquerolles/.
+# Domaine custom : DEMANDER #9 tranché en intérim (5/08/2026) — Pages sous
+# /porquerolles/ (base dans site/astro.config.mjs). Domaine custom plus tard →
+# Cloudflare Pages (DECISIONS.md §14) et retrait du base.
 #
 # Remplace l'ancien workflow Firebase de l'app abandonnée (Phase I : ne plus
 # déployer Vision Picturale depuis ce fichier).

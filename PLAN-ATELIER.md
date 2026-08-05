@@ -106,10 +106,10 @@ vieillissent dès qu'on cesse de relancer les connecteurs à la main.
   **GitHub Pages**. `base: '/porquerolles'` dans `astro.config.mjs` ;
   tous les liens internes passent par `site/src/lib/url.js` (`u()`).
   Budget carte vérifié dans le workflow (< 50 ko).
-- **DEMANDER #9** toujours ouvert : quel nom de domaine ? Tant qu'il
-  n'est pas tranché, on reste sur GitHub Pages sous `/porquerolles/`.
-  Quand un domaine sera choisi → bascule Cloudflare Pages (DECISIONS §14)
-  et retrait du `base`.
+- **DEMANDER #9 — tranché le 5 août 2026 (intérim)** : pas de domaine
+  custom pour l’instant → **GitHub Pages sous `/porquerolles/`**.
+  Quand un domaine sera choisi plus tard → bascule Cloudflare Pages
+  (DECISIONS §14) et retrait du `base`.
 - **Critères** : build local OK, liens préfixés `/porquerolles/…`,
   budget carte < 50 ko. La publication live dépend de l'activation
   GitHub Pages sur le dépôt (Settings → Pages → GitHub Actions) après
@@ -339,7 +339,7 @@ devient pressant).
 | 6 | Signalement au Point d'Accès National (absence des traversées) | long terme |
 | 7 | Demande de flux ouvert à la préfecture du Var | long terme |
 | 8 | `firebase deploy --only firestore:rules` (ou archivage de l'app) | I — sécurité réelle |
-| 9 | Choix du nom de domaine | A1 — hébergement définitif ; *en attendant : GitHub Pages `/porquerolles/`* |
+| 9 | Choix du nom de domaine — **intérim acté 5/08/2026** : Pages `/porquerolles/` ; domaine custom = plus tard | A1 — hébergement définitif (Cloudflare) quand le nom sera choisi |
 | 10 | Terrain : orientation Langoustier Blanche, côte sud, anse de la Galère, paramètres d'ombre par tronçon, écart des 19 m à 18 h, point Alycastre | F5, C2, fiches |
 | 11 | Enquête horaires OSM (~32 commerces) | E — couverture réelle |
 
