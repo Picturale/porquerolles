@@ -66,6 +66,26 @@ export function getConstatEtat(etat) {
   return e?.constat?.trim() ?? null;
 }
 
+const ETAT_DU_JOUR_PATH = path.resolve(process.cwd(), '../conception/donnees/etat-du-jour.json');
+
+/**
+ * Dernier relevé du connecteur vent (conception/moteur/connecteurs/vent.py)
+ * — premier calcul réel d'un état à partir d'une mesure, voir le
+ * connecteur pour le détail. C'est un instantané écrit au moment où le
+ * connecteur a tourné, pas une valeur qui se rafraîchit dans le
+ * navigateur : le site est statique (DECISIONS.md §9), le
+ * rafraîchissement périodique (cron + reconstruction) reste à mettre en
+ * place. Retourne null si le connecteur n'a jamais tourné.
+ */
+export function getEtatDuJour() {
+  try {
+    const raw = fs.readFileSync(ETAT_DU_JOUR_PATH, 'utf-8');
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Note du jour pour un lieu et un état : le MINIMUM des trois axes, jamais
  * la moyenne (conception/DECISIONS.md §6). Retourne null si le lieu n'a pas

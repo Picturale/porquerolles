@@ -1,0 +1,84 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getEtatDuJour, ETATS, ETAT_LABELS } from '../../lib/lieux.js';
+
+const relevé = getEtatDuJour();
+
+const STATUT_LABELS = {
+  frais: { mot: 'frais', couleur: '#2f6b4f' },
+  tiede: { mot: 'tiède', couleur: '#c99a3a' },
+  perime: { mot: 'périmé', couleur: '#b23b3b' },
+};
+
+const aUnePage = relevé && ETATS.includes(relevé.etat.id);
+const routeEtat = relevé ? relevé.etat.id.replace(/_/g, '-') : null;
+---
+
+<Layout title="Aujourd’hui">
+  <h1>Aujourd’hui</h1>
+
+  {
+    !relevé && (
+      <p>
+        Le connecteur vent (<code>moteur/connecteurs/vent.py</code>) n’a jamais tourné dans
+        cet environnement. Rien à afficher — pas de valeur inventée.
+      </p>
+    )
+  }
+
+  {
+    relevé && (
+      <div class="constat">
+        <p class="label">Relevé de vent</p>
+        <p>
+          {relevé.observation.direction_deg}° à {relevé.observation.vitesse_nds} nds
+          (rafales {relevé.observation.rafales_nds} nds).
+        </p>
+        <p class="source">
+          Mesuré à {relevé.observation.mesure_a} (heure locale) · reçu le{' '}
+          {new Date(relevé.genere_le).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })} ·{' '}
+          <span style={`color:${STATUT_LABELS[relevé.observation.statut].couleur};font-weight:600;`}>
+            {STATUT_LABELS[relevé.observation.statut].mot}
+          </span>{' '}
+          ({relevé.observation.age_minutes} min) · source :{' '}
+          <a href={relevé.observation.url}>{relevé.observation.source}</a>.
+        </p>
+        <p class="source">
+          Instantané généré au moment où le connecteur a tourné, pas une valeur qui se
+          rafraîchit dans ce navigateur — le rafraîchissement périodique (déclencheur planifié
+          + reconstruction) n’est pas encore en place, voir <code>DECISIONS.md</code> §9 et §14.
+        </p>
+
+        <p class="conseil-label label">État calculé — {relevé.etat.nom}</p>
+        <p>
+          {relevé.etat.constat ??
+            `Aucun texte de constat écrit pour l’état « ${relevé.etat.nom} » dans etats.yml.`}
+        </p>
+
+        {relevé.veto_vent_extreme_actif && (
+          <p class="source" style="color:#b23b3b;font-weight:600;">
+            Veto vent extrême actif : sable forcé à {relevé.veto_vent_extreme_detail.note}/5 sur
+            tous les lieux, quel que soit l’abri — {relevé.veto_vent_extreme_detail.dit}.
+          </p>
+        )}
+
+        {aUnePage ? (
+          <p>
+            <a href={`/aujourdhui/quelle-plage/${routeEtat}/`}>Voir la matrice des plages pour cet état →</a>
+          </p>
+        ) : (
+          <p class="source">
+            Pas encore de matrice de plages pour «&nbsp;{relevé.etat.nom}&nbsp;» — le site n’a
+            de notes complètes que pour {ETATS.map((e) => ETAT_LABELS[e]).join(', ')}. Voir{' '}
+            <code>REVUE-CRITIQUE-KIMI.md</code> (constat A8).
+          </p>
+        )}
+      </div>
+    )
+  }
+
+  <nav class="etat-nav">
+    <a href="/aujourdhui/quelle-plage/">Choisir un état manuellement</a>
+    <a href="/carte/">Carte</a>
+  </nav>
+</Layout>
