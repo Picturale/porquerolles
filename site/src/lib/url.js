@@ -1,8 +1,8 @@
 /**
  * Préfixe un chemin absolu du site avec le `base` Astro.
  * Sous GitHub Pages sans domaine custom, le site vit à `/porquerolles/`
- * (PLAN-ATELIER A1, DEMANDER #9 encore ouvert). Ne jamais écrire un
- * `href="/…"` en dur : tous les liens internes passent par ici.
+ * (PLAN-ATELIER A1 ; DEMANDER #9 intérim acté le 5/08/2026). Ne jamais
+ * écrire un `href="/…"` en dur : tous les liens internes passent par ici.
  */
 export function u(chemin) {
   const base = import.meta.env.BASE_URL; // toujours terminé par /
