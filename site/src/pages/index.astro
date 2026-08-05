@@ -1,13 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { u } from '../lib/url.js';
 ---
 <Layout title="Accueil">
   <h1>Porquerolles</h1>
   <p>Portail visiteur — première maquette du 3 août 2026.</p>
   <nav class="etat-nav">
-    <a href="/aujourdhui/">Aujourd’hui — relevé réel</a>
-    <a href="/aujourdhui/quelle-plage/">Quelle plage aujourd’hui ?</a>
-    <a href="/carte/">Carte</a>
-    <a href="/toujours/">Les lieux</a>
+    <a href={u('/aujourdhui/')}>Aujourd’hui — relevé réel</a>
+    <a href={u('/aujourdhui/quelle-plage/')}>Quelle plage aujourd’hui ?</a>
+    <a href={u('/carte/')}>Carte</a>
+    <a href={u('/toujours/')}>Les lieux</a>
   </nav>
 </Layout>

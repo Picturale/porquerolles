@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCoastlinePaths, getPlageSegments, getTrajetsPieton, getPortXY } from '../../lib/carte.js';
 import { ETATS, ETAT_LABELS, getPlages, scoreDuJour, AXE_LABELS } from '../../lib/lieux.js';
+import { u } from '../../lib/url.js';
 
 export function getStaticPaths() {
   return ETATS.map((etat) => ({ params: { etat: etat.replace('_', '-') }, props: { etat } }));
@@ -66,7 +67,7 @@ const exposes = dessines.filter((d) => d.expose);
   <nav class="etat-nav" aria-label="Choisir l'état du jour">
     {
       ETATS.map((e) => (
-        <a href={`/carte/${e.replace('_', '-')}/`} aria-current={e === etat ? 'true' : 'false'}>
+        <a href={u(`/carte/${e.replace('_', '-')}/`)} aria-current={e === etat ? 'true' : 'false'}>
           {ETAT_LABELS[e]}
         </a>
       ))

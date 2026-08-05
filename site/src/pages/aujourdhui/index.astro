@@ -1,14 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getEtatDuJour, ETATS, ETAT_LABELS } from '../../lib/lieux.js';
+import { evaluerFraicheur, formaterAge, STATUT_LABELS } from '../../lib/fraicheur.js';
+import { u } from '../../lib/url.js';
 
 const relevé = getEtatDuJour();
-
-const STATUT_LABELS = {
-  frais: { mot: 'frais', couleur: '#2f6b4f' },
-  tiede: { mot: 'tiède', couleur: '#c99a3a' },
-  perime: { mot: 'périmé', couleur: '#b23b3b' },
-};
+// Âge recalculé au build (PLAN A3) — pas le statut figé dans le JSON.
+const fraicheur = evaluerFraicheur(relevé);
+const ageAffiche = formaterAge(fraicheur.age_minutes);
 
 const aUnePage = relevé && ETATS.includes(relevé.etat.id);
 const routeEtat = relevé ? relevé.etat.id.replace(/_/g, '-') : null;
@@ -28,25 +27,37 @@ const routeEtat = relevé ? relevé.etat.id.replace(/_/g, '-') : null;
 
   {
     relevé && (
-      <div class="constat">
+      <div class:list={['constat', { structurel: fraicheur.structurel }]}>
         <p class="label">Relevé de vent</p>
         <p>
           {relevé.observation.direction_deg}° à {relevé.observation.vitesse_nds} nds
           (rafales {relevé.observation.rafales_nds} nds).
         </p>
         <p class="source">
-          Mesuré à {relevé.observation.mesure_a} (heure locale) · reçu le{' '}
+          Mesuré à {relevé.observation.mesure_a} (heure locale) · cache écrit le{' '}
           {new Date(relevé.genere_le).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })} ·{' '}
-          <span style={`color:${STATUT_LABELS[relevé.observation.statut].couleur};font-weight:600;`}>
-            {STATUT_LABELS[relevé.observation.statut].mot}
-          </span>{' '}
-          ({relevé.observation.age_minutes} min) · source :{' '}
+          <span style={`color:${STATUT_LABELS[fraicheur.statut].couleur};font-weight:600;`}>
+            {STATUT_LABELS[fraicheur.statut].mot}
+          </span>
+          {ageAffiche && <> ({ageAffiche})</>} · source :{' '}
           <a href={relevé.observation.url}>{relevé.observation.source}</a>.
         </p>
+
+        {
+          fraicheur.structurel && (
+            <p class="structurel-alerte">
+              Donnée structurelle — le cache a plus de 4× sa validité (
+              {relevé.observation.validite_minutes} min). Affichée grisée et datée, pas
+              masquée. Va vérifier la source officielle :{' '}
+              <a href={relevé.observation.url}>ouvrir le relevé →</a>
+            </p>
+          )
+        }
+
         <p class="source">
-          Instantané généré au moment où le connecteur a tourné, pas une valeur qui se
-          rafraîchit dans ce navigateur — le rafraîchissement périodique (déclencheur planifié
-          + reconstruction) n’est pas encore en place, voir <code>DECISIONS.md</code> §9 et §14.
+          Instantané lu au build du site (statique, DECISIONS.md §9). L’âge ci-dessus est
+          calculé au moment de la construction ; le cron horaire
+          (<code>refresh.yml</code>) rend cette approximation acceptable.
         </p>
 
         <p class="conseil-label label">État calculé — {relevé.etat.nom}</p>
@@ -64,7 +75,9 @@ const routeEtat = relevé ? relevé.etat.id.replace(/_/g, '-') : null;
 
         {aUnePage ? (
           <p>
-            <a href={`/aujourdhui/quelle-plage/${routeEtat}/`}>Voir la matrice des plages pour cet état →</a>
+            <a href={u(`/aujourdhui/quelle-plage/${routeEtat}/`)}>
+              Voir la matrice des plages pour cet état →
+            </a>
           </p>
         ) : (
           <p class="source">
@@ -78,8 +91,8 @@ const routeEtat = relevé ? relevé.etat.id.replace(/_/g, '-') : null;
   }
 
   <nav class="etat-nav">
-    <a href="/aujourdhui/quelle-plage/">Choisir un état manuellement</a>
-    <a href="/aujourdhui/feu/">Risque incendie</a>
-    <a href="/carte/">Carte</a>
+    <a href={u('/aujourdhui/quelle-plage/')}>Choisir un état manuellement</a>
+    <a href={u('/aujourdhui/feu/')}>Risque incendie</a>
+    <a href={u('/carte/')}>Carte</a>
   </nav>
 </Layout>

@@ -9,6 +9,7 @@ import {
   scoreDuJour,
   getConstatEtat,
 } from '../../../lib/lieux.js';
+import { u } from '../../../lib/url.js';
 
 export function getStaticPaths() {
   return ETATS.map((etat) => ({ params: { etat: etat.replace('_', '-') }, props: { etat } }));
@@ -54,7 +55,7 @@ const constatEtat = getConstatEtat(etat);
   <nav class="etat-nav" aria-label="Choisir l'état du jour">
     {
       ETATS.map((e) => (
-        <a href={`/aujourdhui/quelle-plage/${e.replace('_', '-')}/`} aria-current={e === etat ? 'true' : 'false'}>
+        <a href={u(`/aujourdhui/quelle-plage/${e.replace('_', '-')}/`)} aria-current={e === etat ? 'true' : 'false'}>
           {ETAT_LABELS[e]}
         </a>
       ))

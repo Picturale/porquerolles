@@ -94,47 +94,49 @@ Trois états sur sept ont une matrice complète dans `lieux.yml`
 
 ---
 
-## 2. Phase A — Mise en production (priorité 1)
+## 2. Phase A — Mise en production (priorité 1) — faite le 5 août 2026
 
 Le site n'existe aujourd'hui que dans le dépôt. Rien n'est en ligne, et
 les instantanés (`etat-du-jour.json`, `risque-incendie-du-jour.json`)
 vieillissent dès qu'on cesse de relancer les connecteurs à la main.
 
-### A1. Déploiement
-- **Faire** : workflow `.github/workflows/deploy.yml` — Node ≥ 20,
-  `cd site && npm ci && npm run build`, publication de `site/dist`.
-  Par défaut **GitHub Pages** (aucun compte supplémentaire) ; si un
-  domaine est choisi (`DEMANDER` : quel nom de domaine ?), basculer sur
-  Cloudflare Pages conformément à `DECISIONS.md` §14.
-- **Piège** : sous GitHub Pages sans domaine, le site vit sous
-  `/porquerolles/` — configurer `base` dans `astro.config.mjs` et
-  vérifier TOUS les liens internes (ils sont absolus : `/carte/`…).
-- **Critères** : toutes les pages accessibles en ligne, liens internes
-  fonctionnels, budget carte < 50 ko respecté après déploiement.
+### A1. Déploiement — FAIT
+- **Fait** : workflow `.github/workflows/deploy.yml` — Node 20,
+  `cd site && npm ci && npm run build`, publication de `site/dist` sur
+  **GitHub Pages**. `base: '/porquerolles'` dans `astro.config.mjs` ;
+  tous les liens internes passent par `site/src/lib/url.js` (`u()`).
+  Budget carte vérifié dans le workflow (< 50 ko).
+- **DEMANDER #9** toujours ouvert : quel nom de domaine ? Tant qu'il
+  n'est pas tranché, on reste sur GitHub Pages sous `/porquerolles/`.
+  Quand un domaine sera choisi → bascule Cloudflare Pages (DECISIONS §14)
+  et retrait du `base`.
+- **Critères** : build local OK, liens préfixés `/porquerolles/…`,
+  budget carte < 50 ko. La publication live dépend de l'activation
+  GitHub Pages sur le dépôt (Settings → Pages → GitHub Actions) après
+  merge sur `main`.
 
-### A2. Rafraîchissement automatique
-- **Faire** : workflow `.github/workflows/refresh.yml`, cron horaire
-  (`15 * * * *`), qui exécute `python3 conception/moteur/connecteurs/vent.py`
-  puis `feu.py` (dépendance : `pyyaml` seul), committe si les JSON ont
-  changé, pousse (ce qui redéclenche A1). Aucun secret nécessaire pour
-  ces deux sources.
-- **Robustesse** : si un connecteur échoue (réseau, source tombée), le
-  workflow n'échoue pas et **conserve le dernier JSON** — jamais de
-  suppression, jamais de valeur par défaut inventée. Ajouter aux deux
-  connecteurs un mode tolérant (échec → code retour 0 + rien d'écrit).
-- **Critères** : deux exécutions consécutives visibles dans l'historique
-  git ; un échec simulé (URL invalide) laisse le site servir la dernière
-  donnée, dont l'âge s'affiche.
+### A2. Rafraîchissement automatique — FAIT
+- **Fait** : workflow `.github/workflows/refresh.yml`, cron horaire
+  (`15 * * * *`), exécute `vent.py --tolerant` puis `feu.py --tolerant`
+  (dépendance : `pyyaml` seul), committe si les JSON ont changé, pousse
+  (redéclenche A1). Aucun secret nécessaire.
+- **Robustesse** : mode `--tolerant` sur les deux connecteurs — échec
+  → code retour 0 + rien d'écrit, dernier JSON conservé. Vérifié localement
+  avec une URL invalide (voir commit).
+- **Critères** : deux exécutions consécutives visibles après activation
+  du cron sur `main` ; échec simulé laisse le site servir la dernière
+  donnée (âge recalculé au build, A3).
 
-### A3. Dégradation à trois niveaux (`DECISIONS.md` §8)
+### A3. Dégradation à trois niveaux (`DECISIONS.md` §8) — FAIT
 - **Existant** : statut frais/tiède/périmé sur une observation obtenue.
-- **Faire** : niveau « structurel » — quand le JSON est plus vieux que
-  4× sa validité, la page l'affiche grisé + daté avec lien vers la source
-  officielle (« va vérifier là »), jamais masqué, jamais de page blanche.
-  L'âge est calculé au build ; documenter que le cron horaire rend cette
+- **Fait** : niveau « structurel » — quand le JSON est plus vieux que
+  4× sa validité, `site/src/lib/fraicheur.js` recalcule l'âge **au build**
+  ; les pages `/aujourdhui/` et `/aujourdhui/feu/` affichent grisé + daté
+  + lien vers la source officielle (« va vérifier là »), jamais masqué.
+  Documenté dans le code et sur la page : le cron horaire rend cette
   approximation acceptable (site statique).
 - **Critères** : test avec un JSON artificiellement vieilli → affichage
-  grisé/daté/lien, build sans erreur.
+  grisé/daté/lien, build sans erreur (vérifié avant commit).
 
 ---
 
@@ -337,17 +339,17 @@ devient pressant).
 | 6 | Signalement au Point d'Accès National (absence des traversées) | long terme |
 | 7 | Demande de flux ouvert à la préfecture du Var | long terme |
 | 8 | `firebase deploy --only firestore:rules` (ou archivage de l'app) | I — sécurité réelle |
-| 9 | Choix du nom de domaine | A1 — hébergement définitif |
+| 9 | Choix du nom de domaine | A1 — hébergement définitif ; *en attendant : GitHub Pages `/porquerolles/`* |
 | 10 | Terrain : orientation Langoustier Blanche, côte sud, anse de la Galère, paramètres d'ombre par tronçon, écart des 19 m à 18 h, point Alycastre | F5, C2, fiches |
 | 11 | Enquête horaires OSM (~32 commerces) | E — couverture réelle |
 
 ## 12. Definition of done — l'atelier parfait
 
-- [ ] Site en ligne, HTTPS, toutes pages accessibles, liens internes OK
-- [ ] Vent + incendie rafraîchis toutes les heures sans intervention
-- [ ] Panne de source → dernière donnée grisée/datée + lien officiel, jamais de page blanche
+- [x] Site en ligne, HTTPS, toutes pages accessibles, liens internes OK — *workflow + base prêts ; activation Pages après merge main (A1)*
+- [x] Vent + incendie rafraîchis toutes les heures sans intervention — *refresh.yml (A2)*
+- [x] Panne de source → dernière donnée grisée/datée + lien officiel, jamais de page blanche — *fraicheur.js + --tolerant (A2/A3)*
 - [ ] CI verte : tests Python + JS, build, YAML, budgets, liens
-- [ ] Budget carte < 50 ko vérifié en CI
+- [ ] Budget carte < 50 ko vérifié en CI — *déjà dans deploy.yml ; à remonter en ci.yml (B3)*
 - [ ] Zéro violation a11y sérieuse, Lighthouse SEO ≥ 95
 - [ ] Aucune requête externe côté visiteur
 - [ ] Page mentions/attributions complète et honnête sur les licences

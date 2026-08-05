@@ -27,11 +27,18 @@ source differente, non comparable minute a minute.
 
 Usage :
     python3 conception/moteur/connecteurs/vent.py
+    python3 conception/moteur/connecteurs/vent.py --tolerant
     -> ecrit conception/donnees/etat-du-jour.json
+
+Mode --tolerant (PLAN-ATELIER A2) : en cas d'echec (reseau, source tombee,
+YAML illisible…), code retour 0 et RIEN d'ecrit — le dernier JSON est
+conserve. Jamais de suppression, jamais de valeur par defaut inventee.
 """
+import argparse
 import datetime
 import json
 import sys
+import urllib.error
 import urllib.request
 
 OPEN_METEO_URL = (
@@ -139,13 +146,13 @@ def statut_fraicheur(mesure_a_str, maintenant_utc):
     return "perime", age_min
 
 
-def main():
+def run():
     import yaml
 
     with open(ETATS_PATH, encoding="utf-8") as f:
         etats_doc = yaml.safe_load(f)
 
-    print(f"Requete Open-Meteo (AROME France HD)...", file=sys.stderr)
+    print("Requete Open-Meteo (AROME France HD)...", file=sys.stderr)
     data = fetch_vent_live()
     obs = observation_depuis_reponse(data)
 
@@ -190,5 +197,29 @@ def main():
     print(f"Ecrit {OUT_PATH}", file=sys.stderr)
 
 
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__.split("\n")[1])
+    parser.add_argument(
+        "--tolerant",
+        action="store_true",
+        help="echec → code 0, rien d'ecrit (conserve le dernier JSON)",
+    )
+    args = parser.parse_args(argv)
+    try:
+        run()
+    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, OSError,
+            RuntimeError, NotImplementedError, KeyError, TypeError, ValueError) as e:
+        print(f"ECHEC connecteur vent : {e}", file=sys.stderr)
+        if args.tolerant:
+            print(
+                "Mode --tolerant : dernier JSON conserve, code retour 0 "
+                "(PLAN-ATELIER A2).",
+                file=sys.stderr,
+            )
+            return 0
+        return 1
+    return 0
+
+
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

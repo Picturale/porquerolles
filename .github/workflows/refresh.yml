@@ -1,0 +1,53 @@
+# Rafraîchit vent + incendie toutes les heures, committe si les JSON changent.
+# PLAN-ATELIER A2 — cron 15 * * * *, pyyaml seul, aucun secret.
+#
+# Robustesse : les connecteurs tournent en mode --tolerant. Un échec réseau
+# ou source tombée → code retour 0, rien d'écrit, le dernier JSON est
+# conservé (jamais de suppression, jamais de valeur inventée). Le push
+# redéclenche deploy.yml si un fichier a changé.
+
+name: Rafraîchir vent et incendie
+
+on:
+  schedule:
+    - cron: '15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    name: Connecteurs vent + feu
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Installer pyyaml
+        run: pip install pyyaml
+
+      - name: Connecteur vent (tolérant)
+        run: python3 conception/moteur/connecteurs/vent.py --tolerant
+
+      - name: Connecteur feu (tolérant)
+        run: python3 conception/moteur/connecteurs/feu.py --tolerant
+
+      - name: Committer et pousser si les JSON ont changé
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            conception/donnees/etat-du-jour.json \
+            conception/donnees/risque-incendie-du-jour.json
+          if git diff --staged --quiet; then
+            echo "Aucun changement — dernier JSON conservé."
+          else
+            git commit -m "données: rafraîchissement automatique vent + incendie"
+            git push
+          fi

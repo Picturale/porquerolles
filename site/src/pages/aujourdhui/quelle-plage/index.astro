@@ -1,6 +1,7 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import { ETATS, ETAT_LABELS } from '../../../lib/lieux.js';
+import { u } from '../../../lib/url.js';
 ---
 <Layout title="Quelle plage aujourd’hui">
   <h1>Quelle plage aujourd’hui ?</h1>
@@ -11,7 +12,7 @@ import { ETATS, ETAT_LABELS } from '../../../lib/lieux.js';
   <nav class="etat-nav" aria-label="Choisir l'état du jour">
     {
       ETATS.map((e) => (
-        <a href={`/aujourdhui/quelle-plage/${e.replace('_', '-')}/`}>{ETAT_LABELS[e]}</a>
+        <a href={u(`/aujourdhui/quelle-plage/${e.replace('_', '-')}/`)}>{ETAT_LABELS[e]}</a>
       ))
     }
   </nav>

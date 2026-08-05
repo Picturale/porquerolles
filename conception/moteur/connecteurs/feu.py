@@ -29,8 +29,14 @@ jamais une heure supposee.
 
 Usage :
     python3 conception/moteur/connecteurs/feu.py
+    python3 conception/moteur/connecteurs/feu.py --tolerant
     -> ecrit conception/donnees/risque-incendie-du-jour.json
+
+Mode --tolerant (PLAN-ATELIER A2) : en cas d'echec (reseau, source tombee…),
+code retour 0 et RIEN d'ecrit — le dernier JSON est conserve. Jamais de
+suppression, jamais de niveau invente.
 """
+import argparse
 import datetime
 import json
 import sys
@@ -90,7 +96,7 @@ def sonde():
     )
 
 
-def main():
+def run():
     print("Sondage risque-prevention-incendie.fr (J+1 puis J)...", file=sys.stderr)
     data, url, date_portee = sonde()
 
@@ -109,6 +115,11 @@ def main():
 
     recu_a = datetime.datetime.now(datetime.timezone.utc)
 
+    # Fraicheur au moment de l'ecriture — le site la recalcule au build
+    # (site/src/lib/fraicheur.js, PLAN A3) a partir de genere_le.
+    age_min = 0.0
+    statut = "frais"
+
     resultat = {
         "genere_le": recu_a.isoformat(),
         "observation": {
@@ -124,6 +135,8 @@ def main():
             "source": "risque-prevention-incendie.fr — licence inconnue, usage dev/test uniquement",
             "url": url,
             "validite_minutes": VALIDITE_MINUTES,
+            "statut": statut,
+            "age_minutes": age_min,
         },
     }
 
@@ -135,5 +148,29 @@ def main():
     print(f"Ecrit {OUT_PATH}", file=sys.stderr)
 
 
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__.split("\n")[1])
+    parser.add_argument(
+        "--tolerant",
+        action="store_true",
+        help="echec → code 0, rien d'ecrit (conserve le dernier JSON)",
+    )
+    args = parser.parse_args(argv)
+    try:
+        run()
+    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, OSError,
+            RuntimeError, KeyError, TypeError, ValueError) as e:
+        print(f"ECHEC connecteur feu : {e}", file=sys.stderr)
+        if args.tolerant:
+            print(
+                "Mode --tolerant : dernier JSON conserve, code retour 0 "
+                "(PLAN-ATELIER A2).",
+                file=sys.stderr,
+            )
+            return 0
+        return 1
+    return 0
+
+
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

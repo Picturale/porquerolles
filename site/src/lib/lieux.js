@@ -73,9 +73,10 @@ const ETAT_DU_JOUR_PATH = path.resolve(process.cwd(), '../conception/donnees/eta
  * — premier calcul réel d'un état à partir d'une mesure, voir le
  * connecteur pour le détail. C'est un instantané écrit au moment où le
  * connecteur a tourné, pas une valeur qui se rafraîchit dans le
- * navigateur : le site est statique (DECISIONS.md §9), le
- * rafraîchissement périodique (cron + reconstruction) reste à mettre en
- * place. Retourne null si le connecteur n'a jamais tourné.
+ * navigateur : le site est statique (DECISIONS.md §9). Le rafraîchissement
+ * périodique est en place via `.github/workflows/refresh.yml` (cron horaire,
+ * PLAN-ATELIER A2) ; l'âge réel est recalculé au build par
+ * `lib/fraicheur.js` (A3). Retourne null si le connecteur n'a jamais tourné.
  */
 export function getEtatDuJour() {
   try {

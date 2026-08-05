@@ -1,8 +1,14 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getRisqueIncendie, NIVEAU_COULEURS } from '../../lib/feu.js';
+import { evaluerFraicheur, formaterAge, STATUT_LABELS } from '../../lib/fraicheur.js';
+import { u } from '../../lib/url.js';
 
 const relevé = getRisqueIncendie();
+const fraicheur = evaluerFraicheur(relevé);
+const ageAffiche = formaterAge(fraicheur.age_minutes);
+
+const PARC_URL = 'https://www.portcros-parcnational.fr/fr/alerte-incendie';
 ---
 
 <Layout title="Risque incendie">
@@ -26,7 +32,7 @@ const relevé = getRisqueIncendie();
 
   {
     relevé && (
-      <div class="constat">
+      <div class:list={['constat', { structurel: fraicheur.structurel }]}>
         <p class="label">Massif {relevé.observation.massif}</p>
         <p>
           <span
@@ -38,10 +44,26 @@ const relevé = getRisqueIncendie();
           <strong>{relevé.observation.niveau_label}</strong>
         </p>
         <p class="source">
-          Donnée du {relevé.observation.date_donnee} · reçue le{' '}
-          {new Date(relevé.genere_le).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })} · source :{' '}
+          Donnée du {relevé.observation.date_donnee} · cache écrit le{' '}
+          {new Date(relevé.genere_le).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })} ·{' '}
+          <span style={`color:${STATUT_LABELS[fraicheur.statut].couleur};font-weight:600;`}>
+            {STATUT_LABELS[fraicheur.statut].mot}
+          </span>
+          {ageAffiche && <> ({ageAffiche})</>} · source :{' '}
           <a href={relevé.observation.url}>{relevé.observation.source}</a>.
         </p>
+
+        {
+          fraicheur.structurel && (
+            <p class="structurel-alerte">
+              Donnée structurelle — le cache a plus de 4× sa validité (
+              {relevé.observation.validite_minutes} min). Affichée grisée et datée, pas
+              masquée. Va vérifier là :{' '}
+              <a href={PARC_URL}>page officielle du Parc national →</a>
+            </p>
+          )
+        }
+
         {!relevé.observation.zm_concorde && (
           <p class="source" style="color:#b23b3b;">
             La source publie deux indicateurs pour ce massif et ils ne concordent pas
@@ -64,13 +86,13 @@ const relevé = getRisqueIncendie();
   }
 
   <p>
-    <a href="https://www.portcros-parcnational.fr/fr/alerte-incendie">
+    <a href={PARC_URL}>
       Ce qui est fermé aujourd’hui — page officielle du Parc national →
     </a>
   </p>
 
   <nav class="etat-nav">
-    <a href="/aujourdhui/">Aujourd’hui</a>
-    <a href="/carte/">Carte</a>
+    <a href={u('/aujourdhui/')}>Aujourd’hui</a>
+    <a href={u('/carte/')}>Carte</a>
   </nav>
 </Layout>

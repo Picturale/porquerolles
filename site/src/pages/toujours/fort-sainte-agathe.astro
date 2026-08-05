@@ -4,6 +4,7 @@ import { CONFIANCE_LABELS, ETAT_LABELS } from '../../lib/lieux.js';
 import fs from 'node:fs';
 import path from 'node:path';
 import yaml from 'js-yaml';
+import { u } from '../../lib/url.js';
 
 // Le site ne duplique jamais les données du dossier île : lu directement
 // dans conception/porquerolles/lieux.yml au moment du build, comme
@@ -43,7 +44,7 @@ const presentation = [
 ---
 
 <Layout title={lieu.nom}>
-  <p class="retour"><a href="/">&larr; Retour à l'accueil</a></p>
+  <p class="retour"><a href={u('/')}>&larr; Retour à l'accueil</a></p>
   <h1>{lieu.nom}</h1>
 
   <div class="constat">
@@ -111,7 +112,7 @@ const presentation = [
     (<code>conception/DECISIONS.md</code> §7).
   </p>
 
-  <p class="retour"><a href="/">&larr; Retour à l'accueil</a></p>
+  <p class="retour"><a href={u('/')}>&larr; Retour à l'accueil</a></p>
 </Layout>
 
 <style>
