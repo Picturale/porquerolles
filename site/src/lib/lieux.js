@@ -6,7 +6,13 @@ import yaml from 'js-yaml';
 // conception/porquerolles/lieux.yml directement au moment du build.
 // Voir conception/DECISIONS.md §10 (« dossier île = données, pas du code »).
 const LIEUX_PATH = path.resolve(process.cwd(), '../conception/porquerolles/lieux.yml');
+const ETATS_PATH = path.resolve(process.cwd(), '../conception/porquerolles/etats.yml');
 
+// Ordre de départage en cas d'égalité au minimum — DECISIONS.md §6,
+// décidé le 3 août 2026 (une revue croisée avait trouvé que le code
+// tranchait déjà ainsi, mais par accident d'ordre de tableau, sans
+// qu'aucune règle ne le dise). L'eau prime parce qu'elle répond à la
+// question centrale du produit ; sable puis tranquillité ensuite.
 const AXES = ['eau', 'sable', 'tranquillite'];
 
 export const ETATS = ['calme', 'mistral_fort', 'est_fort'];
@@ -28,10 +34,36 @@ function loadRaw() {
   return yaml.load(raw);
 }
 
-/** Tous les lieux de type "plage", avec leurs notes brutes de lieux.yml. */
+function loadEtats() {
+  const raw = fs.readFileSync(ETATS_PATH, 'utf-8');
+  return yaml.load(raw);
+}
+
+/**
+ * Tous les lieux de type "plage", avec leurs notes brutes de lieux.yml.
+ * Exclut tout lieu qui porte un `veto` — DECISIONS.md §6 : « aucun score
+ * ne peut annuler un veto », le lieu disparaît, il ne descend pas dans le
+ * classement. Inerte aujourd'hui : aucun lieu de lieux.yml ne porte ce
+ * champ (voir son en-tête), donc rien n'est filtré en pratique tant
+ * qu'aucune fermeture sourcée n'est ajoutée.
+ */
 export function getPlages() {
   const doc = loadRaw();
-  return doc.lieux.filter((l) => l.type === 'plage');
+  return doc.lieux.filter((l) => l.type === 'plage' && !l.veto);
+}
+
+/**
+ * Texte "constat" par état, depuis etats.yml — DECISIONS.md §4 : « le
+ * constat est sourcé et horodaté ». Branché le 3 août 2026 (une revue
+ * croisée avait trouvé que ce champ existait dans etats.yml mais n'était
+ * lu par aucun code ; l'écran affichait le `dit` du lieu à sa place, une
+ * appréciation locale sans rapport avec l'état météo du jour).
+ * Retourne null si l'état n'a pas de constat écrit (ex. "calme").
+ */
+export function getConstatEtat(etat) {
+  const doc = loadEtats();
+  const e = doc.etats.find((x) => x.id === etat);
+  return e?.constat?.trim() ?? null;
 }
 
 /**

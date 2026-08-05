@@ -42,6 +42,19 @@
 #   terrain   confirmé par observation directe sur place
 #   deduit    tiré de la littérature nautique ou de la géométrie — À VÉRIFIER
 #   a_verifier  non établi
+#
+# ---------------------------------------------------------------------------
+# veto (optionnel, absent par défaut) — décidé le 3 août 2026, DECISIONS.md §6
+#
+#   veto: { source: "...", date: "AAAA-MM-JJ", motif: "..." }
+#
+# Un lieu qui porte ce champ disparaît de tout classement, quel que soit son
+# score — jamais l'inverse : "aucun score ne peut annuler un veto" (§6).
+# Par LIEU, pas par lieu×état : une fermeture réglementaire ferme le lieu,
+# pas une seule de ses conditions météo. Aucun lieu n'en porte un
+# aujourd'hui — aucune fermeture sourcée n'existe encore dans ce dossier
+# (le régime de quota visiteurs, A-VERIFIER.md point 12, n'a pas d'arrêté
+# nommé retrouvé). Ne jamais en ajouter un sans source et date réelles.
 
 # ===========================================================================
 # LE DÉCOUPAGE DES GRANDES BAIES

@@ -7,6 +7,7 @@ import {
   AXE_LABELS,
   getPlages,
   scoreDuJour,
+  getConstatEtat,
 } from '../../../lib/lieux.js';
 
 export function getStaticPaths() {
@@ -39,10 +40,12 @@ const plages = getPlages()
   .sort((a, b) => b.score.min - a.score.min);
 
 const meilleure = plages[0];
-const constat = meilleure
-  ? meilleure.lieu.dit?.[etat] ??
-    `Eau ${meilleure.score.notes.eau}/5, sable ${meilleure.score.notes.sable}/5, tranquillité ${meilleure.score.notes.tranquillite}/5.`
-  : null;
+
+// Constat = le champ constat d'etats.yml, pas le dit du lieu — voir le
+// commentaire de getConstatEtat() dans lib/lieux.js. "calme" n'a pas de
+// texte écrit dans etats.yml : on le dit plutôt que d'improviser une
+// phrase à sa place.
+const constatEtat = getConstatEtat(etat);
 ---
 
 <Layout title={`Quelle plage — ${ETAT_LABELS[etat]}`}>
@@ -61,10 +64,18 @@ const constat = meilleure
   {
     meilleure && (
       <div class="constat">
-        <p class="label">Constat — {meilleure.lieu.nom}</p>
-        <p>{constat}</p>
-        <p class="conseil-label label">Conseil</p>
+        <p class="label">Constat — {ETAT_LABELS[etat]}</p>
         <p>
+          {constatEtat ?? `Aucun texte de constat écrit pour l’état « ${ETAT_LABELS[etat]} » dans etats.yml.`}
+        </p>
+        <p class="source">
+          Source : <code>etats.yml</code>, état nommé — pas encore une mesure horodatée
+          (le connecteur vent/mer en direct n’est pas branché, voir <code>A-VERIFIER.md</code>).
+        </p>
+
+        <p class="conseil-label label">Conseil — {meilleure.lieu.nom}</p>
+        <p>
+          {meilleure.lieu.dit?.[etat] && <>« {meilleure.lieu.dit[etat]} » </>}
           {meilleure.score.min >= 4
             ? `${meilleure.lieu.nom} a la meilleure note aujourd’hui sur les données seules — pas encore un « à faire aujourd’hui » validé à la main (DECISIONS.md §5).`
             : meilleure.score.min >= 2

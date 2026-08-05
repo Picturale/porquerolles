@@ -140,6 +140,14 @@ exactement ce qu'on cherche à faire remonter.
 Et l'explication devient gratuite : **l'axe qui a produit le minimum est la
 raison à afficher**. Avec une somme il aurait fallu inventer une justification.
 
+**En cas d'égalité entre deux axes au minimum, l'eau prime** — décidé le 3
+août 2026, après qu'une revue croisée a montré que le code tranchait déjà
+ainsi, mais par un pur artefact d'ordre de tableau, sans qu'aucune règle
+ne le dise. Ce n'est pas arbitraire une fois énoncé : l'eau répond à la
+question centrale du produit (où se baigner), c'est l'axe qui a le plus à
+perdre à être noyé sous un autre. Sable, puis tranquillité, dans cet
+ordre si les trois sont à égalité.
+
 Ce modèle absorbe l'affluence sans aucune donnée d'affluence : « le mistral
 chasse les bateaux de Notre-Dame » n'est pas une mesure, c'est une connaissance.
 Elle s'écrit une fois et ne périme jamais.
@@ -147,6 +155,16 @@ Elle s'écrit une fois et ne périme jamais.
 **Veto et score ne se mélangent jamais.** Le score est le confort, le lieu
 descend. Le veto est la réglementation, le lieu disparaît avec sa source.
 **Aucun score ne peut annuler un veto.**
+
+Champ retenu (3 août 2026, suite à la revue croisée qui avait trouvé la
+notion décrite mais aucun champ pour la porter) : **`veto` au niveau du
+lieu, pas par état** — `{ source, date, motif }`, absent tant qu'aucune
+fermeture réglementaire sourcée n'existe. Par lieu et non par lieu×état :
+§6 dit que le lieu « disparaît », pas qu'il descend pour un état précis —
+une matrice lieu×état aurait été le schéma le plus lourd des trois pour
+un besoin qui n'a encore aucune instance réelle dans ce dossier. Voir
+l'en-tête de `lieux.yml` pour le schéma exact ; aucun lieu n'en porte un
+aujourd'hui, faute d'arrêté nommé (voir `A-VERIFIER.md` point 12).
 
 Conséquence gratuite du modèle : un jour de mistral fort, toutes les plages
 descendent et un site abrité remonte. Le produit répond spontanément

@@ -9,11 +9,24 @@
 # Premier état qui correspond gagne. Du plus spécifique au plus général.
 
 principe_des_seuils: |
-  Un seuil se déclenche sur l'exception, jamais sur la normale.
-  En été, la brise de mer atteint 12 à 20 noeuds presque tous les après-midi.
-  Un seuil qui se déclencherait là rendrait le service faux tous les jours
-  de juillet à 15h. Tous les seuils ci-dessous sont calés au-dessus de ce
-  bruit de fond.
+  Deux familles de seuils, pas une règle unique — corrigé le 3 août 2026
+  après une revue croisée qui a montré que l'ancienne version de ce texte
+  se contredisait elle-même (elle affirmait TOUS les seuils au-dessus du
+  bruit de fond été, alors que mistral/est/brise_sud_est sont eux-mêmes
+  dans cette fourchette).
+
+  Les états "_fort" (mistral_fort 25, est_fort 20) signalent un épisode
+  qui sort de l'ordinaire : leur seuil se déclenche sur l'exception,
+  jamais sur la normale, et doit rester au-dessus du bruit de fond estival
+  (12-20 noeuds).
+
+  Les états de base (mistral 12, est 10, brise_sud_est 12) ne signalent
+  pas une anomalie : ils NOMMENT le régime de vent du jour, y compris
+  quand ce régime est la brise de mer ordinaire de l'après-midi. C'est
+  explicite dans brise_sud_est lui-même : "quasi quotidienne en été, ce
+  n'est pas un événement". Rendre ce nommage précis vaut mieux que de le
+  masquer sous "Calme" — un vent de 12 noeuds n'est pas un non-événement
+  pour le sable, même s'il est routinier.
 
 unites:
   vent: noeuds        # jamais des km/h : c'est la convention lue en bord de mer
@@ -68,9 +81,57 @@ etats:
       direction: [60, 120]
       moyen_min: 10
 
+  # Comble un trou trouvé le 3 août 2026 : les secteurs [160,270[ (sud à
+  # ouest) et [320,60[ (nord-ouest à nord-est) ne correspondent à aucun
+  # état nommé ci-dessus — un vent fort de ces directions retombait sur
+  # "Calme", l'état le plus permissif du système. Seuil (22 noeuds) repris
+  # tel quel du deuxième palier de paliers_vent ci-dessous ("ça commence à
+  # voler sur les parties exposées") plutôt qu'inventé : c'est déjà le
+  # seuil que ce dossier utilise ailleurs pour dire "notable".
+  #
+  # VOLONTAIREMENT SANS NOTES DANS lieux.yml : aucune donnée de terrain
+  # n'existe sur ces secteurs pour aucun lieu. Le moteur ne doit jamais
+  # inventer un eau/sable/tranquillité ici — afficher que la direction est
+  # hors du modèle, pas une note.
+  - id: vent_fort_non_categorise
+    nom: Vent fort, secteur non modélisé
+    quand:
+      direction: [160, 320]   # couvre les deux trous ; recouvre aussi
+                                # mistral/est plus haut dans le fichier,
+                                # mais eux gagnent d'abord (plus specifiques)
+      moyen_min: 22
+    constat: >-
+      Vent fort mesuré dans un secteur que ce dossier n'a pas encore
+      caractérisé (pas de fetch, pas de relief, pas de note de lieu).
+      Aucune plage n'est notée pour cet état — ce n'est pas une absence de
+      vent, c'est une absence de donnée.
+
   - id: calme
     nom: Calme
     defaut: true
+
+# ---------------------------------------------------------------------------
+# VETO DE VENT EXTRÊME — décision du 3 août 2026, suite à la revue croisée.
+#
+# etats.yml n'avait aucune borne supérieure : mistral_fort (>=25) et un
+# coup de vent à 60 noeuds produisaient exactement le même état et les
+# mêmes notes. Un palier existait déjà plus bas (paliers_vent, dernier
+# palier "invivable à découvert") mais n'était câblé nulle part.
+#
+# Câblé ici, scope volontairement étroit : seul l'axe SABLE est écrasé à
+# la note du palier orphelin, jamais l'eau ni la tranquillité. Motif :
+# paliers_vent gouverne déjà explicitement le sable ("LE SABLE se juge au
+# VENT", plus bas dans ce fichier) — étendre ce mécanisme à un seuil plus
+# haut ne crée rien de nouveau. Écraser l'eau ou la tranquillité
+# demanderait un modèle qui n'existe pas ici (l'eau dépend de la houle,
+# pas du vent local) : ne pas l'inventer. Reste un vrai trou, documenté
+# plutôt que comblé par une valeur inventée.
+veto_vent_extreme:
+  moyen_min: 30   # reprend tel quel la borne du dernier palier_vent
+  axe: sable
+  note: 0
+  dit: "invivable à découvert"
+  portee: "tous lieux, toutes directions — remplace la note sable calculée normalement"
 
 # ---------------------------------------------------------------------------
 # LE SABLE se juge au VENT.

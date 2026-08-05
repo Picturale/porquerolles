@@ -4,12 +4,17 @@
 défauts. 12 ont été corrigés mécaniquement. Les 6 restants sont des
 questions produit réellement ouvertes, que `REVUE-CRITIQUE-KIMI.md`
 lui-même refuse de trancher (« Ne pas deviner », « décision produit, pas
-une correction technique évidente »). Ce document ne tranche rien : pour
-chacune, il propose 2 à 3 options concrètes, avec un *pour* et un *contre*
-réels, dans le même registre que `MISTRAL-SECTEUR-ANALYSE.md` §« Pistes de
-découpage alternatif ». **Aucun fichier de doctrine n'a été modifié**
-(`DECISIONS.md`, `etats.yml`, `lieux.yml` restent tels quels), et aucune
-option ci-dessous n'est recommandée par rapport aux autres.*
+une correction technique évidente »). Pour chacune, ce document a d'abord
+proposé 2 à 3 options concrètes, avec un *pour* et un *contre* réels, dans
+le même registre que `MISTRAL-SECTEUR-ANALYSE.md` §« Pistes de découpage
+alternatif ».*
+
+**Mise à jour du 3 août 2026, plus tard le même jour — les six sont
+tranchées.** Le porteur du projet a délégué la décision (« je te fais
+confiance pour régler tout ça ») plutôt que d'arbitrer lui-même chaque
+option. Chaque décision est notée en tête de sa section ci-dessous, avec
+son motif et les fichiers modifiés — jamais un choix silencieux : si le
+motif ne convainc pas, c'est réversible, tout est dans l'historique git.
 
 Les options ont été générées par `moonshotai/kimi-k3` (via OpenRouter),
 utilisé comme éclaireur d'options — jamais comme décideur — puis
@@ -22,6 +27,18 @@ correction rendue visible ci-dessous (voir Question 1 et Question 3). Les
 ---
 
 ## Question 1 (A2) — Le principe des seuils est contredit par trois seuils réels
+
+> **Décision : Option B, réécrit** (`etats.yml`, `principe_des_seuils`).
+> Ni A (relever les seuils) ni C (règle de priorité seule) ne réglaient le
+> vrai problème : les états de base (`mistral`/`est`/`brise_sud_est`) ne
+> filtrent pas un bruit de fond, ils **nomment un régime**, y compris
+> quand il est quotidien — c'est explicitement ce que dit déjà le texte
+> de `brise_sud_est` lui-même (« quasi quotidienne en été, ce n'est pas un
+> événement »). Le principe a été réécrit pour distinguer deux familles :
+> les états « _fort » (calés au-dessus du bruit de fond, ils signalent
+> une exception) et les états de base (ils nomment le régime, même
+> routinier). Relever les seuils aurait fait retomber un mistral à 15 nds
+> sur « Calme » — une perte d'information, pas une correction.
 
 Fichier : `porquerolles/etats.yml`. `principe_des_seuils` affirme que « Tous
 les seuils ci-dessous sont calés au-dessus de ce bruit de fond » (12-20 nds,
@@ -73,6 +90,16 @@ Trois options, à trancher par le porteur du projet. Aucune n'a été appliquée
 
 ## Question 2 (A6) — Le bloc « Constat » affiché ne lit jamais le champ `constat` d'`etats.yml`
 
+> **Décision : Option A** (`site/src/lib/lieux.js` : `getConstatEtat()` ;
+> `site/.../[etat].astro`). Le bloc « Constat » lit maintenant le champ
+> `constat` d'`etats.yml`, sourcé sur l'état plutôt que sur une
+> appréciation de lieu. Le `dit` du lieu n'est pas perdu : il est repris
+> en ouverture du bloc « Conseil », entre guillemets. Fallback assumé
+> plutôt que deviné : `calme` n'a pas de texte `constat` dans `etats.yml`,
+> la page le dit explicitement (« Aucun texte de constat écrit… ») au
+> lieu d'improviser une phrase à sa place — cohérent avec le principe du
+> dossier de ne jamais masquer une absence de donnée.
+
 Fichiers : `DECISIONS.md` §4, `porquerolles/etats.yml`,
 `site/src/lib/lieux.js`, `site/src/pages/aujourdhui/quelle-plage/[etat].astro`.
 §4 dit « Le constat est sourcé et horodaté, le conseil est signé. »
@@ -113,6 +140,17 @@ Trois options, à trancher par le porteur du projet. Aucune n'a été appliquée
 ---
 
 ## Question 3 (B10) — Deux secteurs de direction entiers retombent par défaut sur « Calme »
+
+> **Décision : Option C** (`etats.yml`, nouvel état `vent_fort_non_categorise`).
+> Un garde-fou plutôt qu'une donnée inventée : les deux secteurs non
+> couverts déclenchent désormais un état nommé au lieu de retomber sur
+> « Calme », mais **sans aucune note de lieu** — aucune n'existe pour ces
+> directions, et lui en inventer aurait été pire que le trou qu'il
+> comble. Seuil (22 nds) repris tel quel du deuxième palier de
+> `paliers_vent`, pas inventé. Rejeté : Option A (élargir `mistral`/`est`)
+> aurait affirmé sans base que ces secteurs se comportent pareil ; Option
+> B (états dédiés avec leurs propres notes) demandait des données de
+> terrain qui n'existent pas.
 
 Fichier : `porquerolles/etats.yml`. Les secteurs [160°, 270°] (sud à ouest)
 et [320°, 60°] (nord-ouest à nord-est) ne correspondent à aucun état nommé
@@ -168,6 +206,16 @@ Trois options, à trancher par le porteur du projet. Aucune n'a été appliquée
 
 ## Question 4 (B11) — Égalité entre deux axes au minimum : « eau » gagne toujours par artefact de code
 
+> **Décision : Option A** (`DECISIONS.md` §6 ; commentaire ajouté dans
+> `site/src/lib/lieux.js`). L'ordre déjà produit par le code (eau > sable
+> > tranquillité) est ratifié, avec un motif réel plutôt qu'un habillage
+> a posteriori : l'eau répond à la question centrale du produit (où se
+> baigner), c'est l'axe qui a le plus à perdre à être noyé sous un autre
+> en cas d'égalité. Option B (afficher les deux axes) aurait cassé le
+> gabarit à une seule raison de §4 pour un cas limite rare ; Option C
+> (documenter l'arbitraire sans le justifier) était honnête mais
+> insatisfaisante dès qu'un motif réel existait.
+
 Fichiers : `DECISIONS.md` §6, `site/src/lib/lieux.js`, `porquerolles/lieux.yml`.
 §6 dit « l'axe qui a produit le minimum est la raison à afficher » (au
 singulier). Le code (`scoreDuJour`) compare avec `<` strict sur
@@ -212,6 +260,19 @@ Trois options, à trancher par le porteur du projet. Aucune n'a été appliquée
 
 ## Question 5 (B16) — Aucune borne supérieure de vent : 25 nds et 60 nds produisent le même état
 
+> **Décision : Option B, scope resserré** (`etats.yml`, nouveau champ
+> `veto_vent_extreme`). Le palier orphelin (« invivable à découvert »,
+> déjà écrit dans `paliers_vent` mais câblé nulle part) est maintenant
+> rattaché, à son propre seuil (30 nds, repris tel quel du fichier). Mais
+> **seulement sur l'axe sable** — pas eau, pas tranquillité — parce que
+> c'est exactement l'axe que `paliers_vent` gouverne déjà, et parce que
+> le *contre* documenté de cette option était réel : plafonner tous les
+> axes à 0 aurait effacé toute différence entre un lieu abrité et un lieu
+> exposé, ce que ni l'eau (pilotée par la houle, pas le vent) ni la
+> tranquillité n'ont de raison de perdre à ce seuil. Reste un vrai trou,
+> écrit comme tel dans `etats.yml` plutôt que comblé par une valeur
+> inventée : aucun mécanisme équivalent pour l'eau en régime de tempête.
+
 Fichier : `porquerolles/etats.yml`. `mistral_fort` (`moyen_min: 25`) et
 `est_fort` (`moyen_min: 20`) n'ont pas de `moyen_max` : un mistral à 25 nds
 et une tempête à 60 nds reçoivent exactement les mêmes notes de lieu. Le
@@ -255,6 +316,18 @@ Trois options, à trancher par le porteur du projet. Aucune n'a été appliquée
 ---
 
 ## Question 6 (D13) — Aucun champ `veto`/`fermé` n'existe dans `lieux.yml` ni dans le code
+
+> **Décision : Option B** (schéma documenté dans l'en-tête de
+> `lieux.yml` ; exclusion câblée dans `getPlages()`, `site/src/lib/lieux.js` ;
+> règle actée dans `DECISIONS.md` §6). Un champ simple par lieu
+> (`veto: { source, date, motif }`), pas une matrice lieu×état : §6 dit
+> que le lieu « disparaît », pas qu'il descend pour un état précis, et
+> Option A (matrice lieu×état) aurait été le schéma le plus lourd des
+> trois pour un besoin qui n'a **aucune instance réelle** dans ce dossier
+> aujourd'hui — aucune fermeture réglementaire sourcée n'existe encore
+> (voir `A-VERIFIER.md` point 12, aucun arrêté nommé retrouvé). Le
+> mécanisme est donc posé et actif dans le code, mais inerte : aucun
+> lieu de `lieux.yml` ne porte ce champ, vérifié après implémentation.
 
 Fichiers : `DECISIONS.md` §5, §6, `porquerolles/lieux.yml`,
 `site/src/lib/lieux.js`. §5 : « Plus un état à part, qui n'est jamais un
