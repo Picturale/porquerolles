@@ -1,16 +1,16 @@
 {
-  "genere_le": "2026-08-20T18:57:25.614735+00:00",
+  "genere_le": "2026-08-20T19:44:14.877553+00:00",
   "observation": {
-    "direction_deg": 244,
-    "vitesse_nds": 7.1,
-    "rafales_nds": 17.3,
-    "mesure_a": "2026-08-20T20:45",
-    "recu_a": "2026-08-20T18:57:25.614714+00:00",
+    "direction_deg": 266,
+    "vitesse_nds": 6.0,
+    "rafales_nds": 16.1,
+    "mesure_a": "2026-08-20T21:30",
+    "recu_a": "2026-08-20T19:44:14.877537+00:00",
     "source": "Open-Meteo (modele AROME France HD), DEV UNIQUEMENT -- non commercial",
     "url": "https://api.open-meteo.com/v1/forecast?latitude=42.999&longitude=6.205&current=wind_speed_10m,wind_direction_10m,wind_gusts_10m&wind_speed_unit=kn&timezone=Europe%2FParis&models=arome_france_hd",
     "validite_minutes": 90,
     "statut": "frais",
-    "age_minutes": 12.4
+    "age_minutes": 14.2
   },
   "etat": {
     "id": "calme",
