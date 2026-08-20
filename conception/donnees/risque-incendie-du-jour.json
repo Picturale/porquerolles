@@ -1,15 +1,17 @@
 {
-  "genere_le": "2026-08-05T13:59:13.454975+00:00",
+  "genere_le": "2026-08-20T14:53:44.491748+00:00",
   "observation": {
-    "niveau": 3,
-    "niveau_label": "orange",
+    "niveau": 2,
+    "niveau_label": "jaune",
     "massif": "839 ILES D'HYERES",
     "zm_concorde": true,
-    "zm_valeur": 3,
-    "date_donnee": "2026-08-05",
-    "recu_a": "2026-08-05T13:59:13.454975+00:00",
+    "zm_valeur": 2,
+    "date_donnee": "2026-08-20",
+    "recu_a": "2026-08-20T14:53:44.491748+00:00",
     "source": "risque-prevention-incendie.fr — licence inconnue, usage dev/test uniquement",
-    "url": "https://www.risque-prevention-incendie.fr/static/83/import_data/20260805.json",
-    "validite_minutes": 1200
+    "url": "https://www.risque-prevention-incendie.fr/static/83/import_data/20260820.json",
+    "validite_minutes": 1200,
+    "statut": "frais",
+    "age_minutes": 0.0
   }
 }
