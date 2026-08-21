@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-08-21T13:56:49.663893+00:00",
+  "genere_le": "2026-08-21T14:52:31.086624+00:00",
   "observation": {
     "niveau": 2,
     "niveau_label": "jaune",
@@ -7,7 +7,7 @@
     "zm_concorde": true,
     "zm_valeur": 2,
     "date_donnee": "2026-08-21",
-    "recu_a": "2026-08-21T13:56:49.663893+00:00",
+    "recu_a": "2026-08-21T14:52:31.086624+00:00",
     "source": "risque-prevention-incendie.fr — licence inconnue, usage dev/test uniquement",
     "url": "https://www.risque-prevention-incendie.fr/static/83/import_data/20260821.json",
     "validite_minutes": 1200,
