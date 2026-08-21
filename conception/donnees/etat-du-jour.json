@@ -1,16 +1,16 @@
 {
-  "genere_le": "2026-08-21T15:47:03.227114+00:00",
+  "genere_le": "2026-08-21T16:49:51.592230+00:00",
   "observation": {
-    "direction_deg": 283,
-    "vitesse_nds": 13.3,
-    "rafales_nds": 30.7,
-    "mesure_a": "2026-08-21T17:45",
-    "recu_a": "2026-08-21T15:47:03.227093+00:00",
+    "direction_deg": 274,
+    "vitesse_nds": 13.4,
+    "rafales_nds": 29.4,
+    "mesure_a": "2026-08-21T18:45",
+    "recu_a": "2026-08-21T16:49:51.592208+00:00",
     "source": "Open-Meteo (modele AROME France HD), DEV UNIQUEMENT -- non commercial",
     "url": "https://api.open-meteo.com/v1/forecast?latitude=42.999&longitude=6.205&current=wind_speed_10m,wind_direction_10m,wind_gusts_10m&wind_speed_unit=kn&timezone=Europe%2FParis&models=arome_france_hd",
     "validite_minutes": 90,
     "statut": "frais",
-    "age_minutes": 2.1
+    "age_minutes": 4.9
   },
   "etat": {
     "id": "mistral",
