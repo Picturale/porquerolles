@@ -1,15 +1,6 @@
 {
   "projects": {
-    "default": "vision-picturale-community"
-  },
-  "targets": {
-    "vision-picturale-community": {
-      "hosting": {
-        "production": [
-          "vision-picturale-community"
-        ]
-      }
-    }
+    "default": "porquerolles-16e8d"
   },
   "etags": {}
 }

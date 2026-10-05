@@ -17,7 +17,7 @@ echo "✅ Build réussi"
 
 # Déploiement hosting seulement pour éviter les problèmes d'index
 echo "🌐 Déploiement hosting..."
-firebase deploy --only hosting --force
+firebase deploy --only hosting --force --project porquerolles-16e8d
 
 if [ $? -ne 0 ]; then
     echo "❌ Erreur lors du déploiement hosting"
@@ -28,7 +28,7 @@ echo "✅ Déploiement hosting réussi"
 
 # Déploiement des rules et storage (sans index)
 echo "🔒 Déploiement des règles..."
-firebase deploy --only storage,database --force
+firebase deploy --only storage,database --force --project porquerolles-16e8d
 
 if [ $? -ne 0 ]; then
     echo "⚠️  Avertissement: Problème avec les règles (non critique)"
