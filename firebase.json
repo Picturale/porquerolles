@@ -166,7 +166,7 @@
   },
   "functions": {
     "source": "functions",
-    "runtime": "nodejs22",
+    "runtime": "nodejs24",
     "region": "europe-west1"
   },
   "emulators": {
